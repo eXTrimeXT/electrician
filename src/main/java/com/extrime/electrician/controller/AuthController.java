@@ -48,6 +48,7 @@ public class AuthController {
         return "register";
     }
 
+
     // Обработка формы авторизации
     @PostMapping("/login")
     public String login(
@@ -69,8 +70,11 @@ public class AuthController {
         if (userOptional.isPresent()) {
             User user = userOptional.get();
 
+            // Генерируем хеш для введенного пароля
+            String inputHash = passwordService.hashPassword(password);
+
             // Проверяем пароль
-            if (passwordService.checkPassword(password, user.getPassword())) {
+            if (inputHash.equals(user.getPassword())) {
                 session.setAttribute(SESSION_AUTH_KEY, true);
                 session.setAttribute(SESSION_USER_KEY, user);
 
@@ -82,11 +86,21 @@ public class AuthController {
                 }
             }
         }
-
         // Если неверные данные, показываем ошибку
         model.addAttribute("error", "Неверный логин или пароль");
         model.addAttribute("pageTitle", "Авторизация - Электрик");
         return "login";
+    }
+
+    @GetMapping("/profile")
+    public String showProfile(HttpSession session, Model model) {
+        if (!isAuthenticated(session)) {
+            return "redirect:/login";
+        }
+
+        User user = getCurrentUser(session);
+        model.addAttribute("user", user);
+        return "profile";
     }
 
     // Обработка формы регистрации
@@ -116,11 +130,18 @@ public class AuthController {
             // Создаем нового пользователя
             User newUser = new User();
             newUser.setUsername(username);
-            newUser.setPassword(passwordService.hashPassword(password));
+
+            // Хешируем пароль
+            String hashedPassword = passwordService.hashPassword(password);
+            System.out.println("Registering user: " + username); // Для отладки
+            System.out.println("Password hash: " + hashedPassword); // Для отладки
+
+            newUser.setPassword(hashedPassword);
             newUser.setEmail(email);
             newUser.setRole("USER"); // По умолчанию обычный пользователь
 
             Long userId = userDAO.createUser(newUser);
+            System.out.println("User created with ID: " + userId); // Для отладки
 
             // Добавляем сообщение об успешной регистрации
             redirectAttributes.addFlashAttribute("successMessage",
@@ -129,6 +150,8 @@ public class AuthController {
             return "redirect:/login";
 
         } catch (Exception e) {
+            System.out.println("Registration error: " + e.getMessage()); // Для отладки
+            e.printStackTrace(); // Для отладки
             model.addAttribute("error", "Ошибка при регистрации: " + e.getMessage());
             model.addAttribute("pageTitle", "Регистрация - Электрик");
             return "register";

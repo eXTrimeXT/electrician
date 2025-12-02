@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль пользователя</title>
+    <link rel="stylesheet" href="../static/css/home.css">
+    <link rel="stylesheet" href="../static/css/profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="header-content">
+            <h1><i class="fas fa-user"></i> Профиль пользователя</h1>
+            <a href="/logout" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Выйти
+            </a>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <div class="profile-container">
+        <div th:if="${user}" class="user-info">
+            <div class="info-card">
+                <h2><i class="fas fa-id-card"></i> Информация о пользователе</h2>
+                <div class="info-item">
+                    <span class="label"><i class="fas fa-user"></i> Логин:</span>
+                    <span class="value" th:text="${user.username}"></span>
+                </div>
+                <div class="info-item">
+                    <span class="label"><i class="fas fa-envelope"></i> Email:</span>
+                    <span class="value" th:text="${user.email != null ? user.email : 'Не указан'}"></span>
+                </div>
+                <div class="info-item">
+                    <span class="label"><i class="fas fa-user-tag"></i> Роль:</span>
+                    <span class="value" th:text="${user.role}"></span>
+                </div>
+                <div class="info-item">
+                    <span class="label"><i class="fas fa-calendar-alt"></i> Дата регистрации:</span>
+                    <span class="value" th:text="${#temporals.format(user.createdAt, 'dd.MM.yyyy HH:mm')}"></span>
+                </div>
+                <div class="info-item">
+                    <span class="label"><i class="fas fa-check-circle"></i> Статус:</span>
+                    <span class="value status-active" th:if="${user.active}">
+                        <i class="fas fa-check"></i> Активен
+                    </span>
+                    <span class="value status-inactive" th:unless="${user.active}">
+                        <i class="fas fa-times"></i> Неактивен
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <a href="/" class="btn home-btn">
+                <i class="fas fa-home"></i> На главную
+            </a>
+            <a th:if="${user.role == 'ADMIN'}" href="/admin" class="btn admin-btn">
+                <i class="fas fa-cog"></i> Админ панель
+            </a>
+        </div>
+    </div>
+</main>
+</body>
+</html>
