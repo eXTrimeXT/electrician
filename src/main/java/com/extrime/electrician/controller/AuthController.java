@@ -1,19 +1,38 @@
 package com.extrime.electrician.controller;
 
+import com.extrime.electrician.dao.UserDAO;
+import com.extrime.electrician.model.User;
+import com.extrime.electrician.service.PasswordService;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import jakarta.servlet.http.HttpSession;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 @Controller
 public class AuthController {
-
-    // Константы для учетных данных
     private static final String ADMIN_USERNAME = "admin";
     private static final String ADMIN_PASSWORD = "admin";
     private static final String SESSION_AUTH_KEY = "isAuthenticated";
+    private static final String SESSION_USER_KEY = "user";
+
+    @Autowired
+    private UserDAO userDAO;
+
+    @Autowired
+    private PasswordService passwordService;
+
+    // Регулярные выражения для валидации
+    private static final Pattern USERNAME_PATTERN = Pattern.compile("^[a-zA-Z0-9_]{3,30}$");
+    private static final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$");
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
 
     // Отображение страницы авторизации
     @GetMapping("/login")
@@ -22,7 +41,14 @@ public class AuthController {
         return "login";
     }
 
-     // Обработка формы авторизации
+    // Отображение страницы регистрации
+    @GetMapping("/register")
+    public String showRegisterPage(Model model) {
+        model.addAttribute("pageTitle", "Регистрация - Электрик");
+        return "register";
+    }
+
+    // Обработка формы авторизации
     @PostMapping("/login")
     public String login(
             @RequestParam("username") String username,
@@ -30,31 +56,144 @@ public class AuthController {
             HttpSession session,
             Model model) {
 
-        // Проверяем учетные данные
+        // Проверяем стандартные учетные данные админа
         if (ADMIN_USERNAME.equals(username) && ADMIN_PASSWORD.equals(password)) {
-            // Устанавливаем флаг аутентификации в сессии
             session.setAttribute(SESSION_AUTH_KEY, true);
-            session.setAttribute("username", username);
-
-            // Перенаправляем на админ панель
+            session.setAttribute(SESSION_USER_KEY, createAdminUser());
             return "redirect:/admin";
-        } else {
-            // Если неверные данные, показываем ошибку
-            model.addAttribute("error", "Неверный логин или пароль");
-            model.addAttribute("pageTitle", "Авторизация - Электрик");
-            return "login";
+        }
+
+        // Ищем пользователя в базе данных
+        var userOptional = userDAO.findByUsername(username);
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+
+            // Проверяем пароль
+            if (passwordService.checkPassword(password, user.getPassword())) {
+                session.setAttribute(SESSION_AUTH_KEY, true);
+                session.setAttribute(SESSION_USER_KEY, user);
+
+                // Перенаправляем в зависимости от роли
+                if ("ADMIN".equals(user.getRole())) {
+                    return "redirect:/admin";
+                } else {
+                    return "redirect:/profile";
+                }
+            }
+        }
+
+        // Если неверные данные, показываем ошибку
+        model.addAttribute("error", "Неверный логин или пароль");
+        model.addAttribute("pageTitle", "Авторизация - Электрик");
+        return "login";
+    }
+
+    // Обработка формы регистрации
+    @PostMapping("/register")
+    public String register(
+            @RequestParam("username") String username,
+            @RequestParam("password") String password,
+            @RequestParam("confirmPassword") String confirmPassword,
+            @RequestParam("email") String email,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        Map<String, String> errors = new HashMap<>();
+
+        // Валидация данных
+        validateRegistration(username, password, confirmPassword, email, errors);
+
+        if (!errors.isEmpty()) {
+            model.addAttribute("errors", errors);
+            model.addAttribute("pageTitle", "Регистрация - Электрик");
+            model.addAttribute("username", username);
+            model.addAttribute("email", email);
+            return "register";
+        }
+
+        try {
+            // Создаем нового пользователя
+            User newUser = new User();
+            newUser.setUsername(username);
+            newUser.setPassword(passwordService.hashPassword(password));
+            newUser.setEmail(email);
+            newUser.setRole("USER"); // По умолчанию обычный пользователь
+
+            Long userId = userDAO.createUser(newUser);
+
+            // Добавляем сообщение об успешной регистрации
+            redirectAttributes.addFlashAttribute("successMessage",
+                    "Регистрация прошла успешно! Теперь вы можете войти в систему.");
+
+            return "redirect:/login";
+
+        } catch (Exception e) {
+            model.addAttribute("error", "Ошибка при регистрации: " + e.getMessage());
+            model.addAttribute("pageTitle", "Регистрация - Электрик");
+            return "register";
         }
     }
 
-     // Проверка аутентификации (можно использовать как вспомогательный метод)
-    private boolean isAuthenticated(HttpSession session) {
+    // Проверка аутентификации
+    public boolean isAuthenticated(HttpSession session) {
         return session.getAttribute(SESSION_AUTH_KEY) != null;
     }
 
-     // Выход из системы
+    // Получить текущего пользователя
+    public User getCurrentUser(HttpSession session) {
+        return (User) session.getAttribute(SESSION_USER_KEY);
+    }
+
+    // Выход из системы
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/login";
+    }
+
+    // Вспомогательные методы
+
+    private void validateRegistration(String username, String password,
+                                      String confirmPassword, String email,
+                                      Map<String, String> errors) {
+
+        // Проверка имени пользователя
+        if (!USERNAME_PATTERN.matcher(username).matches()) {
+            errors.put("username", "Логин должен содержать 3-30 символов (буквы, цифры, подчеркивания)");
+        }
+
+        if (userDAO.existsByUsername(username)) {
+            errors.put("username", "Пользователь с таким логином уже существует");
+        }
+
+        // Проверка пароля
+        if (!PASSWORD_PATTERN.matcher(password).matches()) {
+            errors.put("password",
+                    "Пароль должен содержать минимум 8 символов, включая цифры, строчные и заглавные буквы");
+        }
+
+        if (!password.equals(confirmPassword)) {
+            errors.put("confirmPassword", "Пароли не совпадают");
+        }
+
+        // Проверка email
+        if (email != null && !email.isEmpty()) {
+            if (!EMAIL_PATTERN.matcher(email).matches()) {
+                errors.put("email", "Введите корректный email адрес");
+            }
+
+            if (userDAO.existsByEmail(email)) {
+                errors.put("email", "Пользователь с таким email уже существует");
+            }
+        }
+    }
+
+    private User createAdminUser() {
+        User adminUser = new User();
+        adminUser.setId(0L);
+        adminUser.setUsername("admin");
+        adminUser.setRole("ADMIN");
+        return adminUser;
     }
 }

@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Objects;
 
 @Repository
 public class ServiceDAO {
@@ -45,13 +46,11 @@ public class ServiceDAO {
 
     // Добавить новую услугу
     public Long addService(OurService service) {
-        String sql = "INSERT INTO services (title, description, price, price_unit, is_popular) " +
-                "VALUES (?, ?, ?, ?, ?)";
-
+        String sql = "INSERT INTO services (title, description, price, price_unit, is_popular) " + "VALUES (?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
             ps.setString(1, service.getTitle());
             ps.setString(2, service.getDescription());
             ps.setDouble(3, service.getPrice());
@@ -59,8 +58,8 @@ public class ServiceDAO {
             ps.setBoolean(5, service.getIsPopular());
             return ps;
         }, keyHolder);
-
-        return keyHolder.getKey().longValue();
+//        return keyHolder.getKey().longValue();
+        return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
 
     // Обновить услугу

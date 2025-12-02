@@ -1,6 +1,7 @@
 package com.extrime.electrician.controller;
 
 import com.extrime.electrician.dao.ServiceDAO;
+import com.extrime.electrician.dao.WorkDAO;
 import com.extrime.electrician.model.ContactInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,10 +12,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
 
     private final ServiceDAO serviceDAO;
+    private final WorkDAO workDAO;
 
     @Autowired
-    public HomeController(ServiceDAO serviceDAO) {
+    public HomeController(ServiceDAO serviceDAO, WorkDAO workDAO) {
         this.serviceDAO = serviceDAO;
+        this.workDAO = workDAO;
     }
 
     @GetMapping("/")
@@ -27,7 +30,7 @@ public class HomeController {
         model.addAttribute("popularServices", serviceDAO.getPopularServices());
 
         // Получаем работы из БД
-//        model.addAttribute("works", workDAO.getAllWorks());
+        model.addAttribute("works", workDAO.getAllWorks());
 
         // Добавляем контактную информацию
         model.addAttribute("contactInfo", new ContactInfo());

@@ -88,6 +88,7 @@
         </div>
     </section>
 
+    <!-- В секции работ замените жестко закодированные данные -->
     <section class="works">
         <h2><i class="fas fa-tools"></i>Крупные работы</h2>
         <div class="works-grid">
@@ -95,7 +96,10 @@
                 <img th:src="${work.imageUrl}" alt="Работа" class="work-image">
                 <div class="work-content">
                     <h3 th:text="${work.title}">Название работы</h3>
-                    <div class="work-date" th:text="${#dates.format(work.workDate, 'dd.MM.yyyy')}">15.03.2024</div>
+<!--                    <div class="work-date" th:text="${#dates.format(work.workDate, 'dd.MM.yyyy')}">15.03.2024</div>-->
+
+                    <div class="work-date" th:text="${work.formattedDate}">15.03.2025</div>
+
                     <p class="work-description" th:text="${work.description}">Описание работы</p>
                     <div class="work-price" th:text="${#numbers.formatDecimal(work.price, 0, 'DEFAULT', 0, 'DEFAULT') + ' ₽'}">25 000 ₽</div>
                 </div>

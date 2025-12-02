@@ -20,10 +20,10 @@
 <main class="container">
     <div class="login-container">
         <!-- Показ ошибки, если есть -->
-<!--        <div th:if="${error}" class="error-message">-->
-<!--            <i class="fas fa-exclamation-triangle"></i>-->
-<!--            <span th:text="${error}"></span>-->
-<!--        </div>-->
+        <div th:if="${error}" class="error-message">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span th:text="${error}"></span>
+        </div>
 
         <form id="loginForm" th:action="@{/login}" method="post">
             <div class="form-group">
@@ -42,6 +42,12 @@
                 <i class="fas fa-sign-in-alt"></i> Войти
             </button>
         </form>
+        <div class="register-link">
+            Нет аккаунта?
+            <a href="/register" class="register-link-btn">
+                <i class="fas fa-user-plus"></i> Зарегистрироваться
+            </a>
+        </div>
 
         <a href="/" class="back-link">
             <i class="fas fa-arrow-left"></i> Вернуться на главную

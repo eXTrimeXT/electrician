@@ -1,0 +1,210 @@
+/* src/main/resources/static/css/register.css */
+.register-container {
+    max-width: 500px;
+    margin: 3rem auto;
+    padding: 2.5rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.success-message {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+    padding: 1rem;
+    border-radius: 5px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.success-message i {
+    color: #28a745;
+}
+
+.error-message {
+    background-color: #fee;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 1rem;
+    border-radius: 5px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.error-message i {
+    color: #dc3545;
+}
+
+.register-container .form-group {
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.register-container label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+    font-weight: 600;
+    font-size: 1.05rem;
+}
+
+.register-container input {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 2px solid #e1e5e9;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s;
+    background-color: #f8f9fa;
+}
+
+.register-container input:focus {
+    outline: none;
+    border-color: #3498db;
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.register-container input.error {
+    border-color: #e74c3c;
+}
+
+.register-container input.success {
+    border-color: #2ecc71;
+}
+
+.form-hint {
+    display: block;
+    margin-top: 0.5rem;
+    color: #7f8c8d;
+    font-size: 0.85rem;
+}
+
+.field-error {
+    color: #e74c3c;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    top: 40px;
+    color: #7f8c8d;
+    transition: color 0.3s;
+}
+
+.toggle-password:hover {
+    color: #3498db;
+}
+
+.register-btn {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    transition: all 0.3s;
+    margin-bottom: 1.5rem;
+}
+
+.register-btn:hover {
+    background: linear-gradient(135deg, #219653 0%, #27ae60 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+}
+
+.form-actions {
+    margin-top: 2rem;
+}
+
+.login-link {
+    text-align: center;
+    color: #7f8c8d;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eee;
+}
+
+.login-link-btn {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.3s;
+}
+
+.login-link-btn:hover {
+    color: #2980b9;
+    text-decoration: underline;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.back-link:hover {
+    color: #2980b9;
+    text-decoration: underline;
+}
+
+/* Индикаторы силы пароля */
+.password-strength {
+    height: 5px;
+    margin-top: 5px;
+    border-radius: 2px;
+    transition: all 0.3s;
+}
+
+.strength-weak {
+    background-color: #e74c3c;
+    width: 33%;
+}
+
+.strength-medium {
+    background-color: #f39c12;
+    width: 66%;
+}
+
+.strength-strong {
+    background-color: #2ecc71;
+    width: 100%;
+}
+
+/* Адаптивность */
+@media (max-width: 576px) {
+    .register-container {
+        padding: 1.5rem;
+        margin: 1.5rem auto;
+    }
+
+    .register-container input {
+        padding: 0.75rem;
+    }
+}
