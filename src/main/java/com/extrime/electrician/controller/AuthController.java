@@ -1,6 +1,7 @@
 package com.extrime.electrician.controller;
 
 import com.extrime.electrician.dao.UserDAO;
+import com.extrime.electrician.model.ContactInfo;
 import com.extrime.electrician.model.User;
 import com.extrime.electrician.service.PasswordService;
 import jakarta.servlet.http.HttpSession;
@@ -33,6 +34,29 @@ public class AuthController {
     private static final Pattern USERNAME_PATTERN = Pattern.compile("^[a-zA-Z0-9_]{3,30}$");
     private static final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$");
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
+
+//    // Главная страница
+//    @GetMapping("/")
+//    public String home(Model model, HttpSession session) {
+//        model.addAttribute("pageTitle", "Электрик - профессиональные услуги");
+//
+//        // Получаем пользователя из сессии
+//        User user = getCurrentUser(session);
+//        if (user != null) {
+//            model.addAttribute("user", user);
+//        }
+////        // Получаем услуги из БД
+////        model.addAttribute("services", serviceDAO.getAllServices());
+////        model.addAttribute("popularServices", serviceDAO.getPopularServices());
+////
+////        // Получаем работы из БД
+////        model.addAttribute("works", workDAO.getAllWorks());
+////
+////        // Добавляем контактную информацию
+////        model.addAttribute("contactInfo", new ContactInfo());
+//
+//        return "home";
+//    }
 
     // Отображение страницы авторизации
     @GetMapping("/login")
