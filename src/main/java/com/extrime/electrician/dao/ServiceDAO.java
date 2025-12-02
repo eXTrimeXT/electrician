@@ -58,7 +58,6 @@ public class ServiceDAO {
             ps.setBoolean(5, service.getIsPopular());
             return ps;
         }, keyHolder);
-//        return keyHolder.getKey().longValue();
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
 

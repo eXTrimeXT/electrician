@@ -17,9 +17,7 @@ public class FileStorageService {
     @Value("${file.upload-dir:./uploads}")
     private String uploadDir;
 
-    /**
-     * Сохраняет загруженный файл и возвращает URL для доступа к нему
-     */
+     // Сохраняет загруженный файл и возвращает URL для доступа к нему
     public String storeFile(MultipartFile file) throws IOException {
         // Создаем директорию, если она не существует
         Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
@@ -38,9 +36,7 @@ public class FileStorageService {
         return "/static/uploads/" + fileName;
     }
 
-    /**
-     * Удаляет файл по URL
-     */
+     // Удаляет файл по URL
     public boolean deleteFile(String fileUrl) {
         try {
             // Извлекаем имя файла из URL
@@ -54,17 +50,13 @@ public class FileStorageService {
         }
     }
 
-    /**
-     * Проверяет, является ли файл изображением
-     */
+     // Проверяет, является ли файл изображением
     public boolean isImageFile(MultipartFile file) {
         String contentType = file.getContentType();
         return contentType != null && contentType.startsWith("image/");
     }
 
-    /**
-     * Получает расширение файла
-     */
+    // Получает расширение файла
     private String getFileExtension(String fileName) {
         if (fileName == null || !fileName.contains(".")) {
             return "";
@@ -72,16 +64,12 @@ public class FileStorageService {
         return fileName.substring(fileName.lastIndexOf("."));
     }
 
-    /**
-     * Возвращает максимальный размер файла (в байтах)
-     */
+     // Возвращает максимальный размер файла (в байтах)
     public long getMaxFileSize() {
         return 10 * 1024 * 1024; // 10MB
     }
 
-    /**
-     * Возвращает разрешенные расширения файлов
-     */
+     // Возвращает разрешенные расширения файлов
     public String[] getAllowedExtensions() {
         return new String[]{".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp"};
     }

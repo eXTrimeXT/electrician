@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Repository
@@ -93,7 +94,8 @@ public class UserDAO {
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+//            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getPassword()); // Пароль должен быть уже хеширован
             ps.setString(3, user.getEmail());
@@ -104,7 +106,8 @@ public class UserDAO {
             return ps;
         }, keyHolder);
 
-        return keyHolder.getKey().longValue();
+//        return keyHolder.getKey().longValue();
+        return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
 
     // Обновить пользователя

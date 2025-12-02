@@ -25,14 +25,14 @@ public class PasswordService {
         return inputHash.equals(storedHash);
     }
 
-    // Генерация случайного пароля
-    public String generateRandomPassword() {
-        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
-        StringBuilder password = new StringBuilder();
-        for (int i = 0; i < 10; i++) {
-            int index = (int) (Math.random() * chars.length());
-            password.append(chars.charAt(index));
-        }
-        return password.toString();
-    }
+//    // Генерация случайного пароля
+//    public String generateRandomPassword() {
+//        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+//        StringBuilder password = new StringBuilder();
+//        for (int i = 0; i < 10; i++) {
+//            int index = (int) (Math.random() * chars.length());
+//            password.append(chars.charAt(index));
+//        }
+//        return password.toString();
+//    }
 }

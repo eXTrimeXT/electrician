@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Profile;
 
 @Configuration
 public class DatabaseInitializer {
-
     @Autowired
     private UserDAO userDAO;
 
@@ -16,7 +15,6 @@ public class DatabaseInitializer {
     @Profile("!test") // Не выполняем в тестах
     public void init() {
         try {
-            // Создаем таблицу пользователей, если она не существует
             userDAO.createTableIfNotExists();
             System.out.println("✅ Таблица пользователей создана/проверена");
         } catch (Exception e) {

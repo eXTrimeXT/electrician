@@ -238,6 +238,7 @@ public class AdminApiController {
             response.put("message", success ? "Работа успешно обновлена" : "Не удалось обновить работу");
 
             return ResponseEntity.ok(response);
+
         } catch (Exception e) {
             Map<String, Object> response = new HashMap<>();
             response.put("success", false);
@@ -248,7 +249,6 @@ public class AdminApiController {
 
     // === API для работ с загрузкой файлов ===
     // Создать новую работу с загрузкой изображения
-    // Создать новую работу с загрузкой изображения
     @PostMapping("/works/upload")
     public ResponseEntity<?> createWorkWithUpload(
             @RequestParam("title") String title,
@@ -258,15 +258,6 @@ public class AdminApiController {
             @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
             @RequestParam(value = "imageUrl", required = false) String imageUrl,
             HttpSession session) {
-
-        System.out.println("=== НАЧАЛО СОЗДАНИЯ РАБОТЫ ===");
-        System.out.println("Получен запрос на создание работы:");
-        System.out.println("title: " + title);
-        System.out.println("description: " + description);
-        System.out.println("workDate: " + workDate);
-        System.out.println("price: " + priceStr);
-        System.out.println("imageFile is null: " + (imageFile == null));
-        System.out.println("imageUrl: " + imageUrl);
 
         if (!isAuthenticated(session)) {
             System.out.println("Пользователь не авторизован");
@@ -309,8 +300,11 @@ public class AdminApiController {
             String finalImageUrl = null;
 
             if (imageFile != null && !imageFile.isEmpty()) {
-                System.out.println("Загрузка файла: " + imageFile.getOriginalFilename() +
-                        ", size: " + imageFile.getSize() + ", type: " + imageFile.getContentType());
+                System.out.println(
+                        "Загрузка файла: " + imageFile.getOriginalFilename() +
+                        ", size: " + imageFile.getSize() +
+                        ", type: " + imageFile.getContentType()
+                );
 
                 try {
                     finalImageUrl = fileStorageService.storeFile(imageFile);
