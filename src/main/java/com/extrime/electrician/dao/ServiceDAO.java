@@ -1,0 +1,104 @@
+package com.extrime.electrician.dao;
+
+import com.extrime.electrician.model.OurService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
+
+@Repository
+public class ServiceDAO {
+
+    private final JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    public ServiceDAO(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    // Получить все услуги
+    public List<OurService> getAllServices() {
+        String sql = "SELECT * FROM services ORDER BY title";
+        return jdbcTemplate.query(sql, new ServiceRowMapper());
+    }
+
+    // Получить популярные услуги
+    public List<OurService> getPopularServices() {
+        String sql = "SELECT * FROM services WHERE is_popular = true ORDER BY title";
+        return jdbcTemplate.query(sql, new ServiceRowMapper());
+    }
+
+    // Получить услугу по ID
+    public OurService getServiceById(Long id) {
+        String sql = "SELECT * FROM services WHERE id = ?";
+        List<OurService> services = jdbcTemplate.query(sql, new ServiceRowMapper(), id);
+        return services.isEmpty() ? null : services.get(0);
+    }
+
+    // Добавить новую услугу
+    public Long addService(OurService service) {
+        String sql = "INSERT INTO services (title, description, price, price_unit, is_popular) " +
+                "VALUES (?, ?, ?, ?, ?)";
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, service.getTitle());
+            ps.setString(2, service.getDescription());
+            ps.setDouble(3, service.getPrice());
+            ps.setString(4, service.getPriceUnit());
+            ps.setBoolean(5, service.getIsPopular());
+            return ps;
+        }, keyHolder);
+
+        return keyHolder.getKey().longValue();
+    }
+
+    // Обновить услугу
+    public boolean updateService(OurService service) {
+        String sql = "UPDATE services SET title = ?, description = ?, price = ?, " +
+                "price_unit = ?, is_popular = ? WHERE id = ?";
+
+        int rowsAffected = jdbcTemplate.update(sql,
+                service.getTitle(),
+                service.getDescription(),
+                service.getPrice(),
+                service.getPriceUnit(),
+                service.getIsPopular(),
+                service.getId()
+        );
+
+        return rowsAffected > 0;
+    }
+
+    // Удалить услугу
+    public boolean deleteService(Long id) {
+        String sql = "DELETE FROM services WHERE id = ?";
+        int rowsAffected = jdbcTemplate.update(sql, id);
+        return rowsAffected > 0;
+    }
+
+    // Маппер для услуг
+    private static class ServiceRowMapper implements RowMapper<OurService> {
+        @Override
+        public OurService mapRow(ResultSet rs, int rowNum) throws SQLException {
+            OurService service = new OurService();
+            service.setId(rs.getLong("id"));
+            service.setTitle(rs.getString("title"));
+            service.setDescription(rs.getString("description"));
+            service.setPrice(rs.getDouble("price"));
+            service.setPriceUnit(rs.getString("price_unit"));
+            service.setIsPopular(rs.getBoolean("is_popular"));
+            return service;
+        }
+    }
+}
