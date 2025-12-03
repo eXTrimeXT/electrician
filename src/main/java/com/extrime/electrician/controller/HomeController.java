@@ -1,9 +1,9 @@
 package com.extrime.electrician.controller;
 
 import com.extrime.electrician.dao.ServiceDAO;
+import com.extrime.electrician.dao.UserDAO;
 import com.extrime.electrician.dao.WorkDAO;
 import com.extrime.electrician.model.ContactInfo;
-import com.extrime.electrician.model.User;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,21 +18,15 @@ public class HomeController {
     private final WorkDAO workDAO;
 
     @Autowired
-    public HomeController(ServiceDAO serviceDAO, WorkDAO workDAO) {
+    public HomeController(ServiceDAO serviceDAO, WorkDAO workDAO, UserDAO userDAO) {
         this.serviceDAO = serviceDAO;
         this.workDAO = workDAO;
     }
 
     @GetMapping("/")
-    public String home(Model model) {
+    public String home(Model model, HttpSession session) {
         // Устанавливаем заголовок страницы
         model.addAttribute("pageTitle", "Электрик - профессиональные услуги");
-
-//        // Добавляем информацию о пользователе в модель
-//        User user = (User) session.getAttribute("user");
-//        if (user != null) {
-//            model.addAttribute("user", user);
-//        }
 
         // Получаем услуги из БД
         model.addAttribute("services", serviceDAO.getAllServices());

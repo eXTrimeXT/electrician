@@ -35,29 +35,6 @@ public class AuthController {
     private static final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$");
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
 
-//    // Главная страница
-//    @GetMapping("/")
-//    public String home(Model model, HttpSession session) {
-//        model.addAttribute("pageTitle", "Электрик - профессиональные услуги");
-//
-//        // Получаем пользователя из сессии
-//        User user = getCurrentUser(session);
-//        if (user != null) {
-//            model.addAttribute("user", user);
-//        }
-////        // Получаем услуги из БД
-////        model.addAttribute("services", serviceDAO.getAllServices());
-////        model.addAttribute("popularServices", serviceDAO.getPopularServices());
-////
-////        // Получаем работы из БД
-////        model.addAttribute("works", workDAO.getAllWorks());
-////
-////        // Добавляем контактную информацию
-////        model.addAttribute("contactInfo", new ContactInfo());
-//
-//        return "home";
-//    }
-
     // Отображение страницы авторизации
     @GetMapping("/login")
     public String showLoginPage(Model model) {
@@ -72,6 +49,15 @@ public class AuthController {
         return "register";
     }
 
+
+    private User createAdminUser() {
+        User adminUser = new User();
+        adminUser.setId(0L);
+        adminUser.setUsername("admin");
+        adminUser.setRole("ADMIN");
+        adminUser.setActive(true);
+        return adminUser;
+    }
 
     // Обработка формы авторизации
     @PostMapping("/login")
@@ -90,24 +76,13 @@ public class AuthController {
 
         // Ищем пользователя в базе данных
         var userOptional = userDAO.findByUsername(username);
-
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-
-            // Генерируем хеш для введенного пароля
-            String inputHash = passwordService.hashPassword(password);
-
             // Проверяем пароль
-            if (inputHash.equals(user.getPassword())) {
+            if (passwordService.checkPassword(password, user.getPassword())){
                 session.setAttribute(SESSION_AUTH_KEY, true);
                 session.setAttribute(SESSION_USER_KEY, user);
-
-                // Перенаправляем в зависимости от роли
-                if ("ADMIN".equals(user.getRole())) {
-                    return "redirect:/admin";
-                } else {
-                    return "redirect:/profile";
-                }
+                return "redirect:/profile";
             }
         }
         // Если неверные данные, показываем ошибку
@@ -157,15 +132,13 @@ public class AuthController {
 
             // Хешируем пароль
             String hashedPassword = passwordService.hashPassword(password);
-            System.out.println("Registering user: " + username); // Для отладки
-            System.out.println("Password hash: " + hashedPassword); // Для отладки
 
             newUser.setPassword(hashedPassword);
             newUser.setEmail(email);
             newUser.setRole("USER"); // По умолчанию обычный пользователь
+            newUser.setActive(true);
 
             Long userId = userDAO.createUser(newUser);
-            System.out.println("User created with ID: " + userId); // Для отладки
 
             // Добавляем сообщение об успешной регистрации
             redirectAttributes.addFlashAttribute("successMessage",
@@ -174,7 +147,6 @@ public class AuthController {
             return "redirect:/login";
 
         } catch (Exception e) {
-            System.out.println("Registration error: " + e.getMessage()); // Для отладки
             e.printStackTrace(); // Для отладки
             model.addAttribute("error", "Ошибка при регистрации: " + e.getMessage());
             model.addAttribute("pageTitle", "Регистрация - Электрик");
@@ -234,13 +206,5 @@ public class AuthController {
                 errors.put("email", "Пользователь с таким email уже существует");
             }
         }
-    }
-
-    private User createAdminUser() {
-        User adminUser = new User();
-        adminUser.setId(0L);
-        adminUser.setUsername("admin");
-        adminUser.setRole("ADMIN");
-        return adminUser;
     }
 }
