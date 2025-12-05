@@ -22,6 +22,11 @@
                     <span th:text="${contactInfo.workingHours}">Пн-Пт: 00:00-00:00</span>
                 </div>
 
+                <!-- КНОПКА ОТЗЫВОВ (ДОБАВЛЕНА ПЕРЕД КНОПКОЙ ВХОДА) -->
+                <a href="/reviews" class="admin-btn reviews-btn">
+                    <i class="fas fa-comments"></i> Отзывы
+                </a>
+
                 <!-- Измененная кнопка с меню пользователя -->
                 <div class="user-menu-container" th:if="${session.user != null}">
                     <div class="user-dropdown">
@@ -119,10 +124,7 @@
                 <img th:src="${work.imageUrl}" alt="Работа" class="work-image">
                 <div class="work-content">
                     <h3 th:text="${work.title}">Название работы</h3>
-<!--                    <div class="work-date" th:text="${#dates.format(work.workDate, 'dd.MM.yyyy')}">15.03.2024</div>-->
-
                     <div class="work-date" th:text="${work.formattedDate}">15.03.2025</div>
-
                     <p class="work-description" th:text="${work.description}">Описание работы</p>
                     <div class="work-price" th:text="${#numbers.formatDecimal(work.price, 0, 'DEFAULT', 0, 'DEFAULT') + ' ₽'}">25 000 ₽</div>
                 </div>
@@ -147,7 +149,7 @@
             </div>
             <div class="contact-item">
                 <i class="fas fa-clock"></i>
-                <span th:text="${contactInfo.workingHours}">Пн-Пт: 9:00-18:00</span>
+                <span th:text="${contactInfo.workingHours}">Пн-Пт: 00:00-00:00</span>
             </div>
         </div>
     </section>

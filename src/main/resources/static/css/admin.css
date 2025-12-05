@@ -170,6 +170,38 @@
 .btn:hover {
     opacity: 0.9;
 }
+/* В раздел стилей кнопок добавьте: */
+.reviews-btn {
+    background: #9b59b6;
+}
+
+.reviews-btn:hover {
+    background: #8e44ad;
+}
+
+/* В раздел стилей навигации: */
+.admin-nav-btn {
+    background: #34495e;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.3s;
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.admin-nav-btn:hover {
+    background: #3d566e;
+}
+
+.admin-nav-btn.active {
+    background: #3498db;
+}
 
 /* === Стили таблиц === */
 .admin-table {

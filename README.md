@@ -2,16 +2,14 @@
 
 Отключен кэш для статических ресурсов
 
-Главная страница
+Что уже сделано:
+- Главная страница
+- Админ панель
+- Регистрация?
+- Авторизация
+- Запрет всем к админ-панеле(кроме админа)
 
-![1](https://github.com/eXTrimeXT/electrician/blob/main/md_screens/1.png)
-
-![2](https://github.com/eXTrimeXT/electrician/blob/main/md_screens/2.png)
-
-Админ панель - Услуги
-
-![3](https://github.com/eXTrimeXT/electrician/blob/main/md_screens/3.png)
-
-Админ панель - Работы
-
-![4](https://github.com/eXTrimeXT/electrician/blob/main/md_screens/4.png)
+Что нужно сделать:
+- Починить регистрацию (валидацию, страницу об ошибке)
+- Добавить красивую страницу 404
+- **Добавить отзывы**

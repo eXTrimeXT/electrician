@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Произошла ошибка</title>
+    <link rel="stylesheet" href="../../static/css/home.css">
+    <link rel="stylesheet" href="../../static/css/error.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="header-content">
+            <h1><i class="fas fa-bolt"></i> Профессиональный электрик</h1>
+            <div class="contact-header">
+                <div class="phone">
+                    <i class="fas fa-phone"></i>
+                    <span><a href="tel:+79506219757">+7 (950) 621-97-57</a></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <div class="error-page">
+        <div class="error-container">
+            <div class="error-icon">
+                <i class="fas fa-exclamation-triangle" style="color: #f39c12;"></i>
+            </div>
+
+            <h1 class="error-title">Произошла ошибка</h1>
+            <span class="error-code" th:text="${status}">Ошибка</span>
+
+            <div class="error-message">
+                <p th:text="${error}">Что-то пошло не так.</p>
+                <p th:if="${message}" th:text="${message}"></p>
+                <p th:unless="${message}">Пожалуйста, попробуйте еще раз или свяжитесь с нами.</p>
+            </div>
+
+            <div class="error-actions">
+                <a href="/" class="error-btn error-btn-primary">
+                    <i class="fas fa-home"></i> На главную
+                </a>
+                <a href="javascript:history.back()" class="error-btn error-btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Назад
+                </a>
+                <a th:href="@{/reviews}" class="error-btn error-btn-secondary">
+                    <i class="fas fa-comments"></i> Отзывы
+                </a>
+            </div>
+
+            <div th:if="${timestamp}" class="error-details">
+                <h4><i class="fas fa-info-circle"></i> Детали ошибки:</h4>
+                <pre>
+Время: <span th:text="${timestamp}"></span>
+Статус: <span th:text="${status}"></span>
+Путь: <span th:text="${path}"></span>
+Ошибка: <span th:text="${error}"></span>
+                </pre>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Профессиональный электрик. Все права защищены.</p>
+    </div>
+</footer>
+</body>
+</html>

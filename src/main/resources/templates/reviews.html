@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle}">Отзывы клиентов</title>
+    <link rel="stylesheet" href="../static/css/home.css">
+    <link rel="stylesheet" href="../static/css/reviews.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="../static/js/reviews-script.js"></script>
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="header-content">
+            <h1><i class="fas fa-comments"></i> Отзывы клиентов</h1>
+            <div class="contact-header">
+                <div class="phone">
+                    <i class="fas fa-phone"></i>
+                    <span><a href="tel:+79506219757">+7 (950) 621-97-57</a></span>
+                </div>
+
+                <!-- Кнопки навигации -->
+                <a href="/" class="admin-btn">
+                    <i class="fas fa-home"></i> На главную
+                </a>
+
+                <!-- Меню пользователя -->
+                <div class="user-menu-container" th:if="${session.user != null}">
+                    <div class="user-dropdown">
+                        <button class="user-menu-btn">
+                            <i class="fas fa-user-circle"></i>
+                            <span th:text="${session.user.username}"></span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="user-dropdown-content">
+                            <a th:href="@{/profile}">
+                                <i class="fas fa-user"></i> Мой профиль
+                            </a>
+                                <a th:if="${#strings.equals(session.user.role, 'ADMIN')}" th:href="@{/admin}">
+                                <i class="fas fa-cogs"></i> Админ панель
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a th:href="@{/logout}">
+                                <i class="fas fa-sign-out-alt"></i> Выйти
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <a th:if="${session.user == null}" href="/login" class="admin-btn">
+                    <i class="fas fa-sign-in-alt"></i> Войти
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <div class="reviews-page">
+        <!-- Сообщения -->
+        <div th:if="${success}" class="alert alert-success">
+            <i class="fas fa-check-circle"></i> <span th:text="${success}"></span>
+        </div>
+        <div th:if="${error}" class="alert alert-error">
+            <i class="fas fa-exclamation-circle"></i> <span th:text="${error}"></span>
+        </div>
+        <div th:if="${dbError}" class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i> <span th:text="${dbError}"></span>
+        </div>
+
+        <!-- Форма добавления отзыва -->
+        <div th:if="${isLoggedIn && !isAdmin}" class="add-review-form">
+            <h3><i class="fas fa-pencil-alt"></i> Добавить отзыв</h3>
+            <form th:action="@{/reviews/add}" method="post" id="reviewForm">
+                <div class="form-group">
+                    <label for="rating">Ваша оценка:</label>
+                    <div class="rating-stars" id="ratingStars">
+                        <input type="hidden" id="rating-value" name="rating" value="5" required>
+                        <span class="star active" data-value="1" title="Очень плохо">
+                            <i class="fas fa-star"></i>
+                        </span>
+                        <span class="star active" data-value="2" title="Плохо">
+                            <i class="fas fa-star"></i>
+                        </span>
+                        <span class="star active" data-value="3" title="Нормально">
+                            <i class="fas fa-star"></i>
+                        </span>
+                        <span class="star active" data-value="4" title="Хорошо">
+                            <i class="fas fa-star"></i>
+                        </span>
+                        <span class="star active" data-value="5" title="Отлично">
+                            <i class="fas fa-star"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="comment">Ваш отзыв:</label>
+                    <textarea id="comment" name="comment" class="form-control" rows="5"
+                              placeholder="Поделитесь вашим опытом..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-edit">
+                    <i class="fas fa-paper-plane"></i> Опубликовать отзыв
+                </button>
+            </form>
+        </div>
+
+        <div th:unless="${isLoggedIn}" class="login-prompt" style="text-align: center; padding: 2rem; background: #f8f9fa; border-radius: 8px; margin: 2rem 0;">
+            <h3 style="color: #7f8c8d; margin-bottom: 1rem;">
+                <i class="fas fa-comment-alt"></i> Хотите оставить отзыв?
+            </h3>
+            <p style="color: #555; margin-bottom: 1rem;">
+                Для добавления отзыва необходимо войти в систему
+            </p>
+            <a href="/login" class="btn btn-edit">
+                <i class="fas fa-sign-in-alt"></i> Войти
+            </a>
+        </div>
+
+        <!-- Список отзывов -->
+        <div class="reviews-list">
+            <h2><i class="fas fa-comments"></i> Отзывы наших клиентов</h2>
+
+            <div th:if="${#lists.isEmpty(reviews)}" style="text-align: center; padding: 3rem; color: #7f8c8d;">
+                <i class="fas fa-comment-slash" style="font-size: 3rem; margin-bottom: 1rem; color: #ddd;"></i>
+                <h3 style="margin-bottom: 0.5rem;">Пока нет отзывов</h3>
+                <p>Будьте первым, кто оставит отзыв о наших услугах!</p>
+            </div>
+
+            <div th:each="review : ${reviews}" class="review-card">
+                <div class="review-header">
+                    <div class="review-user">
+                        <i class="fas fa-user-circle"></i>
+                        <span th:text="${review.username}">Пользователь</span>
+                    </div>
+                    <div class="review-rating">
+                        <span th:text="${review.rating}">5</span>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+
+                <div class="review-date">
+                    <i class="far fa-calendar"></i>
+                    <span th:text="${#temporals.format(review.createdAt, 'dd.MM.yyyy HH:mm')}"></span>
+                </div>
+
+                <div class="review-content" th:text="${review.comment}">
+                    Текст отзыва...
+                </div>
+
+                <!-- Ответ администратора -->
+                <div th:if="${review.adminResponse}" class="admin-response">
+                    <div class="admin-response-header">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Ответ администратора:</span>
+                    </div>
+                    <p th:text="${review.adminResponse}">Ответ администратора...</p>
+                    <div th:if="${isAdmin}">
+                        <form th:action="@{/reviews/{id}/delete-response(id=${review.id})}"
+                              method="post"
+                              style="margin-top: 0.5rem;">
+                            <button type="submit" class="btn btn-delete btn-sm" onclick="return confirm('Удалить ответ администратора?')">
+                                <i class="fas fa-trash"></i> Удалить ответ
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Кнопки действий -->
+                <button th:if="${isLoggedIn && (session.user.id == review.userId)}"
+                        type="button"
+                        class="btn btn-edit"
+                        th:attr="data-id=${review.id}, data-rating=${review.rating}, data-comment=${review.comment}"
+                        onclick="editReview(this.getAttribute('data-id'), this.getAttribute('data-rating'), this.getAttribute('data-comment'))">
+                    <i class="fas fa-edit"></i> Редактировать
+                </button>
+
+                <!-- Форма удаления (не требует изменений) -->
+                <form th:if="${isLoggedIn && (isAdmin || (session.user.id == review.userId))}"
+                      th:action="@{/reviews/{id}/delete(id=${review.id})}"
+                      method="post"
+                      style="display: inline;">
+                    <button type="submit" class="btn btn-delete" onclick="return confirm('Удалить этот отзыв?')">
+                        <i class="fas fa-trash"></i> Удалить
+                    </button>
+                </form>
+
+                <!-- Кнопка ответа (только для админа) -->
+<!--                <button th:if="${isAdmin && !review.adminResponse}"-->
+                <button th:if="${isAdmin}"
+                        type="button"
+                        class="btn btn-reply"
+                        th:attr="data-id=${review.id}"
+                        onclick="replyToReview(this.getAttribute('data-id'))">
+                    <i class="fas fa-reply"></i> Ответить
+                </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Профессиональный электрик. Все права защищены.</p>
+    </div>
+</footer>
+
+<!-- Модальное окно для редактирования -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <h3><i class="fas fa-edit"></i> Редактировать отзыв</h3>
+        <form id="editForm" method="post">
+            <div class="form-group">
+                <label>Оценка:</label>
+                <div class="rating-stars" id="editRatingStars">
+                    <input type="hidden" id="editRating" name="rating">
+                    <span class="star" data-value="1"><i class="fas fa-star"></i></span>
+                    <span class="star" data-value="2"><i class="fas fa-star"></i></span>
+                    <span class="star" data-value="3"><i class="fas fa-star"></i></span>
+                    <span class="star" data-value="4"><i class="fas fa-star"></i></span>
+                    <span class="star" data-value="5"><i class="fas fa-star"></i></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Отзыв:</label>
+                <textarea id="editComment" name="comment" class="form-control" rows="5" required></textarea>
+            </div>
+            <div class="modal-actions">
+                <button type="submit" class="btn btn-edit">Сохранить</button>
+                <button type="button" class="btn btn-delete" onclick="closeModal()">Отмена</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Модальное окно для ответа -->
+<div id="replyModal" class="modal">
+    <div class="modal-content">
+        <h3><i class="fas fa-reply"></i> Ответить на отзыв</h3>
+        <form id="replyForm" method="post">
+            <input type="hidden" id="replyReviewId" name="reviewId">
+            <div class="form-group">
+                <label>Ответ администратора:</label>
+                <textarea id="replyResponse" name="response" class="form-control" rows="5"
+                          placeholder="Введите ваш ответ..." required></textarea>
+            </div>
+            <div class="modal-actions">
+                <button type="submit" class="btn btn-reply">Отправить</button>
+                <button type="button" class="btn btn-delete" onclick="closeReplyModal()">Отмена</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

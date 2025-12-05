@@ -33,13 +33,14 @@ spring:
         cachecontrol:
           no-cache: true
           must-revalidate: true
-
+      add-mappings: false
   # Отключение кэша шаблонов Spring MVC
   mvc:
     static-path-pattern: /static/**
     view:
       prefix: /templates/
       suffix: .html
+    throw-exception-if-no-handler-found: true
 
   # Загрузка файлов
   servlet:
@@ -49,15 +50,22 @@ spring:
       max-request-size: 20MB
       file-size-threshold: 2KB
 
+
 server:
   port: 8081
   servlet:
     context-path: /
+  error:
+#    whitelabel:
+#      enabled: false
+    path: /error
+
 
 logging:
   level:
     com.extrime.electrician: DEBUG
     org.springframework.web: DEBUG
     org.springframework.web.multipart: DEBUG
+    org:springframework:jdbc: DEBUG
     org.springframework.jdbc.core.JdbcTemplate: DEBUG
     org.springframework.jdbc.core.StatementCreatorUtils: TRACE

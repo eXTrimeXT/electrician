@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Внутренняя ошибка сервера - 500</title>
+    <link rel="stylesheet" href="../../static/css/home.css">
+    <link rel="stylesheet" href="../../static/css/error.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="header-content">
+            <h1><i class="fas fa-bolt"></i> Профессиональный электрик</h1>
+            <div class="contact-header">
+                <div class="phone">
+                    <i class="fas fa-phone"></i>
+                    <span><a href="tel:+79506219757">+7 (950) 621-97-57</a></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <div class="error-page">
+        <div class="error-container">
+            <div class="error-icon error-icon-500">
+                <i class="fas fa-server"></i>
+            </div>
+
+            <h1 class="error-title">Внутренняя ошибка сервера</h1>
+            <span class="error-code">Ошибка 500</span>
+
+            <div class="error-message">
+                <p>К сожалению, произошла внутренняя ошибка сервера.</p>
+                <p>Наша команда уже уведомлена о проблеме и работает над ее решением.</p>
+                <p>Попробуйте обновить страницу через несколько минут.</p>
+            </div>
+
+            <div class="error-actions">
+                <a href="/" class="error-btn error-btn-primary">
+                    <i class="fas fa-home"></i> На главную
+                </a>
+                <a href="javascript:location.reload()" class="error-btn error-btn-secondary">
+                    <i class="fas fa-redo"></i> Обновить страницу
+                </a>
+                <a href="tel:+79506219757" class="error-btn error-btn-secondary">
+                    <i class="fas fa-phone"></i> Позвонить нам
+                </a>
+            </div>
+
+            <div class="error-details" th:if="${timestamp}">
+                <h4><i class="fas fa-bug"></i> Техническая информация:</h4>
+                <pre>
+Время ошибки: <span th:text="${timestamp}"></span>
+Статус: 500 - Internal Server Error
+Путь: <span th:text="${path}"></span>
+Ошибка: <span th:text="${error}"></span>
+Сообщение: <span th:text="${message}"></span>
+                </pre>
+            </div>
+
+            <div style="margin-top: 2rem; padding: 1rem; background: #fff3cd; border-radius: 5px; border-left: 4px solid #ffc107;">
+                <p style="color: #856404; margin: 0;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <strong>Что делать?</strong>
+                    Попробуйте обновить страницу. Если ошибка повторяется, свяжитесь с нами.
+                </p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Профессиональный электрик. Все права защищены.</p>
+        <p style="font-size: 0.9rem; margin-top: 0.5rem; color: #bdc3c7;">
+            <i class="fas fa-envelope"></i> Для срочных вопросов: electrician@example.com
+        </p>
+    </div>
+</footer>
+
+<script>
+    // Автоматическое обновление через 30 секунд
+    setTimeout(function() {
+        if (confirm('Прошло 30 секунд. Хотите обновить страницу?')) {
+            location.reload();
+        }
+    }, 30000);
+
+    // Счетчик для автообновления
+    let countdown = 30;
+    const countdownElement = document.createElement('div');
+    countdownElement.style.cssText = 'margin-top: 1rem; color: #7f8c8d; font-size: 0.9rem;';
+    countdownElement.innerHTML = `<i class="fas fa-clock"></i> Автообновление через: <span id="countdown">${countdown}</span> сек.`;
+
+    const container = document.querySelector('.error-container');
+    container.appendChild(countdownElement);
+
+    const countdownInterval = setInterval(function() {
+        countdown--;
+        document.getElementById('countdown').textContent = countdown;
+
+        if (countdown <= 0) {
+            clearInterval(countdownInterval);
+            location.reload();
+        }
+    }, 1000);
+</script>
+</body>
+</html>

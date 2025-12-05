@@ -11,7 +11,7 @@ public class ContactInfo {
         this.address = "г. Нижний Новгород";
         this.phone = "+7 (950) 621-97-57";
         this.email = "electrician@example.com";
-        this.workingHours = "Пн-Пт: 9:00-18:00";
+        this.workingHours = "Пн-Пт: 8:00-17:00";
     }
 
     // Геттеры и сеттеры

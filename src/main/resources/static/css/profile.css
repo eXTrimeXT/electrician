@@ -12,7 +12,8 @@
     background: white;
     border-radius: 10px;
     padding: 25px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
 }
 
 .info-card h2 {
@@ -21,6 +22,9 @@
     font-size: 1.5rem;
     border-bottom: 2px solid #3498db;
     padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .info-item {
@@ -35,7 +39,7 @@
 }
 
 .info-item .label {
-    font-weight: bold;
+    font-weight: 600;
     color: #555;
     min-width: 200px;
     display: flex;
@@ -55,31 +59,39 @@
 
 .status-active {
     color: #27ae60;
+    font-weight: 600;
 }
 
 .status-inactive {
     color: #e74c3c;
+    font-weight: 600;
 }
 
 .actions {
     display: flex;
     gap: 15px;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 .btn {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
     padding: 12px 25px;
-    background: #3498db;
     color: white;
     text-decoration: none;
     border-radius: 5px;
-    font-weight: bold;
-    transition: background 0.3s;
+    font-weight: 600;
+    transition: all 0.3s;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
 }
 
 .btn:hover {
-    background: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
 .home-btn {
@@ -98,18 +110,47 @@
     background: #8e44ad;
 }
 
+.reviews-btn {
+    background: #3498db;
+}
+
+.reviews-btn:hover {
+    background: #2980b9;
+}
+
 .logout-btn {
-    position: absolute;
-    right: 20px;
-    top: 20px;
     background: #e74c3c;
     color: white;
     padding: 10px 20px;
     border-radius: 5px;
     text-decoration: none;
-    transition: background 0.3s;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .logout-btn:hover {
     background: #c0392b;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .info-item {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .info-item .label {
+        min-width: auto;
+    }
+
+    .actions {
+        flex-direction: column;
+    }
+
+    .actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
 }

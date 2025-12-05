@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страница не найдена - 404</title>
+    <link rel="stylesheet" href="../../static/css/home.css">
+    <link rel="stylesheet" href="../../static/css/error.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="header-content">
+            <h1><i class="fas fa-bolt"></i> Профессиональный электрик</h1>
+            <div class="contact-header">
+                <div class="phone">
+                    <i class="fas fa-phone"></i>
+                    <span><a href="tel:+79506219757">+7 (950) 621-97-57</a></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <div class="error-page">
+        <div class="error-container">
+            <div class="error-icon error-icon-404">
+                <i class="fas fa-map-signs"></i>
+            </div>
+
+            <h1 class="error-title">Страница не найдена</h1>
+            <span class="error-code">Ошибка 404</span>
+
+            <div class="error-message">
+                <p>Извините, но страница, которую вы ищете, не существует или была перемещена.</p>
+                <p>Возможно, вы ввели неправильный адрес или страница была удалена.</p>
+            </div>
+
+            <div class="error-actions">
+                <a href="/" class="error-btn error-btn-primary">
+                    <i class="fas fa-home"></i> На главную
+                </a>
+                <a href="javascript:history.back()" class="error-btn error-btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Вернуться назад
+                </a>
+                <a href="/reviews" class="error-btn error-btn-secondary">
+                    <i class="fas fa-comments"></i> Посмотреть отзывы
+                </a>
+            </div>
+
+            <div class="error-details" th:if="${timestamp}">
+                <h4><i class="fas fa-info-circle"></i> Техническая информация:</h4>
+                <pre>
+Время ошибки: <span th:text="${timestamp}"></span>
+Статус: 404 - Not Found
+Путь: <span th:text="${path}"></span>
+                </pre>
+            </div>
+
+            <div style="margin-top: 2rem; color: #7f8c8d; font-size: 0.9rem;">
+                <p><i class="fas fa-lightbulb"></i> <strong>Совет:</strong> Проверьте правильность введенного URL или воспользуйтесь меню навигации.</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Профессиональный электрик. Все права защищены.</p>
+        <p style="font-size: 0.9rem; margin-top: 0.5rem; color: #bdc3c7;">
+            <i class="fas fa-exclamation-triangle"></i> Если ошибка повторяется, свяжитесь с нами
+        </p>
+    </div>
+</footer>
+
+<script>
+    // Автоматический возврат через 10 секунд
+    setTimeout(function() {
+        if (confirm('Хотите вернуться на главную страницу?')) {
+            window.location.href = '/';
+        }
+    }, 10000);
+</script>
+</body>
+</html>
