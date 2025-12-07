@@ -86,3 +86,34 @@
     color: #2980b9;
     text-decoration: underline;
 }
+
+/* Добавить в конец файла login.css */
+
+.register-link {
+    text-align: center;
+    color: #7f8c8d;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eee;
+}
+
+.register-link-btn {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.3s;
+}
+
+.register-link-btn:hover {
+    color: #2980b9;
+    text-decoration: underline;
+}
+
+/* Убрать старую ссылку назад из login.css, если она есть */
+.back-link {
+    display: none;
+}

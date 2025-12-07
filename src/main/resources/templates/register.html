@@ -14,6 +14,9 @@
     <div class="container">
         <div class="header-content">
             <h1><i class="fas fa-user-plus"></i> Регистрация</h1>
+            <a href="/" class="back-link-header">
+                <i class="fas fa-arrow-left"></i> Вернуться на главную
+            </a>
         </div>
     </div>
 </header>
@@ -35,49 +38,53 @@
         <form id="registerForm" th:action="@{/register}" method="post">
             <!-- Имя пользователя -->
             <div class="form-group">
-                <label for="username">Логин *:</label>
+                <label for="username">Логин:</label>
                 <input type="text" id="username" name="username" required
                        th:value="${username != null ? username : ''}"
                        placeholder="Введите логин (3-30 символов)">
-                <small class="form-hint">Только буквы, цифры и подчеркивания</small>
-                <div th:if="${errors?.username}" class="field-error">
+                <small class="form-hint">Только латинские буквы, цифры и подчеркивания</small>
+                <!-- Исправленный синтаксис для Thymeleaf -->
+                <div th:if="${errors != null and errors.containsKey('username')}" class="field-error">
                     <i class="fas fa-exclamation-circle"></i>
-                    <span th:text="${errors.username}"></span>
+                    <span th:text="${errors.get('username')}"></span>
                 </div>
             </div>
 
             <!-- Email -->
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email"
+                <input type="email" id="email" name="email" required
                        th:value="${email != null ? email : ''}"
-                       placeholder="Введите email (необязательно)">
-                <div th:if="${errors?.email}" class="field-error">
+                       placeholder="Введите email">
+                <!-- Исправленный синтаксис для Thymeleaf -->
+                <div th:if="${errors != null and errors.containsKey('email')}" class="field-error">
                     <i class="fas fa-exclamation-circle"></i>
-                    <span th:text="${errors.email}"></span>
+                    <span th:text="${errors.get('email')}"></span>
                 </div>
             </div>
 
             <!-- Пароль -->
             <div class="form-group">
-                <label for="password">Пароль *:</label>
+                <label for="password">Пароль:</label>
                 <input type="password" id="password" name="password" required
                        placeholder="Введите пароль">
-                <small class="form-hint">Минимум 8 символов, включая цифры, строчные и заглавные буквы</small>
-                <div th:if="${errors?.password}" class="field-error">
+                <small class="form-hint">Минимум 8 символов, включая цифры, строчные и заглавные латинские буквы</small>
+                <!-- Исправленный синтаксис для Thymeleaf -->
+                <div th:if="${errors != null and errors.containsKey('password')}" class="field-error">
                     <i class="fas fa-exclamation-circle"></i>
-                    <span th:text="${errors.password}"></span>
+                    <span th:text="${errors.get('password')}"></span>
                 </div>
             </div>
 
             <!-- Подтверждение пароля -->
             <div class="form-group">
-                <label for="confirmPassword">Подтверждение пароля *:</label>
+                <label for="confirmPassword">Подтверждение пароля:</label>
                 <input type="password" id="confirmPassword" name="confirmPassword" required
                        placeholder="Повторите пароль">
-                <div th:if="${errors?.confirmPassword}" class="field-error">
+                <!-- Исправленный синтаксис для Thymeleaf -->
+                <div th:if="${errors != null and errors.containsKey('confirmPassword')}" class="field-error">
                     <i class="fas fa-exclamation-circle"></i>
-                    <span th:text="${errors.confirmPassword}"></span>
+                    <span th:text="${errors.get('confirmPassword')}"></span>
                 </div>
             </div>
 
@@ -94,8 +101,6 @@
                 </div>
             </div>
         </form>
-
-        <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> Вернуться на главную</a>
     </div>
 </main>
 </body>

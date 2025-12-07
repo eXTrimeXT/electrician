@@ -14,32 +14,6 @@
     align-items: center;
 }
 
-.admin-nav {
-    display: flex;
-    gap: 1rem;
-}
-
-.admin-nav-btn {
-    background: #34495e;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: background 0.3s;
-}
-
-.admin-nav-btn:hover {
-    background: #3d566e;
-}
-
-.admin-nav-btn.active {
-    background: #3498db;
-}
-
 /* === Стили секций === */
 .admin-section {
     display: none;
@@ -170,16 +144,13 @@
 .btn:hover {
     opacity: 0.9;
 }
-/* В раздел стилей кнопок добавьте: */
-.reviews-btn {
-    background: #9b59b6;
-}
-
-.reviews-btn:hover {
-    background: #8e44ad;
-}
 
 /* В раздел стилей навигации: */
+.admin-nav {
+    display: flex;
+    gap: 1rem;
+}
+
 .admin-nav-btn {
     background: #34495e;
     color: white;
@@ -195,12 +166,20 @@
     font-size: 0.95rem;
 }
 
+.admin-nav-btn.active {
+    background: #64ad5c;
+}
 .admin-nav-btn:hover {
-    background: #3d566e;
+    background: #2f522b;
 }
 
-.admin-nav-btn.active {
-    background: #3498db;
+/* В раздел стилей кнопок добавьте: */
+.reviews-btn {
+    background: #8e44ad;
+}
+
+.reviews-btn:hover {
+    background: #513463;
 }
 
 /* === Стили таблиц === */

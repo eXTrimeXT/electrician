@@ -59,7 +59,11 @@ textarea.form-control {
     transition: all 0.3s;
 }
 
-.star:hover,
+.star.hover {
+    color: #ffcc00;
+    transform: scale(1.5);
+}
+
 .star.active {
     color: #f39c12;
     transform: scale(1.1);

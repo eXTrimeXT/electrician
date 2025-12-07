@@ -18,7 +18,7 @@ public class HomeController {
     private final WorkDAO workDAO;
 
     @Autowired
-    public HomeController(ServiceDAO serviceDAO, WorkDAO workDAO, UserDAO userDAO) {
+    public HomeController(ServiceDAO serviceDAO, WorkDAO workDAO) {
         this.serviceDAO = serviceDAO;
         this.workDAO = workDAO;
     }

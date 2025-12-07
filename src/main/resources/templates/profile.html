@@ -13,9 +13,20 @@
     <div class="container">
         <div class="header-content">
             <h1><i class="fas fa-user"></i> Профиль пользователя</h1>
-            <a href="/logout" class="logout-btn">
-                <i class="fas fa-sign-out-alt"></i> Выйти
-            </a>
+            <div class="actions">
+                <a href="/" class="btn home-btn">
+                    <i class="fas fa-home"></i> На главную
+                </a>
+                <a href="/reviews" class="btn reviews-btn">
+                    <i class="fas fa-comments"></i> Отзывы
+                </a>
+                <a th:if="${user.role == 'ADMIN'}" href="/admin" class="btn admin-btn">
+                    <i class="fas fa-cog"></i> Админ панель
+                </a>
+                <a href="/logout" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Выйти
+                </a>
+            </div>
         </div>
     </div>
 </header>
@@ -51,18 +62,6 @@
                     </span>
                 </div>
             </div>
-        </div>
-
-        <div class="actions">
-            <a href="/" class="btn home-btn">
-                <i class="fas fa-home"></i> На главную
-            </a>
-            <a href="/reviews" class="btn reviews-btn">
-                <i class="fas fa-comments"></i> Отзывы
-            </a>
-            <a th:if="${user.role == 'ADMIN'}" href="/admin" class="btn admin-btn">
-                <i class="fas fa-cog"></i> Админ панель
-            </a>
         </div>
     </div>
 </main>

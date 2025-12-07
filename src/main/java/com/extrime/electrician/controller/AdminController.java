@@ -22,7 +22,7 @@ public class AdminController {
 
         // Проверяем роль пользователя
         User user = (User) session.getAttribute("user");
-        if (user == null || !"ADMIN".equals(user.getRole())) {
+        if (user == null || !user.getRole().equals("ADMIN")) {
             // Если пользователь не админ, перенаправляем на профиль
             return "redirect:/profile";
         }
@@ -40,11 +40,5 @@ public class AdminController {
         }
         // Логика получения данных для админ панели
         return "admin_data";
-    }
-
-    // Добавьте эту проверку в каждый метод админ-контроллера
-    private boolean isAdmin(HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        return user != null && "ADMIN".equals(user.getRole());
     }
 }

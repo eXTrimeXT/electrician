@@ -158,6 +158,9 @@
     text-decoration: underline;
 }
 
+
+/* Убрать из register.css стили для .back-link или закомментировать их */
+/*
 .back-link {
     display: inline-flex;
     align-items: center;
@@ -173,6 +176,7 @@
     color: #2980b9;
     text-decoration: underline;
 }
+*/
 
 /* Индикаторы силы пароля */
 .password-strength {
