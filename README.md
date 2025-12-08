@@ -14,12 +14,12 @@
     <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/4.png" width="100%"></td>
   </tr>
   <tr>
-    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/8.png" width="100%"></td>
     <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/5.png" width="100%"></td>
+    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/6.png" width="100%"></td>
   </tr>
   <tr>
-    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/6.png" width="100%"></td>
     <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/7.png" width="100%"></td>
+    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/8.png" width="100%"></td>
   </tr>
 </table>
 
