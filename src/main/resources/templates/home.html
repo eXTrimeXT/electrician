@@ -15,6 +15,7 @@
             <div class="contact-header">
                 <div class="phone">
                     <i class="fas fa-phone"></i>
+                    <!-- ИЗМЕНИТЬ НОМЕР ТЕЛЕФОНА ЕСЛИ НЕОБХОДИМО -->
                     <span><a href="tel:+79506219757">+7 (950) 621-97-57</a></span>
                 </div>
                 <div class="hours">
@@ -156,9 +157,7 @@
 </main>
 
 <footer>
-    <div class="container">
-        <p>&copy; 2025 Профессиональный электрик. Все права защищены.</p>
-    </div>
+    <p>&copy; <span th:text="${#dates.year(#dates.createNow())}">2022</span> Профессиональный электрик. Все права защищены.</p>
 </footer>
 </body>
 </html>

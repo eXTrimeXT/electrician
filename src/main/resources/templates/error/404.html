@@ -68,7 +68,7 @@
 
 <footer>
     <div class="container">
-        <p>&copy; 2025 Профессиональный электрик. Все права защищены.</p>
+        <p>&copy; <span th:text="${#dates.year(#dates.createNow())}">2022</span> Профессиональный электрик. Все права защищены.</p>
         <p style="font-size: 0.9rem; margin-top: 0.5rem; color: #bdc3c7;">
             <i class="fas fa-exclamation-triangle"></i> Если ошибка повторяется, свяжитесь с нами
         </p>

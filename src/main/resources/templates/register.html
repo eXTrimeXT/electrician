@@ -101,9 +101,7 @@
 </main>
 
 <footer>
-    <div class="container">
-        <p>&copy; 2025 Профессиональный электрик. Все права защищены.</p>
-    </div>
+    <p>&copy; <span th:text="${#dates.year(#dates.createNow())}">2022</span> Профессиональный электрик. Все права защищены.</p>
 </footer>
 </body>
 </html>

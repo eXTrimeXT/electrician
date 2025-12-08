@@ -1,5 +1,6 @@
 package com.extrime.electrician.service.email;
 
+import com.extrime.electrician.config.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -13,23 +14,17 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    @Value("${spring.mail.username}")
-    private String fromEmail;
-
-    @Value("${email.verification.sender-name:Электрик Сервис}")
-    private String senderName;
-
-    @Value("${email.verification.subject:Код подтверждения регистрации}")
-    private String subject;
+    @Autowired
+    private Config config;
 
     public boolean sendVerificationCode(String toEmail, String verificationCode) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-            helper.setFrom(fromEmail, senderName);
+            helper.setFrom(config.getFromEmail(), config.getSenderName());
             helper.setTo(toEmail);
-            helper.setSubject(subject);
+            helper.setSubject(config.getSubject());
 
             String htmlContent = """
                 <!DOCTYPE html>
@@ -99,7 +94,7 @@ public class EmailService {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-            helper.setFrom(fromEmail, senderName);
+            helper.setFrom(config.getFromEmail(), config.getSenderName());
             helper.setTo(toEmail);
             helper.setSubject("Восстановление пароля - Электрик Сервис");
 

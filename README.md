@@ -36,85 +36,91 @@
 
 ```
 electrician-project/
+├── src/main/java/com/extrime/electrician/
+│   ├── config/
+│   │   ├── Config.java
+│   │   ├── ConfigPostgres.java
+│   │   ├── DatabaseInitializer.java
+│   │   └── FileUploadConfig.java
+│   ├── controller/
+│   │   ├── AdminApiController.java
+│   │   ├── AdminController.java
+│   │   ├── AuthController.java
+│   │   ├── CustomErrorController.java
+│   │   ├── HomeController.java
+│   │   ├── PasswordResetController.java
+│   │   ├── RegisterController.java
+│   │   └── ReviewController.java
+│   ├── dao/
+│   │   ├── EmailVerificationDAO.java
+│   │   ├── ReviewDAO.java
+│   │   ├── ServiceDAO.java
+│   │   ├── UserDAO.java
+│   │   └── WorkDAO.java
+│   ├── model/
+│   │   ├── ContactInfo.java
+│   │   ├── EmailVerification.java
+│   │   ├── OurService.java
+│   │   ├── PasswordResetToken.java
+│   │   ├── Review.java
+│   │   ├── User.java
+│   │   └── Work.java
+│   ├── service/
+│   │   ├── email/
+│   │   │   ├── EmailService.java
+│   │   │   └── EmailVerificationService.java
+│   │   ├── AuthService.java
+│   │   ├── FileStorageService.java
+│   │   ├── PasswordService.java
+│   │   └── RegisterService.java
+│   └── ElectricianApplication.java
 │
-├── java/
-│   └── com/
-│       └── extrime/
-│           └── electrician/
-│               ├── config/
-│               │   ├── ConfigPostgres
-│               │   ├── DatabaseInitializer
-│               │   └── FileUploadConfig
-│               │
-│               ├── controller/
-│               │   ├── AdminApiController
-│               │   ├── AdminController
-│               │   ├── AuthController
-│               │   ├── CustomErrorController.java
-│               │   ├── HomeController
-│               │   ├── RegisterController
-│               │   └── ReviewController
-│               │
-│               ├── dao/
-│               │   ├── ReviewDAO
-│               │   ├── ServiceDAO
-│               │   ├── UserDAO
-│               │   └── WorkDAO
-│               │
-│               ├── model/
-│               │   ├── ContactInfo
-│               │   ├── OurService
-│               │   ├── Review
-│               │   ├── User
-│               │   └── Work
-│               │
-│               ├── service/
-│               │   ├── AuthService
-│               │   ├── FileStorageService
-│               │   ├── PasswordService
-│               │   └── RegisterService
-│               │
-│               └── ElectricianApplication.java
-│
-├── resources/
-│   ├── static/
-│   │   ├── css/
-│   │   │   ├── admin.css
-│   │   │   ├── error.css
-│   │   │   ├── file-upload.css
-│   │   │   ├── home.css
-│   │   │   ├── login.css
-│   │   │   ├── profile.css
-│   │   │   ├── register.css
-│   │   │   └── reviews.css
-│   │   │
-│   │   ├── images/
-│   │   ├── js/
-│   │   │   ├── admin-script.js
-│   │   │   ├── register-script.js
-│   │   │   └── reviews-script.js
-│   │   │
-│   │   └── uploads/
-│   │
-│   ├── templates/
-│   │   ├── error111/
-│   │   │   └── ...
-│   │   ├── 404.html
-│   │   ├── 500.html
-│   │   ├── error.html
-│   │   ├── admin.html
-│   │   ├── home.html
-│   │   ├── login.html
-│   │   ├── profile.html
-│   │   ├── register.html
-│   │   └── reviews.html
-│   │
-│   ├── application.yml
-│   ├── postgres.sql
-│   ├── postgres_users.sql
-│   ├── postgres_works.sql
-│   ├── reviews.sql
-│   └── view.sql
+└── src/main/resources/
+    ├── static/
+    │   ├── css/
+    │   │   ├── admin.css
+    │   │   ├── error.css
+    │   │   ├── file-upload.css
+    │   │   ├── home.css
+    │   │   ├── login.css
+    │   │   ├── password-reset.css
+    │   │   ├── profile.css
+    │   │   ├── register.css
+    │   │   ├── reviews.css
+    │   │   └── verification.css
+    │   ├── js/
+    │   │   ├── admin-script.js
+    │   │   ├── password-reset-script.js
+    │   │   ├── register-script.js
+    │   │   ├── reviews-script.js
+    │   │   └── verification-script.js
+    │   └── uploads/
+    │
+    ├── templates/
+    │   ├── error/
+    │   │   ├── 404.html
+    │   │   ├── 500.html
+    │   │   └── error.html
+    │   ├── admin.html
+    │   ├── home.html
+    │   ├── login.html
+    │   ├── password-error.html
+    │   ├── password-forgot.html
+    │   ├── password-reset.html
+    │   ├── password-success.html
+    │   ├── profile.html
+    │   ├── register.html
+    │   ├── reviews.html
+    │   └── verification.html
+    │
+    ├── application.yml
+    ├── create_db.sql
+    ├── table_email.sql
+    ├── table_reviews.sql
+    ├── table_services.sql
+    ├── table_users.sql
+    ├── table_works.sql
+    └── view.sql
 ```
 
 ## 🚀 Быстрый старт
@@ -126,7 +132,7 @@ electrician-project/
 
 2. **Настроить базу данных**:
     - Создать БД PostgreSQL
-    - Обновить настройки в `application.properties`
+    - Обновить настройки в `application.yml`
 
 3. **Запустить приложение**:
    ```bash
@@ -137,6 +143,8 @@ electrician-project/
     - Главная страница: `http://localhost:8080`
     - Админ панель: `http://localhost:8080/admin`
     - Страница отзывов: `http://localhost:8080/reviews`
+    - Страница входа: `http://localhost:8080/login`
+    - Страница регистрации: `http://localhost:8080/register`
 
 ## 🔐 Доступ по умолчанию
 
@@ -145,7 +153,7 @@ electrician-project/
     - Пароль: `admin` (изменить после первого входа)
 
 - **Обычный пользователь**:
-    - Регистрация доступна по ссылке "Зарегистрироваться"
+    - Регистрация доступна по ссылке "/register"
 
 ## 📱 Адаптивность
 

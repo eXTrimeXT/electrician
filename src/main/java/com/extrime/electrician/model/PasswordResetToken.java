@@ -2,7 +2,6 @@ package com.extrime.electrician.model;
 
 import lombok.Getter;
 import lombok.Setter;
-
 import java.time.LocalDateTime;
 
 // Класс для хранения информации о токене

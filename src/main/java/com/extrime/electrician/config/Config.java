@@ -1,0 +1,43 @@
+package com.extrime.electrician.config;
+
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+@Setter
+@Getter
+@Component
+public class Config {
+    // Базовая конфигурация
+    @Value("${spring.application.url}")
+    private String URL;
+    @Value("${server.port}")
+    private String PORT;
+
+    // POSTGRES
+    @Value("${spring.datasource.url}")
+    private String postgresUrl;
+    @Value("${spring.datasource.username}")
+    private String postgresUsername;
+    @Value("${spring.datasource.password}")
+    private String postgresPassword;
+    @Value("${spring.datasource.driver-class-name}")
+    private String postgresDriverClassName;
+
+    // MAIL
+    @Value("${spring.mail.username}")
+    private String fromEmail;
+    @Value("${email.verification.sender-name}")
+    private String senderName;
+    @Value("${email.verification.subject}")
+    private String subject;
+    @Value("${email.verification.code-length}")
+    private int codeLength;
+    @Value("${email.verification.expiration-minutes}")
+    private int expirationMinutes;
+
+    // FileStorageService - path to uploads dir
+    @Value("${file.upload-dir:./uploads}")
+    private String uploadDir;
+}

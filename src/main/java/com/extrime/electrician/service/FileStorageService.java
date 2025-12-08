@@ -1,5 +1,7 @@
 package com.extrime.electrician.service;
 
+import com.extrime.electrician.config.Config;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,13 +16,13 @@ import java.util.UUID;
 @Service
 public class FileStorageService {
 
-    @Value("${file.upload-dir:./uploads}")
-    private String uploadDir;
+    @Autowired
+    private Config config;
 
      // Сохраняет загруженный файл и возвращает URL для доступа к нему
     public String storeFile(MultipartFile file) throws IOException {
         // Создаем директорию, если она не существует
-        Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
+        Path uploadPath = Paths.get(config.getUploadDir()).toAbsolutePath().normalize();
         Files.createDirectories(uploadPath);
 
         // Генерируем уникальное имя файла
@@ -41,7 +43,7 @@ public class FileStorageService {
         try {
             // Извлекаем имя файла из URL
             String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
-            Path filePath = Paths.get(uploadDir).resolve(fileName).normalize();
+            Path filePath = Paths.get(config.getUploadDir()).resolve(fileName).normalize();
 
             return Files.deleteIfExists(filePath);
         } catch (IOException e) {

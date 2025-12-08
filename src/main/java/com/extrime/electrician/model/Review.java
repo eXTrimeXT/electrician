@@ -29,5 +29,4 @@ public class Review {
         this.comment = comment;
         this.active = true;
     }
-
 }

@@ -5,9 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class ElectricianApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(ElectricianApplication.class, args);
-        System.out.println("Открыть сайт http://localhost:8081");
+        System.out.println("Открыть сайт: http://localhost:8081");
     }
 }

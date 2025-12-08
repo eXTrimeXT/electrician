@@ -33,15 +33,6 @@ public class AuthController {
         return "login";
     }
 
-//    private User createAdminUser() {
-//        User adminUser = new User();
-//        adminUser.setId(0L);
-//        adminUser.setUsername("admin");
-//        adminUser.setRole("ADMIN");
-//        adminUser.setActive(true);
-//        return adminUser;
-//    }
-
     // Обработка формы авторизации
     @PostMapping("/login")
     public String login(
@@ -49,13 +40,6 @@ public class AuthController {
             @RequestParam("password") String password,
             HttpSession session,
             Model model) {
-
-        // Проверяем стандартные учетные данные админа
-//        if (ADMIN_USERNAME.equals(username) && ADMIN_PASSWORD.equals(password)) {
-//            session.setAttribute(SESSION_AUTH_KEY, true);
-//            session.setAttribute(SESSION_USER_KEY, createAdminUser());
-//            return "redirect:/admin";
-//        }
 
         // Ищем пользователя в базе данных
         var userOptional = userDAO.findByUsername(username);

@@ -126,14 +126,6 @@ public class ReviewController {
                                    HttpSession session,
                                    RedirectAttributes redirectAttributes) {
 
-        User user = (User) session.getAttribute("user");
-
-        // Проверка прав администратора
-//        if (user == null || !"ADMIN".equals(user.getRole())) {
-//            redirectAttributes.addFlashAttribute("error", "Только администратор может отвечать на отзывы");
-//            return "redirect:/reviews";
-//        }
-
         reviewDAO.addAdminResponse(id, response);
         redirectAttributes.addFlashAttribute("success", "Ответ добавлен");
         return "redirect:/reviews";

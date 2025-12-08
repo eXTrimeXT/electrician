@@ -1,5 +1,6 @@
 package com.extrime.electrician.service.email;
 
+import com.extrime.electrician.config.Config;
 import com.extrime.electrician.dao.EmailVerificationDAO;
 import com.extrime.electrician.model.EmailVerification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Random;
 
 @Service
@@ -19,11 +21,8 @@ public class EmailVerificationService {
     @Autowired
     private EmailService emailService;
 
-    @Value("${email.verification.code-length:6}")
-    private int codeLength;
-
-    @Value("${email.verification.expiration-minutes:5}")
-    private int expirationMinutes;
+    @Autowired
+    private Config config;
 
     /**
      * Генерация кода верификации
@@ -32,7 +31,7 @@ public class EmailVerificationService {
         Random random = new Random();
         StringBuilder code = new StringBuilder();
 
-        for (int i = 0; i < codeLength; i++) {
+        for (int i = 0; i < config.getCodeLength(); i++) {
             code.append(random.nextInt(10)); // только цифры
         }
 
@@ -49,7 +48,7 @@ public class EmailVerificationService {
             String verificationCode = generateVerificationCode();
 
             // Устанавливаем время истечения
-            LocalDateTime expiresAt = LocalDateTime.now().plusMinutes(expirationMinutes);
+            LocalDateTime expiresAt = LocalDateTime.now().plusMinutes(config.getExpirationMinutes());
 
             // Создаем запись в БД
             EmailVerification verification = new EmailVerification();

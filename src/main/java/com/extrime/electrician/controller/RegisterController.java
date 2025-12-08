@@ -69,7 +69,6 @@ public class RegisterController {
             model.addAttribute("username", userName); // Добавляем username
             model.addAttribute("pageTitle", "Подтверждение email - Электрик");
 
-//            return "redirect:/verification";
             return "verification";
 
         } else if (result.containsKey("error")) {

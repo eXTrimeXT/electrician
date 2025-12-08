@@ -285,7 +285,6 @@ public class PasswordResetController {
 
     @Scheduled(fixedRate = 3600000) // Каждый час
     public void cleanupExpiredTokensScheduled() {
-//        logger.info("Cleaning up expired password reset tokens");
         cleanupExpiredTokens();
     }
 }

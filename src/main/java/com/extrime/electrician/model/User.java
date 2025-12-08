@@ -17,7 +17,7 @@ public class User {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private boolean active;
-    private boolean emailVerified; // Добавляем это поле
+    private boolean emailVerified;
 
     // Конструкторы
     public User() {
