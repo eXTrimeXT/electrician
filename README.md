@@ -173,7 +173,7 @@ electrician-project/
 
 3. **Запустить приложение**:
    ```bash
-   mvn spring-boot:run
+   .\mvnw.cmd spring-boot:run
    ```
 
 4. **Доступ к приложению**:
