@@ -43,7 +43,7 @@ spring:
     view:
       prefix: /templates/
       suffix: .html
-  #    throw-exception-if-no-handler-found: false
+      throw-exception-if-no-handler-found: false
 
   # Загрузка файлов
   servlet:
