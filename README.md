@@ -6,21 +6,30 @@
 
 <table>
   <tr>
-    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/1.png" width="100%"></td>
-    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/2.png" width="100%"></td>
+    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/home.png" width="100%"></td>
+    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/home_added.png" width="100%"></td>
   </tr>
   <tr>
-    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/3.png" width="100%"></td>
-    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/4.png" width="100%"></td>
+    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/login.png" width="100%"></td>
+    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/user_profile.png" width="100%"></td>
   </tr>
   <tr>
-    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/5.png" width="100%"></td>
-    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/6.png" width="100%"></td>
+    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/register.png" width="100%"></td>
+    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/register_mail.png" width="100%"></td>
   </tr>
   <tr>
-    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/7.png" width="100%"></td>
-    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/8.png" width="100%"></td>
+    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/reviews.png" width="100%"></td>
+    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/reviews_added.png" width="100%"></td>
   </tr>
+  <tr>
+    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/admin_service.png" width="100%"></td>
+    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/admin_reviews.png" width="100%"></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/admin_work.png" width="100%"></td>
+    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/admin_work_added.png" width="100%"></td>
+  </tr>
+
 </table>
 
 ## ✨ Особенности
@@ -54,6 +63,13 @@
     - Валидация форм на клиенте и сервере
 
 ## 📁 Структура проекта
+
+<table>
+  <tr>
+    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/struct_1.png" width="100%"></td>
+    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/struct_2.png" width="100%"></td>
+  </tr>
+</table>
 
 ```
 electrician-project/
