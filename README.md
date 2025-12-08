@@ -4,13 +4,15 @@
 
 ## 💡 Пример реализации
 
-![1](https://github.com/eXTrimeXT/electrician/blob/main/md_screens/1.png)
-![2](https://github.com/eXTrimeXT/electrician/blob/main/md_screens/2.png)
-![3](https://github.com/eXTrimeXT/electrician/blob/main/md_screens/3.png)
-![4](https://github.com/eXTrimeXT/electrician/blob/main/md_screens/4.png)
-![5](https://github.com/eXTrimeXT/electrician/blob/main/md_screens/5.png)
-![6](https://github.com/eXTrimeXT/electrician/blob/main/md_screens/6.png)
-![7](https://github.com/eXTrimeXT/electrician/blob/main/md_screens/7.png)
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;">
+  <img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/1.png" style="width: 100%;">
+  <img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/2.png" style="width: 100%;">
+  <img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/3.png" style="width: 100%;">
+  <img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/4.png" style="width: 100%;">
+  <img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/5.png" style="width: 100%;">
+  <img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/6.png" style="width: 100%;">
+  <img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/7.png" style="width: 100%;">
+</div>
 
 ## ✨ Особенности
 
