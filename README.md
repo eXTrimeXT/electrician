@@ -2,6 +2,16 @@
 
 Веб-приложение для предоставления услуг электрика с административной панелью, системой отзывов и управлением контентом.
 
+## 💡 Пример реализации
+
+![1]("https://github.com/eXTrimeXT/electrician/blob/main/md_screens/1.png")
+![2](https://github.com/eXTrimeXT/electrician/blob/main/md_screens/2.png)
+![3](https://github.com/eXTrimeXT/electrician/blob/main/md_screens/3.png)
+![4](https://github.com/eXTrimeXT/electrician/blob/main/md_screens/4.png)
+![5](https://github.com/eXTrimeXT/electrician/blob/main/md_screens/5.png)
+![6](https://github.com/eXTrimeXT/electrician/blob/main/md_screens/6.png)
+![7](https://github.com/eXTrimeXT/electrician/blob/main/md_screens/7.png)
+
 ## ✨ Особенности
 
 - **Публичная часть**:
