@@ -4,15 +4,24 @@
 
 ## 💡 Пример реализации
 
-<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;">
-  <img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/1.png" style="width: 100%;">
-  <img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/2.png" style="width: 100%;">
-  <img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/3.png" style="width: 100%;">
-  <img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/4.png" style="width: 100%;">
-  <img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/5.png" style="width: 100%;">
-  <img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/6.png" style="width: 100%;">
-  <img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/7.png" style="width: 100%;">
-</div>
+<table>
+  <tr>
+    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/1.png" width="100%"></td>
+    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/2.png" width="100%"></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/3.png" width="100%"></td>
+    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/4.png" width="100%"></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/5.png" width="100%"></td>
+    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/6.png" width="100%"></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/7.png" width="100%"></td>
+    <td></td>
+  </tr>
+</table>
 
 ## ✨ Особенности
 
