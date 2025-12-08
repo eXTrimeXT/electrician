@@ -17,9 +17,15 @@ public class User {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private boolean active;
+    private boolean emailVerified; // Добавляем это поле
 
     // Конструкторы
-    public User() {}
+    public User() {
+        this.active = true;
+        this.emailVerified = false;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
 
     public User(Long id, String username, String password, String email, String role) {
         this.id = id;
@@ -27,8 +33,9 @@ public class User {
         this.password = password;
         this.email = email;
         this.role = role;
+        this.active = true;
+        this.emailVerified = false;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
-        this.active = true;
     }
 }

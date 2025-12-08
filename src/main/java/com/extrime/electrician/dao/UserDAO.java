@@ -69,6 +69,17 @@ public class UserDAO {
         }
     }
 
+    // Получить пользователя по ID
+    public Optional<User> findById(Long id) {
+        String sql = "SELECT * FROM users WHERE id = ?";
+        try {
+            User user = jdbcTemplate.queryForObject(sql, new UserRowMapper(), id);
+            return Optional.ofNullable(user);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
     // Проверить существует ли пользователь с таким username
     public boolean existsByUsername(String username) {
         String sql = "SELECT COUNT(*) FROM users WHERE username = ?";
@@ -131,6 +142,29 @@ public class UserDAO {
         return rowsAffected > 0;
     }
 
+    /**
+     * Обновление пароля пользователя
+     */
+    public void update(User user) {
+        String sql = """
+        UPDATE users 
+        SET username = ?, email = ?, password = ?, 
+            role = ?, active = ?, created_at = ?, 
+            email_verified = ?
+        WHERE id = ?
+        """;
+
+        jdbcTemplate.update(sql,
+                user.getUsername(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getRole(),
+                user.isActive(),
+                user.getCreatedAt(),
+                user.isEmailVerified(),
+                user.getId());
+    }
+
     // Получить всех пользователей
     public List<User> findAll() {
         String sql = "SELECT * FROM users ORDER BY created_at DESC";
@@ -143,17 +177,6 @@ public class UserDAO {
         int rowsAffected = jdbcTemplate.update(sql,
                 java.sql.Timestamp.valueOf(LocalDateTime.now()), id);
         return rowsAffected > 0;
-    }
-
-    // Получить пользователя по ID
-    public Optional<User> findById(Long id) {
-        String sql = "SELECT * FROM users WHERE id = ?";
-        try {
-            User user = jdbcTemplate.queryForObject(sql, new UserRowMapper(), id);
-            return Optional.ofNullable(user);
-        } catch (EmptyResultDataAccessException e) {
-            return Optional.empty();
-        }
     }
 
     /**

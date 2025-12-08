@@ -40,14 +40,11 @@ public class PasswordService {
 
     // Хеширование пароля с использованием BCrypt
     public String hashPassword(String password) {
-        String hashPassword = passwordEncoder.encode(password);
-        System.out.println("hashPassword = " + hashPassword);
-        return hashPassword;
+        return passwordEncoder.encode(password);
     }
 
     // Проверка пароля
     public boolean checkPassword(String inputPassword, String storedHash) {
-        System.out.println("inputPassword = " + inputPassword + " storedHash = " + storedHash);
         return passwordEncoder.matches(inputPassword, storedHash);
     }
 

@@ -93,4 +93,89 @@ public class EmailService {
             return false;
         }
     }
+
+    public boolean sendResetPasswordEmail(String toEmail, String resetLink, String username) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setFrom(fromEmail, senderName);
+            helper.setTo(toEmail);
+            helper.setSubject("Восстановление пароля - Электрик Сервис");
+
+            String htmlContent = """
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <style>
+                    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                    .header { background: #2c3e50; color: white; padding: 20px; text-align: center; }
+                    .button { 
+                        display: inline-block; 
+                        padding: 12px 24px; 
+                        background: #3498db; 
+                        color: white; 
+                        text-decoration: none; 
+                        border-radius: 5px; 
+                        margin: 20px 0;
+                        font-weight: bold;
+                    }
+                    .footer { 
+                        margin-top: 30px; 
+                        padding-top: 20px; 
+                        border-top: 1px solid #eee; 
+                        color: #7f8c8d;
+                        font-size: 12px;
+                    }
+                    .token { 
+                        background: #f8f9fa; 
+                        padding: 15px; 
+                        border-radius: 5px; 
+                        font-family: monospace; 
+                        word-break: break-all;
+                        margin: 15px 0;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <h2>Восстановление пароля</h2>
+                    </div>
+                    
+                    <p>Здравствуйте, %s!</p>
+                    <p>Мы получили запрос на восстановление пароля для вашей учётной записи на сайте "Электрик Сервис".</p>
+                    
+                    <p><strong>Для установки нового пароля нажмите на кнопку ниже:</strong></p>
+                    
+                    <p style="text-align: center;">
+                        <a href="%s" class="button">Восстановить пароль</a>
+                    </p>
+                    
+                    <p>Или скопируйте эту ссылку в адресную строку браузера:</p>
+                    <div class="token">%s</div>
+                    
+                    <p><strong>Эта ссылка действительна в течение 24 часов.</strong></p>
+                    
+                    <p>Если вы не запрашивали восстановление пароля, просто проигнорируйте это письмо.</p>
+                    
+                    <div class="footer">
+                        <p>С уважением,<br>Команда Электрик Сервис</p>
+                        <p><small>Это письмо отправлено автоматически, пожалуйста, не отвечайте на него.</small></p>
+                    </div>
+                </div>
+            </body>
+            </html>
+            """.formatted(username, resetLink, resetLink);
+
+            helper.setText(htmlContent, true);
+            mailSender.send(message);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
