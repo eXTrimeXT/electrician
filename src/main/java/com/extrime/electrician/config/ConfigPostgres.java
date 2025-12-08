@@ -9,7 +9,7 @@ import javax.sql.DataSource;
 @Configuration
 public class ConfigPostgres {
     @Autowired
-    public Config config;
+    private Config config;
 
     @Bean
     public DataSource dataSource() {

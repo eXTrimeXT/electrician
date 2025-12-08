@@ -1,5 +1,6 @@
 package com.extrime.electrician.controller;
 
+import com.extrime.electrician.config.Config;
 import com.extrime.electrician.dao.UserDAO;
 import com.extrime.electrician.model.PasswordResetToken;
 import com.extrime.electrician.model.User;
@@ -29,6 +30,9 @@ public class PasswordResetController {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private Config config;
 
     // Хранилище токенов сброса пароля (в production используйте БД или Redis)
     private final Map<String, PasswordResetToken> resetTokens = new ConcurrentHashMap<>();
@@ -178,7 +182,7 @@ public class PasswordResetController {
      */
     private void sendResetPasswordEmail(String toEmail, String token, String username) {
         try {
-            String resetLink = "http://localhost:8081/password/reset?token=" + token;
+            String resetLink = config.getURL() + "password/reset?token=" + token;
 
             String htmlContent = """
                 <!DOCTYPE html>
