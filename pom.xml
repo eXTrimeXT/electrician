@@ -61,6 +61,12 @@
             <artifactId>spring-security-crypto</artifactId>
             <version>6.4.5</version>
         </dependency>
+        <!-- SESSION -->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.session</groupId>-->
+<!--            <artifactId>spring-session-jdbc</artifactId>-->
+<!--            <version>3.2.0</version>-->
+<!--        </dependency>-->
         <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -83,6 +89,11 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
+        </dependency>
+        <!-- GMAIL -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
     </dependencies>
 

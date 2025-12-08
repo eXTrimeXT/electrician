@@ -41,7 +41,7 @@ spring:
     view:
       prefix: /templates/
       suffix: .html
-#    throw-exception-if-no-handler-found: false
+  #    throw-exception-if-no-handler-found: false
 
   # Загрузка файлов
   servlet:
@@ -50,6 +50,30 @@ spring:
       max-file-size: 20MB
       max-request-size: 20MB
       file-size-threshold: 2KB
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: timurmalishevxt57@gmail.com  # Ваш Gmail
+    password: iqpp dswl lhmo qgsu     # Пароль приложения (не основной пароль)
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+
+# Настройки верификации email
+email:
+  verification:
+    code-length: 6
+    expiration-minutes: 5
+    sender-name: "Электрик Сервис"
+    subject: "Код подтверждения регистрации"
 
 
 server:

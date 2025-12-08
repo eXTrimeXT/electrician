@@ -14,8 +14,6 @@ import com.extrime.electrician.service.AuthService;
 
 @Controller
 public class AuthController {
-//    private static final String ADMIN_USERNAME = "admin";
-//    private static final String ADMIN_PASSWORD = "adminn";
     private static final String SESSION_AUTH_KEY = "isAuthenticated";
     private static final String SESSION_USER_KEY = "user";
 
@@ -67,7 +65,6 @@ public class AuthController {
             if (passwordService.checkPassword(password, user.getPassword())) {
                 session.setAttribute(SESSION_AUTH_KEY, true);
                 session.setAttribute(SESSION_USER_KEY, user);
-//                if (user.getRole().equals("ADMIN")) return "redirect:/admin";
                 return "redirect:/profile";
             }
         }

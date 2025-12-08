@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -154,6 +153,34 @@ public class UserDAO {
             return Optional.ofNullable(user);
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
+        }
+    }
+
+    /**
+     * Активация пользователя (установка флага active = true)
+     */
+    public boolean activateUser(Long userId) {
+        try {
+            String sql = "UPDATE users SET active = true WHERE id = ?";
+            int rowsAffected = jdbcTemplate.update(sql, userId);
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Проверка, активен ли пользователь
+     */
+    public boolean isUserActive(Long userId) {
+        try {
+            String sql = "SELECT active FROM users WHERE id = ?";
+            Boolean active = jdbcTemplate.queryForObject(sql, Boolean.class, userId);
+            return active != null && active;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 

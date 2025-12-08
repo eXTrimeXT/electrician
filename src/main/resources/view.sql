@@ -2,3 +2,4 @@
 -- SELECT * FROM public.works;
 -- SELECT * FROM public.reviews;
 SELECT * FROM public.users;
+-- SELECT * FROM public.email_verifications;

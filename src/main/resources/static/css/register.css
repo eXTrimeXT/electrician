@@ -158,26 +158,6 @@
     text-decoration: underline;
 }
 
-
-/* Убрать из register.css стили для .back-link или закомментировать их */
-/*
-.back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 2rem;
-    color: #3498db;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s;
-}
-
-.back-link:hover {
-    color: #2980b9;
-    text-decoration: underline;
-}
-*/
-
 /* Индикаторы силы пароля */
 .password-strength {
     height: 5px;

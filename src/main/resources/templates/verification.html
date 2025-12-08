@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подтверждение Email</title>
+    <link rel="stylesheet" href="../static/css/home.css">
+    <link rel="stylesheet" href="../static/css/verification.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../static/js/verification-script.js"></script>
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="header-content">
+            <h1><i class="fas fa-envelope-circle-check"></i> Подтверждение Email</h1>
+            <a href="/register" class="back-link-header">
+                <i class="fas fa-arrow-left"></i> Назад к регистрации
+            </a>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <div class="verification-container">
+        <!-- Сообщения об успехе или ошибке -->
+        <div th:if="${successMessage}" class="success-message">
+            <i class="fas fa-check-circle"></i>
+            <span th:text="${successMessage}"></span>
+        </div>
+
+        <div th:if="${error}" class="error-message">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span th:text="${error}"></span>
+        </div>
+
+        <div class="verification-content">
+            <div class="verification-header">
+                <h2><i class="fas fa-envelope"></i> Подтверждение Email</h2>
+                <p>Мы отправили 6-значный код подтверждения на email:</p>
+
+                <div class="email-display">
+                    <i class="fas fa-envelope"></i>
+                    <span th:text="${email != null ? email : 'email@example.com'}"></span>
+                </div>
+
+                <p class="hint">Проверьте папку "Входящие" или "Спам"</p>
+            </div>
+
+            <form id="verificationForm">
+                <input type="hidden" id="userId" th:value="${userId}">
+                <input type="hidden" id="userEmail" th:value="${email}">
+
+                <div class="form-group">
+                    <label for="verificationCode">Код подтверждения:</label>
+                    <div class="code-input-container">
+                        <input type="text" id="verificationCode"
+                               maxlength="6" pattern="\d{6}"
+                               autocomplete="off"
+                               autofocus>
+                        <!-- placeholder="Введите 6 цифр"-->
+                        <div class="input-hint">Введите 6 цифр из письма</div>
+                    </div>
+                    <div id="codeError" class="field-error" style="display: none;">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span></span>
+                    </div>
+                </div>
+
+                <div class="timer-section">
+                    <div class="timer">
+                        <i class="fas fa-clock"></i>
+                        <span>Осталось времени: </span>
+                        <span id="countdown" class="countdown">15:00</span>
+                    </div>
+
+                    <div class="resend-info">
+                        Не получили код?
+                        <button type="button" class="resend-btn-link" id="resendBtn">
+                            <i class="fas fa-redo"></i> Отправить снова
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="verify-btn" id="verifyBtn">
+                        <i class="fas fa-check"></i> Подтвердить Email
+                    </button>
+
+                    <a href="/register" class="cancel-btn">
+                        <i class="fas fa-times"></i> Отмена
+                    </a>
+                </div>
+            </form>
+
+            <div class="verification-footer">
+                <p><i class="fas fa-info-circle"></i> После подтверждения email вы сможете войти в систему</p>
+                <p><i class="fas fa-question-circle"></i> Если возникли проблемы, свяжитесь с поддержкой</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Профессиональный электрик. Все права защищены.</p>
+    </div>
+</footer>
+</body>
+</html>

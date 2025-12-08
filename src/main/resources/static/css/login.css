@@ -117,3 +117,27 @@
 .back-link {
     display: none;
 }
+
+/* Стили для чекбокса "Запомнить меня" */
+.remember-me-group {
+    margin-bottom: 1.5rem;
+}
+
+.remember-me-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    color: #333;
+    font-weight: 500;
+}
+
+.remember-me-label input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+    cursor: pointer;
+}
+
+.remember-me-label span {
+    user-select: none;
+}

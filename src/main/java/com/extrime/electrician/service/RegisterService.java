@@ -2,6 +2,7 @@ package com.extrime.electrician.service;
 
 import com.extrime.electrician.dao.UserDAO;
 import com.extrime.electrician.model.User;
+import com.extrime.electrician.service.email.EmailVerificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -20,70 +21,12 @@ public class RegisterService {
     @Autowired
     private PasswordService passwordService;
 
+    @Autowired
+    private EmailVerificationService emailVerificationService; // Добавлено
+
     // Регулярные выражения для валидации
     private static final Pattern USERNAME_PATTERN = Pattern.compile("^[a-zA-Z0-9_]{3,30}$");
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
-
-    /**
-     * Обработка регистрации пользователя
-     * @return Map с результатом обработки:
-     *         - "errors": Map<String, String> с ошибками валидации
-     *         - "success": boolean - успешная регистрация
-     *         - "error": String - сообщение об общей ошибке
-     */
-    @Transactional
-    public Map<String, Object> processRegistration(String username, String password,
-                                                   String confirmPassword, String email) {
-
-        Map<String, Object> result = new HashMap<>();
-
-        // Валидация данных
-        Map<String, String> validationErrors = validateRegistration(username, password, confirmPassword, email);
-        if (!validationErrors.isEmpty()) {
-            result.put("errors", validationErrors);
-            return result;
-        }
-
-        try {
-            // Проверяем доступность логина и email
-            if (userDAO.existsByUsername(username)) {
-                validationErrors.put("username", "Пользователь с таким логином уже существует");
-                result.put("errors", validationErrors);
-                return result;
-            }
-
-            if (userDAO.existsByEmail(email)) {
-                validationErrors.put("email", "Пользователь с таким email уже существует");
-                result.put("errors", validationErrors);
-                return result;
-            }
-
-            // Создаем и сохраняем нового пользователя
-            User newUser = createUser(username, password, email);
-            Long userId = userDAO.createUser(newUser);
-
-            if (userId != null && userId > 0) {
-                result.put("success", true);
-            } else {
-                result.put("error", "Не удалось создать пользователя");
-            }
-
-        } catch (DataAccessException e) {
-            // Обработка ошибок базы данных
-            Map<String, String> dbErrors = handleDatabaseException(e);
-            if (!dbErrors.isEmpty()) {
-                result.put("errors", dbErrors);
-            } else {
-                result.put("error", "Ошибка базы данных при регистрации. Попробуйте позже.");
-            }
-        } catch (Exception e) {
-            // Общая обработка исключений
-            e.printStackTrace();
-            result.put("error", "Произошла непредвиденная ошибка. Пожалуйста, попробуйте позже.");
-        }
-
-        return result;
-    }
 
     /**
      * Создание объекта пользователя с хешированием пароля
@@ -243,5 +186,139 @@ public class RegisterService {
      */
     public boolean isEmailAvailable(String email) {
         return !userDAO.existsByEmail(email);
+    }
+
+    @Transactional
+    public Map<String, Object> processRegistration(String username, String password,
+                                                   String confirmPassword, String email) {
+        Map<String, Object> result = new HashMap<>();
+
+        // Валидация данных
+        Map<String, String> validationErrors = validateRegistration(username, password, confirmPassword, email);
+        if (!validationErrors.isEmpty()) {
+            result.put("errors", validationErrors);
+            return result;
+        }
+
+        try {
+            // Проверяем доступность логина и email
+            if (userDAO.existsByUsername(username)) {
+                validationErrors.put("username", "Пользователь с таким логином уже существует");
+                result.put("errors", validationErrors);
+                return result;
+            }
+
+            if (userDAO.existsByEmail(email)) {
+                validationErrors.put("email", "Пользователь с таким email уже существует");
+                result.put("errors", validationErrors);
+                return result;
+            }
+
+            // Создаем и сохраняем нового пользователя (НО ЕЩЕ НЕ АКТИВИРУЕМ)
+            User newUser = createUser(username, password, email);
+            newUser.setActive(false); // Пользователь неактивен до подтверждения email
+            Long userId = userDAO.createUser(newUser);
+
+            if (userId != null && userId > 0) {
+                // Отправляем код подтверждения
+                boolean emailSent = emailVerificationService
+                        .createAndSendVerificationCode(email, userId);
+
+                if (emailSent) {
+                    // Возвращаем ID пользователя для верификации
+                    result.put("success", true);
+                    result.put("userId", userId);
+                    result.put("email", email);
+                    result.put("requiresVerification", true);
+                } else {
+                    result.put("error", "Не удалось отправить код подтверждения. Попробуйте позже.");
+                    // Удаляем созданного пользователя
+                    userDAO.deleteUser(userId);
+                }
+            } else {
+                result.put("error", "Не удалось создать пользователя");
+            }
+
+        } catch (DataAccessException e) {
+            // Обработка ошибок базы данных
+            Map<String, String> dbErrors = handleDatabaseException(e);
+            if (!dbErrors.isEmpty()) {
+                result.put("errors", dbErrors);
+            } else {
+                result.put("error", "Ошибка базы данных при регистрации. Попробуйте позже.");
+            }
+        } catch (Exception e) {
+            // Общая обработка исключений
+            e.printStackTrace();
+            result.put("error", "Произошла непредвиденная ошибка. Пожалуйста, попробуйте позже.");
+        }
+
+        return result;
+    }
+
+    /**
+     * Подтверждение email и активация пользователя
+     */
+    @Transactional
+    public Map<String, Object> confirmEmail(Long userId, String email, String code) {
+        Map<String, Object> result = new HashMap<>();
+
+        try {
+            // Проверяем код
+            boolean isValid = emailVerificationService.verifyCode(email, code);
+
+            if (isValid) {
+                // Активируем пользователя
+                boolean activated = userDAO.activateUser(userId);
+
+                if (activated) {
+                    result.put("success", true);
+                    result.put("message", "Email успешно подтвержден! Теперь вы можете войти.");
+                } else {
+                    result.put("error", "Не удалось активировать пользователя.");
+                }
+            } else {
+                result.put("error", "Неверный или устаревший код подтверждения.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("error", "Произошла ошибка при подтверждении email.");
+        }
+
+        return result;
+    }
+
+    /**
+     * Повторная отправка кода подтверждения
+     */
+    @Transactional
+    public Map<String, Object> resendVerificationCode(Long userId, String email) {
+        Map<String, Object> result = new HashMap<>();
+
+        try {
+            // Проверяем, не активен ли уже пользователь
+            if (userDAO.isUserActive(userId)) {
+                result.put("error", "Пользователь уже активирован.");
+                return result;
+            }
+
+            // Отправляем новый код
+            boolean emailSent = emailVerificationService
+                    .createAndSendVerificationCode(email, userId);
+
+            if (emailSent) {
+                result.put("success", true);
+                result.put("message", "Новый код подтверждения отправлен на вашу почту.");
+            } else {
+                result.put("error", "Не удалось отправить код подтверждения. Попробуйте позже.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("error", "Произошла ошибка при отправке кода.");
+        }
+
+        return result;
     }
 }
