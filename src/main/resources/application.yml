@@ -4,13 +4,7 @@ spring:
     url: http://localhost:8081/
 #    url: http://электрик252.рф/
 
-  thymeleaf:
-    prefix: classpath:/templates/
-    suffix: .html
-    mode: HTML
-    encoding: UTF-8
-    cache: false
-
+  # POSTGRES
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/electrician_db
@@ -19,12 +13,35 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: validate # postgres
     show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect # postgres
         format_sql: true
+
+#  MySQL
+#  datasource:
+#    driver-class-name: org.postgresql.Driver
+#    url: jdbc:postgresql://localhost:5432/electrician_db
+#    username: root
+#    password: extrimepasswd
+#  MySQL
+#  jpa:
+#    hibernate:
+#      ddl-auto: validate # postgres
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.PostgreSQLDialect # postgres
+#        format_sql: true
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+    cache: false
 
   # Отключение кэша статических ресурсов
   web:

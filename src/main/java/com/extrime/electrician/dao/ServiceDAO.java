@@ -1,5 +1,6 @@
 package com.extrime.electrician.dao;
 
+import com.extrime.electrician.config.Config;
 import com.extrime.electrician.model.OurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,8 +18,11 @@ import java.util.Objects;
 
 @Repository
 public class ServiceDAO {
+    @Autowired
+    public Config config;
 
     private final JdbcTemplate jdbcTemplate;
+    private String sql;
 
     @Autowired
     public ServiceDAO(JdbcTemplate jdbcTemplate) {
@@ -27,26 +31,26 @@ public class ServiceDAO {
 
     // Получить все услуги
     public List<OurService> getAllServices() {
-        String sql = "SELECT * FROM services ORDER BY title";
+        if (config.isPostgres()) sql = "SELECT * FROM services ORDER BY title";
         return jdbcTemplate.query(sql, new ServiceRowMapper());
     }
 
     // Получить популярные услуги
     public List<OurService> getPopularServices() {
-        String sql = "SELECT * FROM services WHERE is_popular = true ORDER BY title";
+        if (config.isPostgres()) sql = "SELECT * FROM services WHERE is_popular = true ORDER BY title";
         return jdbcTemplate.query(sql, new ServiceRowMapper());
     }
 
     // Получить услугу по ID
     public OurService getServiceById(Long id) {
-        String sql = "SELECT * FROM services WHERE id = ?";
+        if (config.isPostgres()) sql = "SELECT * FROM services WHERE id = ?";
         List<OurService> services = jdbcTemplate.query(sql, new ServiceRowMapper(), id);
         return services.isEmpty() ? null : services.get(0);
     }
 
     // Добавить новую услугу
     public Long addService(OurService service) {
-        String sql = "INSERT INTO services (title, description, price, price_unit, is_popular) " + "VALUES (?, ?, ?, ?, ?)";
+        if (config.isPostgres()) sql = "INSERT INTO services (title, description, price, price_unit, is_popular) " + "VALUES (?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
@@ -63,7 +67,7 @@ public class ServiceDAO {
 
     // Обновить услугу
     public boolean updateService(OurService service) {
-        String sql = "UPDATE services SET title = ?, description = ?, price = ?, " +
+        if (config.isPostgres()) sql = "UPDATE services SET title = ?, description = ?, price = ?, " +
                 "price_unit = ?, is_popular = ? WHERE id = ?";
 
         int rowsAffected = jdbcTemplate.update(sql,
@@ -80,7 +84,7 @@ public class ServiceDAO {
 
     // Удалить услугу
     public boolean deleteService(Long id) {
-        String sql = "DELETE FROM services WHERE id = ?";
+        if (config.isPostgres()) sql = "DELETE FROM services WHERE id = ?";
         int rowsAffected = jdbcTemplate.update(sql, id);
         return rowsAffected > 0;
     }

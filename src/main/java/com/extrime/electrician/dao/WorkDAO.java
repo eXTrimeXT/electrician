@@ -1,5 +1,6 @@
 package com.extrime.electrician.dao;
 
+import com.extrime.electrician.config.Config;
 import com.extrime.electrician.model.Work;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,8 +19,11 @@ import java.util.Objects;
 
 @Repository
 public class WorkDAO {
+    @Autowired
+    public Config config;
 
     private final JdbcTemplate jdbcTemplate;
+    private String sql;
 
     @Autowired
     public WorkDAO(JdbcTemplate jdbcTemplate) {
@@ -28,20 +32,20 @@ public class WorkDAO {
 
     // Получить все работы
     public List<Work> getAllWorks() {
-        String sql = "SELECT * FROM works ORDER BY work_date DESC";
+        if (config.isPostgres()) sql = "SELECT * FROM works ORDER BY work_date DESC";
         return jdbcTemplate.query(sql, new WorkRowMapper());
     }
 
     // Получить работу по ID
     public Work getWorkById(Long id) {
-        String sql = "SELECT * FROM works WHERE id = ?";
+        if (config.isPostgres()) sql = "SELECT * FROM works WHERE id = ?";
         List<Work> works = jdbcTemplate.query(sql, new WorkRowMapper(), id);
         return works.isEmpty() ? null : works.get(0);
     }
 
     // Добавить новую работу
     public Long addWork(Work work) {
-        String sql = "INSERT INTO works (title, description, work_date, price, image_url) " + "VALUES (?, ?, ?, ?, ?)";
+        if (config.isPostgres()) sql = "INSERT INTO works (title, description, work_date, price, image_url) " + "VALUES (?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
@@ -58,7 +62,7 @@ public class WorkDAO {
 
     // Обновить работу
     public boolean updateWork(Work work) {
-        String sql = "UPDATE works SET title = ?, description = ?, work_date = ?, " +
+        if (config.isPostgres()) sql = "UPDATE works SET title = ?, description = ?, work_date = ?, " +
                 "price = ?, image_url = ? WHERE id = ?";
 
         int rowsAffected = jdbcTemplate.update(sql,
@@ -75,7 +79,7 @@ public class WorkDAO {
 
     // Удалить работу
     public boolean deleteWork(Long id) {
-        String sql = "DELETE FROM works WHERE id = ?";
+        if (config.isPostgres()) sql = "DELETE FROM works WHERE id = ?";
         int rowsAffected = jdbcTemplate.update(sql, id);
         return rowsAffected > 0;
     }

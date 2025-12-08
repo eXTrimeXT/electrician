@@ -1,5 +1,6 @@
 package com.extrime.electrician.dao;
 
+import com.extrime.electrician.config.Config;
 import com.extrime.electrician.model.Review;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,8 +19,11 @@ import java.util.Objects;
 
 @Repository
 public class ReviewDAO {
+    @Autowired
+    public Config config;
 
     private final JdbcTemplate jdbcTemplate;
+    private String sql;
 
     @Autowired
     public ReviewDAO(JdbcTemplate jdbcTemplate) {
@@ -27,7 +31,7 @@ public class ReviewDAO {
     }
 
     public void createTableIfNotExists() {
-        String sql = """
+        if (config.isPostgres()) sql = """
             CREATE TABLE IF NOT EXISTS reviews (
                 id SERIAL PRIMARY KEY,
                 user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
@@ -47,7 +51,7 @@ public class ReviewDAO {
     }
 
     public Long save(Review review) {
-        String sql = """
+        if (config.isPostgres()) sql = """
         INSERT INTO reviews (user_id, username, rating, comment, created_at, updated_at)
         VALUES (?, ?, ?, ?, ?, ?)
         """;
@@ -76,7 +80,7 @@ public class ReviewDAO {
     }
 
     public List<Review> findAllActive() {
-        String sql = """
+        if (config.isPostgres()) sql = """
             SELECT r.*, u.username as user_username 
             FROM reviews r 
             LEFT JOIN users u ON r.user_id = u.id 
@@ -87,7 +91,7 @@ public class ReviewDAO {
     }
 
     public List<Review> findAll() {
-        String sql = """
+        if (config.isPostgres()) sql = """
             SELECT r.*, u.username as user_username 
             FROM reviews r 
             LEFT JOIN users u ON r.user_id = u.id 
@@ -97,7 +101,7 @@ public class ReviewDAO {
     }
 
     public Review findById(Long id) {
-        String sql = """
+        if (config.isPostgres()) sql = """
             SELECT r.*, u.username as user_username 
             FROM reviews r 
             LEFT JOIN users u ON r.user_id = u.id 
@@ -107,7 +111,7 @@ public class ReviewDAO {
     }
 
     public boolean update(Review review) {
-        String sql = """
+        if (config.isPostgres()) sql = """
             UPDATE reviews 
             SET comment = ?, rating = ?, admin_response = ?, updated_at = ? 
             WHERE id = ?
@@ -125,7 +129,7 @@ public class ReviewDAO {
     }
 
     public boolean delete(Long id) {
-        String sql = "UPDATE reviews SET active = false, updated_at = ? WHERE id = ?";
+        if (config.isPostgres()) sql = "UPDATE reviews SET active = false, updated_at = ? WHERE id = ?";
         int rowsAffected = jdbcTemplate.update(sql,
                 Timestamp.valueOf(LocalDateTime.now()),
                 id
@@ -134,7 +138,7 @@ public class ReviewDAO {
     }
 
     public boolean addAdminResponse(Long reviewId, String response) {
-        String sql = "UPDATE reviews SET admin_response = ?, updated_at = ? WHERE id = ?";
+        if (config.isPostgres()) sql = "UPDATE reviews SET admin_response = ?, updated_at = ? WHERE id = ?";
         int rowsAffected = jdbcTemplate.update(sql,
                 response,
                 Timestamp.valueOf(LocalDateTime.now()),

@@ -15,15 +15,25 @@ public class Config {
     @Value("${server.port}")
     private String PORT;
 
-    // POSTGRES
+    // DATABASE
+    private final String NAME_TYPE_DATABASE = "postgres"; // or mysql
+
     @Value("${spring.datasource.url}")
-    private String postgresUrl;
+    private String databaseUrl;
     @Value("${spring.datasource.username}")
-    private String postgresUsername;
+    private String databaseUsername;
     @Value("${spring.datasource.password}")
-    private String postgresPassword;
+    private String databasePassword;
     @Value("${spring.datasource.driver-class-name}")
-    private String postgresDriverClassName;
+    private String databaseDriverClassName;
+
+    public boolean isPostgres(){
+        return NAME_TYPE_DATABASE.equals("postgres");
+    }
+
+    public boolean isMysql(){
+        return NAME_TYPE_DATABASE.equals("mysql");
+    }
 
     // MAIL
     @Value("${spring.mail.username}")

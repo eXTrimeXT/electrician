@@ -1,5 +1,6 @@
 package com.extrime.electrician.dao;
 
+import com.extrime.electrician.config.Config;
 import com.extrime.electrician.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -19,8 +20,11 @@ import java.util.Optional;
 
 @Repository
 public class UserDAO {
+    @Autowired
+    public Config config;
 
     private final JdbcTemplate jdbcTemplate;
+    private String sql;
 
     @Autowired
     public UserDAO(JdbcTemplate jdbcTemplate) {
@@ -29,27 +33,31 @@ public class UserDAO {
 
     // Создать таблицу пользователей (если не существует)
     public void createTableIfNotExists() {
-        String sql = """
-            CREATE TABLE IF NOT EXISTS users (
-                id SERIAL PRIMARY KEY,
-                username VARCHAR(50) UNIQUE NOT NULL,
-                password VARCHAR(255) NOT NULL,
-                email VARCHAR(100) UNIQUE,
-                role VARCHAR(20) DEFAULT 'USER',
-                active BOOLEAN DEFAULT true,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-            """;
-        jdbcTemplate.execute(sql);
-
-        // Создаем индекс для быстрого поиска по username
-        jdbcTemplate.execute("CREATE INDEX IF NOT EXISTS idx_users_username ON users(username)");
+        if (config.isPostgres()) {
+            sql = """
+                    CREATE TABLE IF NOT EXISTS users (
+                        id SERIAL PRIMARY KEY,
+                        username VARCHAR(50) UNIQUE NOT NULL,
+                        password VARCHAR(255) NOT NULL,
+                        email VARCHAR(100) UNIQUE,
+                        role VARCHAR(20) DEFAULT 'USER',
+                        active BOOLEAN DEFAULT true,
+                        email_verified BOOLEAN DEFAULT false,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                    """;
+            jdbcTemplate.execute(sql);
+            // Создаем индекс для быстрого поиска по username
+            jdbcTemplate.execute("CREATE INDEX IF NOT EXISTS idx_users_username ON users(username)");
+        }else {
+            // MySQL
+        }
     }
 
     // Получить пользователя по username
     public Optional<User> findByUsername(String username) {
-        String sql = "SELECT * FROM users WHERE username = ? AND active = true";
+        if (config.isPostgres()) sql = "SELECT * FROM users WHERE username = ? AND active = true";
         try {
             User user = jdbcTemplate.queryForObject(sql, new UserRowMapper(), username);
             return Optional.ofNullable(user);
@@ -60,7 +68,7 @@ public class UserDAO {
 
     // Получить пользователя по email
     public Optional<User> findByEmail(String email) {
-        String sql = "SELECT * FROM users WHERE email = ? AND active = true";
+        if (config.isPostgres()) sql = "SELECT * FROM users WHERE email = ? AND active = true";
         try {
             User user = jdbcTemplate.queryForObject(sql, new UserRowMapper(), email);
             return Optional.ofNullable(user);
@@ -71,7 +79,7 @@ public class UserDAO {
 
     // Получить пользователя по ID
     public Optional<User> findById(Long id) {
-        String sql = "SELECT * FROM users WHERE id = ?";
+        if (config.isPostgres()) sql = "SELECT * FROM users WHERE id = ?";
         try {
             User user = jdbcTemplate.queryForObject(sql, new UserRowMapper(), id);
             return Optional.ofNullable(user);
@@ -82,23 +90,23 @@ public class UserDAO {
 
     // Проверить существует ли пользователь с таким username
     public boolean existsByUsername(String username) {
-        String sql = "SELECT COUNT(*) FROM users WHERE username = ?";
+        if (config.isPostgres()) sql = "SELECT COUNT(*) FROM users WHERE username = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, username);
         return count != null && count > 0;
     }
 
     // Проверить существует ли пользователь с таким email
     public boolean existsByEmail(String email) {
-        String sql = "SELECT COUNT(*) FROM users WHERE email = ?";
+        if (config.isPostgres()) sql = "SELECT COUNT(*) FROM users WHERE email = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, email);
         return count != null && count > 0;
     }
 
     // Создать нового пользователя
     public Long createUser(User user) {
-        String sql = """
-            INSERT INTO users (username, password, email, role, active, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+        if (config.isPostgres()) sql = """
+            INSERT INTO users (username, password, email, role, active, created_at, updated_at, email_verified)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """;
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -113,6 +121,7 @@ public class UserDAO {
             ps.setBoolean(5, user.isActive());
             ps.setTimestamp(6, java.sql.Timestamp.valueOf(LocalDateTime.now()));
             ps.setTimestamp(7, java.sql.Timestamp.valueOf(LocalDateTime.now()));
+            ps.setBoolean(8, user.isEmailVerified());
             return ps;
         }, keyHolder);
 
@@ -122,7 +131,7 @@ public class UserDAO {
 
     // Обновить пользователя
     public boolean updateUser(User user) {
-        String sql = """
+        if (config.isPostgres()) sql = """
             UPDATE users 
             SET username = ?, password = ?, email = ?, role = ?, 
                 active = ?, updated_at = ? 
@@ -135,6 +144,7 @@ public class UserDAO {
                 user.getEmail(),
                 user.getRole(),
                 user.isActive(),
+                user.isEmailVerified(),
                 java.sql.Timestamp.valueOf(LocalDateTime.now()),
                 user.getId()
         );
@@ -146,7 +156,7 @@ public class UserDAO {
      * Обновление пароля пользователя
      */
     public void update(User user) {
-        String sql = """
+        if (config.isPostgres()) sql = """
         UPDATE users 
         SET username = ?, email = ?, password = ?, 
             role = ?, active = ?, created_at = ?, 
@@ -167,13 +177,13 @@ public class UserDAO {
 
     // Получить всех пользователей
     public List<User> findAll() {
-        String sql = "SELECT * FROM users ORDER BY created_at DESC";
+        if (config.isPostgres()) sql = "SELECT * FROM users ORDER BY created_at DESC";
         return jdbcTemplate.query(sql, new UserRowMapper());
     }
 
     // Удалить пользователя (мягкое удаление)
     public boolean deleteUser(Long id) {
-        String sql = "UPDATE users SET active = false, updated_at = ? WHERE id = ?";
+        if (config.isPostgres()) sql = "UPDATE users SET active = false, updated_at = ? WHERE id = ?";
         int rowsAffected = jdbcTemplate.update(sql,
                 java.sql.Timestamp.valueOf(LocalDateTime.now()), id);
         return rowsAffected > 0;
@@ -184,7 +194,7 @@ public class UserDAO {
      */
     public boolean activateUser(Long userId) {
         try {
-            String sql = "UPDATE users SET active = true WHERE id = ?";
+            if (config.isPostgres()) sql = "UPDATE users SET active = true WHERE id = ?";
             int rowsAffected = jdbcTemplate.update(sql, userId);
             return rowsAffected > 0;
         } catch (Exception e) {
@@ -198,7 +208,7 @@ public class UserDAO {
      */
     public boolean isUserActive(Long userId) {
         try {
-            String sql = "SELECT active FROM users WHERE id = ?";
+            if (config.isPostgres()) sql = "SELECT active FROM users WHERE id = ?";
             Boolean active = jdbcTemplate.queryForObject(sql, Boolean.class, userId);
             return active != null && active;
         } catch (Exception e) {
@@ -212,12 +222,16 @@ public class UserDAO {
         @Override
         public User mapRow(ResultSet rs, int rowNum) throws SQLException {
             User user = new User();
+//            update(user);
             user.setId(rs.getLong("id"));
             user.setUsername(rs.getString("username"));
             user.setPassword(rs.getString("password"));
             user.setEmail(rs.getString("email"));
             user.setRole(rs.getString("role"));
+
             user.setActive(rs.getBoolean("active"));
+            user.setEmailVerified(rs.getBoolean("email_verified"));
+
             user.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
             user.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
             return user;

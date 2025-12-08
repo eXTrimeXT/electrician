@@ -1,9 +1,10 @@
 package com.extrime.electrician.dao;
 
+import com.extrime.electrician.config.Config;
 import com.extrime.electrician.model.EmailVerification;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -15,12 +16,21 @@ import java.util.Objects;
 
 @Repository
 public class EmailVerificationDAO {
+//    @Autowired
+//    private JdbcTemplate jdbcTemplate;
+    @Autowired
+    public Config config;
+
+    private final JdbcTemplate jdbcTemplate;
+    private String sql;
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    public EmailVerificationDAO(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     public Long save(EmailVerification verification) {
-        String sql = """
+        if (config.isPostgres()) sql = """
             INSERT INTO email_verifications 
             (email, verification_code, expires_at, user_id, used) 
             VALUES (?, ?, ?, ?, ?)
@@ -41,7 +51,7 @@ public class EmailVerificationDAO {
     }
 
     public EmailVerification findByEmailAndCode(String email, String code) {
-        String sql = """
+        if (config.isPostgres()) sql = """
             SELECT * FROM email_verifications 
             WHERE email = ? AND verification_code = ? 
             ORDER BY created_at DESC LIMIT 1
@@ -57,7 +67,7 @@ public class EmailVerificationDAO {
     }
 
     public EmailVerification findActiveByUserId(Long userId) {
-        String sql = """
+        if (config.isPostgres()) sql = """
             SELECT * FROM email_verifications 
             WHERE user_id = ? AND used = false 
             AND expires_at > ? 
@@ -74,7 +84,7 @@ public class EmailVerificationDAO {
     }
 
     public void update(EmailVerification verification) {
-        String sql = """
+        if (config.isPostgres()) sql = """
             UPDATE email_verifications 
             SET used = ? 
             WHERE id = ?
@@ -89,7 +99,7 @@ public class EmailVerificationDAO {
      * Удаление старых верификаций
      */
     public void cleanupOldVerifications() {
-        String sql = """
+        if (config.isPostgres()) sql = """
             DELETE FROM email_verifications 
             WHERE expires_at < ? OR used = true
             """;
