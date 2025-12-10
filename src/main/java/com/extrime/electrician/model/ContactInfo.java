@@ -16,6 +16,6 @@ public class ContactInfo {
         this.address = "г. Нижний Новгород";
         this.phone = "+79506219757"; // На главной странице, также изменять ссылку tel:
         this.email = "electric252.com@gmail.com";
-        this.workingHours = "ГРАФИК РАБОТЫ";
+        this.workingHours = "Ср-Вс: 08:00-17:00";
     }
 }

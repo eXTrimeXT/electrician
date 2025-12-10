@@ -1,13 +1,14 @@
 spring:
   application:
     name: electrician-service
-    url: ${SPRING_APPLICATION_URL:http://localhost:8081/}
+    url: ${SPRING_APPLICATION_URL:http://0.0.0.0:8081/}
 #    url: http://электрик252.рф/
 
   # POSTGRES
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/electrician_db}
+#    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/electrician_db}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://postgres:5432/electrician_db}
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
     password: ${SPRING_DATASOURCE_PASSWORD:extrimepasswd}
 

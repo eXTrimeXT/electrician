@@ -12,5 +12,5 @@ COPY --from=build /app/target/*.jar app.jar
 # Создаем директорию для загрузок
 RUN mkdir -p /app/uploads
 
-EXPOSE 8081
+EXPOSE 80
 ENTRYPOINT ["java", "-jar", "app.jar"]
