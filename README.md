@@ -223,11 +223,11 @@ docker exec -it electrician-db psql -U postgres -d electrician_db
 ```
 
 ### **Доступ к приложению**:
-    - Главная страница: `http://localhost:8080`
-    - Админ панель: `http://localhost:8080/admin`
-    - Страница отзывов: `http://localhost:8080/reviews`
-    - Страница входа: `http://localhost:8080/login`
-    - Страница регистрации: `http://localhost:8080/register`
+- Главная страница: `http://localhost:8080`
+- Админ панель: `http://localhost:8080/admin`
+- Страница отзывов: `http://localhost:8080/reviews`
+- Страница входа: `http://localhost:8080/login`
+- Страница регистрации: `http://localhost:8080/register`
 
 ## 🔐 Доступ по умолчанию
 
