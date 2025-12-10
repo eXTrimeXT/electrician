@@ -31,7 +31,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/electrician_db # amvera-extrime-cnpg-electricdbextreme-rw
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: extrimepasswd
-      SPRING_APPLICATION_URL: http://0.0.0.0:80/
+      SPRING_APPLICATION_URL: https://0.0.0.0:80/
       SERVER_PORT: 80
       SPRING_MAIL_USERNAME: electric252.com@gmail.com
       SPRING_MAIL_PASSWORD: ntvf auqn hksz uham

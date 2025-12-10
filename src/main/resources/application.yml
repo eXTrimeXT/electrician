@@ -73,7 +73,7 @@ spring:
 
   mail:
     host: smtp.gmail.com
-    port: 587
+    port: 465 # 587 465
     username: ${SPRING_MAIL_USERNAME:electric252.com@gmail.com}  # Ваш Gmail
     password: ${SPRING_MAIL_PASSWORD:ntvf auqn hksz uham}     # Пароль приложения (не основной пароль)
     properties:
@@ -82,7 +82,6 @@ spring:
           auth: true
           starttls:
             enable: true
-            required: true
           connectiontimeout: 5000
           timeout: 5000
           writetimeout: 5000
