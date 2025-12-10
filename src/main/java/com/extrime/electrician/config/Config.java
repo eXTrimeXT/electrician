@@ -16,7 +16,7 @@ public class Config {
     private String PORT;
 
     // DATABASE
-    private final String NAME_TYPE_DATABASE = "postgres"; // or mysql
+    private final String NAME_TYPE_DATABASE = "postgres"; // postgres or mysql
 
     @Value("${spring.datasource.url}")
     private String databaseUrl;
