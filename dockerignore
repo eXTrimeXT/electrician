@@ -1,0 +1,11 @@
+# .dockerignore
+.idea/
+.git
+.gitignore
+md_screens/
+target/
+*.iml
+*.log
+*.md
+Dockerfile
+docker-compose.yml
