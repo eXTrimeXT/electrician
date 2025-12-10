@@ -1,6 +1,4 @@
--- Таблица уже будет создана автоматически через DAO, 
--- но можно выполнить вручную для проверки:
-
+-- Создаем таблицу для отзывов
 CREATE TABLE IF NOT EXISTS reviews (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,

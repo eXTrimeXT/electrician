@@ -50,6 +50,19 @@ public class UserDAO {
             jdbcTemplate.execute(sql);
             // Создаем индекс для быстрого поиска по username
             jdbcTemplate.execute("CREATE INDEX IF NOT EXISTS idx_users_username ON users(username)");
+            // Создаем индекс для быстрого поиска по email
+            jdbcTemplate.execute("CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)");
+            // Создаем индекс для email_verified для быстрой фильтрации
+            jdbcTemplate.execute("CREATE INDEX IF NOT EXISTS idx_users_email_verified ON users(email_verified) WHERE email_verified = false");
+            // Создаем индекс для active, для email_verifications
+            jdbcTemplate.execute("CREATE INDEX IF NOT EXISTS idx_users_active ON users(active)");
+
+            //
+            jdbcTemplate.execute("""
+                    INSERT INTO users (username, password, email, role)
+                    VALUES ('admin', '$2a$12$85ADATkk12Cv4rjSUWpxg.t4pOOJBWevboxVEzhG8Icfko0vY39nS', 'electric252.com@gmail.com', 'ADMIN')
+                    ON CONFLICT (username) DO NOTHING;
+                    """);
         }else {
             // MySQL
         }

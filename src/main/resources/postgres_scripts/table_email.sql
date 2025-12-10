@@ -16,27 +16,3 @@ CREATE INDEX IF NOT EXISTS idx_email_verifications_email_code ON email_verificat
 CREATE INDEX IF NOT EXISTS idx_email_verifications_expires ON email_verifications(expires_at);
 CREATE INDEX IF NOT EXISTS idx_email_verifications_used ON email_verifications(used) WHERE used = false;
 CREATE INDEX IF NOT EXISTS idx_email_verifications_user_id ON email_verifications(user_id);
-
--- Обновление таблицы users для поддержки флага активности
-DO $$
-BEGIN
-    -- Добавляем колонку active, если её нет
-    IF NOT EXISTS (
-        SELECT 1
-        FROM information_schema.columns
-        WHERE table_name = 'users'
-        AND column_name = 'active'
-    ) THEN
-        ALTER TABLE users ADD COLUMN active BOOLEAN DEFAULT TRUE;
-    END IF;
-
-    -- Добавляем индекс для колонки active, если его нет
-    IF NOT EXISTS (
-        SELECT 1
-        FROM pg_indexes
-        WHERE tablename = 'users'
-        AND indexname = 'idx_users_active'
-    ) THEN
-        CREATE INDEX idx_users_active ON users(active);
-    END IF;
-END $$;

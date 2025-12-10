@@ -13,7 +13,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate # postgres
+      ddl-auto: update # postgres: validate update create create-drop
     show-sql: true
     properties:
       hibernate:

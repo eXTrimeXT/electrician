@@ -29,6 +29,23 @@ public class ServiceDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    public void createTableIfNotExists() {
+        if (config.isPostgres()) {
+            sql = """
+                    CREATE TABLE IF NOT EXISTS services (
+                        id SERIAL PRIMARY KEY,
+                        title VARCHAR(255) NOT NULL,
+                        description TEXT,
+                        price DECIMAL(10, 2) NOT NULL,
+                        price_unit VARCHAR(50) DEFAULT 'за штуку',
+                        is_popular BOOLEAN DEFAULT FALSE,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                    """;
+        }
+        jdbcTemplate.execute(sql);
+    }
+
     // Получить все услуги
     public List<OurService> getAllServices() {
         if (config.isPostgres()) sql = "SELECT * FROM services ORDER BY title";

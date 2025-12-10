@@ -29,6 +29,31 @@ public class EmailVerificationDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    public void createTableIfNotExists() {
+        if (config.isPostgres()) {
+            sql = """
+                    CREATE TABLE IF NOT EXISTS email_verifications (
+                        id SERIAL PRIMARY KEY,
+                        email VARCHAR(100) NOT NULL,
+                        verification_code VARCHAR(10) NOT NULL,
+                        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                        expires_at TIMESTAMP NOT NULL,
+                        used BOOLEAN DEFAULT FALSE,
+                        user_id BIGINT NOT NULL,
+                        CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+                    )
+                    """;
+            jdbcTemplate.execute(sql);
+
+            // Создание индексов для таблицы email_verifications
+            jdbcTemplate.execute("CREATE INDEX IF NOT EXISTS idx_email_verifications_email ON email_verifications(email)");
+            jdbcTemplate.execute("CREATE INDEX IF NOT EXISTS idx_email_verifications_email_code ON email_verifications(email, verification_code)");
+            jdbcTemplate.execute("CREATE INDEX IF NOT EXISTS idx_email_verifications_expires ON email_verifications(expires_at)");
+            jdbcTemplate.execute("CREATE INDEX IF NOT EXISTS idx_email_verifications_used ON email_verifications(used) WHERE used = false");
+            jdbcTemplate.execute("CREATE INDEX IF NOT EXISTS idx_email_verifications_user_id ON email_verifications(user_id)");
+        }
+    }
+
     public Long save(EmailVerification verification) {
         if (config.isPostgres()) sql = """
             INSERT INTO email_verifications 

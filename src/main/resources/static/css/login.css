@@ -158,3 +158,39 @@
     color: #2980b9;
     text-decoration: underline;
 }
+
+/* Стили для обертки поля пароля */
+.password-wrapper {
+    position: relative;
+}
+
+/* Стили для иконки переключения видимости пароля */
+.password-wrapper .toggle-password {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #7f8c8d;
+    z-index: 10;
+    padding: 5px;
+    transition: color 0.3s;
+    background: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+}
+
+.password-wrapper .toggle-password:hover {
+    color: #3498db;
+}
+
+/* Убедитесь, что поле пароля не перекрывается иконкой */
+.password-wrapper input[type="password"],
+.password-wrapper input[type="text"] {
+    padding-right: 45px !important;
+    width: 100%;
+}
