@@ -73,7 +73,7 @@ spring:
 
   mail:
     host: smtp.gmail.com
-    port: 465 # 587 465
+    port: 8025 # 587 465 8025
     username: ${SPRING_MAIL_USERNAME:electric252.com@gmail.com}  # Ваш Gmail
     password: ${SPRING_MAIL_PASSWORD:ntvf auqn hksz uham}     # Пароль приложения (не основной пароль)
     properties:
