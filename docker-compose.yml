@@ -1,19 +1,19 @@
-# docker-compose.yml
 version: '3.8'
 
 services:
   postgres:
     image: postgres:17-alpine
-    container_name: electrician-db
+    container_name: electrician-postgres
     environment:
       POSTGRES_DB: electrician_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: extrimepasswd
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./create_db.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./init-db:/docker-entrypoint-initdb.d
     networks:
       - electrician-network
     healthcheck:
@@ -25,25 +25,33 @@ services:
   app:
     build: .
     container_name: electrician-app
-    depends_on:
-      postgres:
-        condition: service_healthy
+    ports:
+      - "8081:8081"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/electrician_db
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: extrimepasswd
-    ports:
-      - "8081:8081"
+      SPRING_APPLICATION_URL: http://localhost:8081/
+      SERVER_PORT: 8081
+      SPRING_MAIL_USERNAME: electric252.com@gmail.com
+      SPRING_MAIL_PASSWORD: ntvf auqn hksz uham
+      FILE_UPLOAD_DIR: /app/uploads
     volumes:
-      - ./uploads:/app/uploads
-      - ./static:/app/static
+      - uploads_volume:/app/uploads
+      - ./logs:/app/logs
+    depends_on:
+      postgres:
+        condition: service_healthy
     networks:
       - electrician-network
     restart: unless-stopped
 
-volumes:
-  postgres_data:
-
 networks:
   electrician-network:
     driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  uploads_volume:
+    driver: local

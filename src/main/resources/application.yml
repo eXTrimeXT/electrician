@@ -1,15 +1,15 @@
 spring:
   application:
     name: electrician-service
-    url: http://localhost:8081/
+    url: ${SPRING_APPLICATION_URL:http://localhost:8081/}
 #    url: http://электрик252.рф/
 
   # POSTGRES
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/electrician_db
-    username: postgres
-    password: extrimepasswd
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/electrician_db}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:extrimepasswd}
 
   jpa:
     hibernate:
@@ -46,7 +46,7 @@ spring:
   # Отключение кэша статических ресурсов
   web:
     resources:
-      static-locations: classpath:/static/, file:./uploads/
+      static-locations: classpath:/static/, file:${FILE_UPLOAD_DIR:./uploads}/
       cache:
         period: 0  # Отключает кэш браузера для статических ресурсов
         cachecontrol:
@@ -73,8 +73,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: electric252.com@gmail.com  # Ваш Gmail
-    password: ntvf auqn hksz uham     # Пароль приложения (не основной пароль)
+    username: ${SPRING_MAIL_USERNAME:electric252.com@gmail.com}  # Ваш Gmail
+    password: ${SPRING_MAIL_PASSWORD:ntvf auqn hksz uham}     # Пароль приложения (не основной пароль)
     properties:
       mail:
         smtp:
@@ -96,7 +96,7 @@ email:
 
 
 server:
-  port: 8081
+  port: ${SERVER_PORT:8081}
   servlet:
     context-path: /
   error:
@@ -112,4 +112,8 @@ logging:
     org.springframework.web.multipart: DEBUG
     org:springframework:jdbc: DEBUG
     org.springframework.jdbc.core.JdbcTemplate: DEBUG
-    org.springframework.jdbc.core.StatementCreatorUtils: TRACE
+#    org.springframework.jdbc.core.StatementCreatorUtils: TRACE
+  file:
+    name: /app/logs/app.log
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
