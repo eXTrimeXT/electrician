@@ -2,7 +2,7 @@ spring:
   application:
     name: electrician-service
     url: ${SPRING_APPLICATION_URL:http://0.0.0.0:8081/}
-#    url: http://электрик252.рф/
+    domain: http://электрик252.рф/
 
   # POSTGRES
   datasource:

@@ -14,6 +14,8 @@ public class Config {
     private String URL;
     @Value("${server.port}")
     private String PORT;
+    @Value("${spring.application.domain}")
+    private String DOMAIN;
 
     // DATABASE
     private final String NAME_TYPE_DATABASE = "postgres"; // postgres or mysql

@@ -182,7 +182,7 @@ public class PasswordResetController {
      */
     private void sendResetPasswordEmail(String toEmail, String token, String username) {
         try {
-            String resetLink = config.getURL() + "password/reset?token=" + token;
+            String resetLink = config.getDOMAIN() + "password/reset?token=" + token;
 
             String htmlContent = """
                 <!DOCTYPE html>
