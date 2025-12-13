@@ -6,8 +6,8 @@ services:
     container_name: electrician-postgres
     environment:
       POSTGRES_DB: electrician_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: extrimepasswd
+      POSTGRES_USER: ${DATASOURCE_USERNAME}
+      POSTGRES_PASSWORD: ${DATASOURCE_PASSWORD}
       POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
     ports:
       - "5432:5432"
@@ -26,17 +26,36 @@ services:
     build: .
     container_name: electrician-app
     ports:
-      - "80:80"
+      - "${SERVER_PORT}:${SERVER_PORT}"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/electrician_db
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: extrimepasswd
-      SPRING_APPLICATION_URL: https://0.0.0.0:80/
-      SERVER_PORT: 80
-      SERVER_DOMAIN: http://электрик252.рф/
-      SPRING_MAIL_USERNAME: electric252.com@gmail.com
-      SPRING_MAIL_PASSWORD: ntvf auqn hksz uham
-      FILE_UPLOAD_DIR: /app/uploads
+      # PostgreSQL
+      DATASOURCE_URL: ${DATASOURCE_URL}
+      DATASOURCE_USERNAME: ${DATASOURCE_USERNAME}
+      DATASOURCE_PASSWORD: ${DATASOURCE_PASSWORD}
+
+      # Server
+      SERVER_PORT: ${SERVER_PORT}
+
+      # Spring Application
+      SPRING_APPLICATION_URL: ${SPRING_APPLICATION_URL}
+      SPRING_APPLICATION_DOMAIN: ${SPRING_APPLICATION_DOMAIN}
+
+      # Telegram Bot
+      TELEGRAM_TOKEN: ${TELEGRAM_TOKEN}
+      TELEGRAM_OWNER_ID: ${TELEGRAM_OWNER_ID}
+      TELEGRAM_CHANNEL_ID: ${TELEGRAM_CHANNEL_ID}
+
+      # Mail
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      MAIL_PORT: ${MAIL_PORT}
+      MAIL_SENDER: ${MAIL_SENDER}
+
+      # File Upload
+      FILE_UPLOAD_DIR: ${FILE_UPLOAD_DIR}
+
+      # Spring профиль для Docker
+      SPRING_PROFILES_ACTIVE: docker
     volumes:
       - uploads_volume:/app/uploads
       - ./logs:/app/logs

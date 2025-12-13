@@ -16,6 +16,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Repository
 public class ReviewDAO {
@@ -24,6 +25,20 @@ public class ReviewDAO {
 
     private final JdbcTemplate jdbcTemplate;
     private String sql;
+    private static final String FIND_LATEST_TIME_SQL = """
+            SELECT MAX(created_at) as latest_time 
+            FROM reviews 
+            WHERE active = true
+            """;
+
+    private static final String FIND_LATEST_REVIEW_SQL = """
+            SELECT id, user_id, username, rating, comment, 
+                   admin_response, created_at, updated_at, active
+            FROM reviews 
+            WHERE active = true 
+            ORDER BY created_at DESC 
+            LIMIT 1
+            """;
 
     @Autowired
     public ReviewDAO(JdbcTemplate jdbcTemplate) {
@@ -149,6 +164,39 @@ public class ReviewDAO {
         return rowsAffected > 0;
     }
 
+    /**
+     * Находит время последнего отзыва
+     */
+    public Optional<LocalDateTime> findLatestReviewTime() {
+        try {
+            return Optional.ofNullable(
+                    jdbcTemplate.queryForObject(
+                            FIND_LATEST_TIME_SQL,
+                            LocalDateTime.class
+                    )
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Находит последний отзыв
+     */
+    public Optional<Review> findLatestReview() {
+        try {
+            Review review = jdbcTemplate.queryForObject(
+                    FIND_LATEST_REVIEW_SQL,
+                    new ReviewRowMapper()
+            );
+            return Optional.ofNullable(review);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+    }
+
     private static class ReviewRowMapper implements RowMapper<Review> {
         @Override
         public Review mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -156,8 +204,9 @@ public class ReviewDAO {
             review.setId(rs.getLong("id"));
 
             // Исправленная строка - сначала получаем как Integer, затем конвертируем в Long
-            Integer userIdInt = rs.getObject("user_id", Integer.class);
-            review.setUserId(userIdInt != null ? userIdInt.longValue() : null);
+//            Integer userIdInt = rs.getObject("user_id", Integer.class);
+//            review.setUserId(userIdInt != null ? userIdInt.longValue() : null);
+            review.setUserId(rs.getLong("user_id"));
 
             review.setUsername(rs.getString("username"));
             review.setRating(rs.getInt("rating"));

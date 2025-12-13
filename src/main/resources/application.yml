@@ -1,15 +1,15 @@
 spring:
   application:
     name: electrician-service
-    url: ${SPRING_APPLICATION_URL:http://0.0.0.0:8081/}
-    domain: ${SERVER_DOMAIN:http://localhost:8081/}
+    url: ${SPRING_APPLICATION_URL}
+    domain: ${SPRING_APPLICATION_DOMAIN}
 
   # POSTGRES
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/electrician_db}
-    username: ${SPRING_DATASOURCE_USERNAME:postgres}
-    password: ${SPRING_DATASOURCE_PASSWORD:extrimepasswd}
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
 
   jpa:
     hibernate:
@@ -19,22 +19,6 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect # postgres
         format_sql: true
-
-#  MySQL
-#  datasource:
-#    driver-class-name: org.postgresql.Driver
-#    url: jdbc:postgresql://localhost:5432/electrician_db
-#    username: root
-#    password: extrimepasswd
-#  MySQL
-#  jpa:
-#    hibernate:
-#      ddl-auto: validate # postgres
-#    show-sql: true
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.PostgreSQLDialect # postgres
-#        format_sql: true
 
   thymeleaf:
     prefix: classpath:/templates/
@@ -72,9 +56,9 @@ spring:
 
   mail:
     host: smtp.gmail.com
-    port: 587 # 587 465 8025
-    username: ${SPRING_MAIL_USERNAME:electric252.com@gmail.com}  # Ваш Gmail
-    password: ${SPRING_MAIL_PASSWORD:ntvf auqn hksz uham}     # Пароль приложения (не основной пароль)
+    username: ${MAIL_USERNAME}  # Ваш Gmail
+    password: ${MAIL_PASSWORD}  # Пароль приложения (не основной пароль)
+    port: ${MAIL_PORT} # 587 465 8025
     properties:
       mail:
         smtp:
@@ -91,18 +75,25 @@ email:
   verification:
     code-length: 6
     expiration-minutes: 5
-    sender-name: "Электрик Сервис"
+    sender-name: ${MAIL_SENDER}
     subject: "Код подтверждения регистрации"
 
 
 server:
-  port: ${SERVER_PORT:8081}
+  port: ${SERVER_PORT}
   servlet:
     context-path: /
   error:
     whitelabel:
       enabled: false
     path: /error
+
+
+# Настройки для телеграм бота
+telegram:
+  TOKEN: ${TELEGRAM_TOKEN}
+  OWNER_ID: ${TELEGRAM_OWNER_ID}
+  CHANNEL_ID: ${TELEGRAM_CHANNEL_ID}
 
 
 logging:
