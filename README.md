@@ -29,7 +29,10 @@
     <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/admin_work.png" width="100%"></td>
     <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/admin_work_added.png" width="100%"></td>
   </tr>
-
+  <tr>
+    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/admin_users.png" width="100%"></td>
+    <td><img src="https://github.com/eXTrimeXT/electrician/blob/main/md_screens/admin_users_edit.png" width="100%"></td>
+  </tr>
 </table>
 
 ## ✨ Особенности
