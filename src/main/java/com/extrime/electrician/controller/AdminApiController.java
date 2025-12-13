@@ -688,6 +688,12 @@ public class AdminApiController {
                         .body(Map.of("success", false, "message", "Пользователь не найден"));
             }
 
+            // Защита от изменения администратора
+            if ("admin".equals(user.getUsername())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Map.of("success", false, "message", "Нельзя изменять статус администратора системы"));
+            }
+
             // Проверяем, не пытаемся ли изменить статус самого себя
             Object currentUserId = session.getAttribute("userId");
             if (currentUserId != null && user.getId().equals(Long.parseLong(currentUserId.toString()))) {
@@ -733,6 +739,12 @@ public class AdminApiController {
             if (user == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(Map.of("success", false, "message", "Пользователь не найден"));
+            }
+
+            // Защита от удаления администратора
+            if ("admin".equals(user.getUsername())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Map.of("success", false, "message", "Нельзя удалить администратора системы"));
             }
 
             // Проверяем, не пытаемся ли удалить самого себя

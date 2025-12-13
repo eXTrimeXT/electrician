@@ -190,14 +190,16 @@ public class UserDAO {
                 user.getId());
     }
 
-    // Получить всех пользователей
+    // Получить всех пользователей, кроме админа
     public List<User> findAll() {
-        if (config.isPostgres()) sql = "SELECT * FROM users ORDER BY created_at DESC";
+        if (config.isPostgres()) sql = "SELECT * FROM users WHERE username != 'admin' ORDER BY created_at DESC";
         return jdbcTemplate.query(sql, new UserRowMapper());
     }
 
     // Удалить пользователя (ФИЗИЧЕСКОЕ удаление)
     public boolean deleteUser(Long id) {
+        if (isUserAdmin(id)) return false; // Админа нельзя удалять
+
         if (config.isPostgres()) sql = "DELETE FROM users WHERE id = ?";
 
         try {
@@ -237,6 +239,12 @@ public class UserDAO {
         }
     }
 
+    // Проверка на админа
+    public boolean isUserAdmin(Long id){
+        User user = getUserById(id);
+        return user != null && "admin".equals(user.getUsername()); // Да, это админ
+    }
+
     // RowMapper для пользователей
     private static class UserRowMapper implements RowMapper<User> {
         @Override
@@ -263,7 +271,7 @@ public class UserDAO {
 
     // Получить пользователей с фильтрами и пагинацией
     public List<User> getUsersWithFilters(String role, String status, int offset, int limit) {
-        StringBuilder sqlBuilder = new StringBuilder("SELECT * FROM users WHERE 1=1");
+        StringBuilder sqlBuilder = new StringBuilder("SELECT * FROM users WHERE username != 'admin'");
         List<Object> params = new ArrayList<>();
 
         if (role != null && !role.isEmpty()) {
@@ -296,7 +304,7 @@ public class UserDAO {
     // Поиск пользователей
     public List<User> searchUsers(String search, String role, String status, int offset, int limit) {
         StringBuilder sqlBuilder = new StringBuilder(
-                "SELECT * FROM users WHERE (username ILIKE ? OR email ILIKE ?)"
+                "SELECT * FROM users WHERE username != 'admin' AND (username ILIKE ? OR email ILIKE ?)"
         );
         List<Object> params = new ArrayList<>();
         params.add("%" + search + "%");
@@ -331,7 +339,7 @@ public class UserDAO {
 
     // Подсчет пользователей с фильтрами
     public int countUsersWithFilters(String role, String status) {
-        StringBuilder sqlBuilder = new StringBuilder("SELECT COUNT(*) FROM users WHERE 1=1");
+        StringBuilder sqlBuilder = new StringBuilder("SELECT COUNT(*) FROM users WHERE username != 'admin'");
         List<Object> params = new ArrayList<>();
 
         if (role != null && !role.isEmpty()) {
@@ -364,7 +372,7 @@ public class UserDAO {
     // Подсчет найденных пользователей
     public int countSearchedUsers(String search, String role, String status) {
         StringBuilder sqlBuilder = new StringBuilder(
-                "SELECT COUNT(*) FROM users WHERE (username ILIKE ? OR email ILIKE ?)"
+                "SELECT COUNT(*) FROM users WHERE username != 'admin' AND (username ILIKE ? OR email ILIKE ?)"
         );
         List<Object> params = new ArrayList<>();
         params.add("%" + search + "%");
@@ -395,6 +403,9 @@ public class UserDAO {
 
     // Обновить статус пользователя
     public boolean updateUserStatus(Long id, boolean active) {
+
+        if (isUserAdmin(id)) return false; // Админа трогать нельзя
+
         if (config.isPostgres()) sql = "UPDATE users SET active = ?, updated_at = ? WHERE id = ?";
 
         int rowsAffected = jdbcTemplate.update(sql,

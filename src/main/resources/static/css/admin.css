@@ -469,3 +469,143 @@
         justify-content: center;
     }
 }
+
+
+/* === Стили для массовых действий === */
+.bulk-actions-container {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.bulk-actions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.bulk-actions-header h4 {
+    color: #495057;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.bulk-actions-buttons {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.selected-count {
+    background: #6c757d;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-left: auto;
+}
+
+/* Стили для кнопки "Выбрать все" */
+.admin-table th input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.admin-table td input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+/* Стили для кнопок массовых действий */
+.btn-warning {
+    background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+    color: #212529;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s;
+    font-weight: 500;
+}
+
+.btn-warning:hover {
+    background: linear-gradient(135deg, #ff9800 0%, #ffc107 100%);
+    transform: translateY(-2px);
+}
+
+.btn-small {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+}
+
+/* Анимация появления массовых действий */
+.bulk-actions-container {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+}
+
+.bulk-actions-container.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Стили для выделенных строк */
+.admin-table tr.selected {
+    background-color: #e8f5e9 !important;
+}
+
+.admin-table tr:hover {
+    background: #f8f9fa;
+}
+
+.admin-table tr.selected:hover {
+    background-color: #d4edda !important;
+}
+
+/* Стили для чекбоксов в таблице */
+.checkbox-cell {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Адаптивность для массовых действий */
+@media (max-width: 768px) {
+    .bulk-actions-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .selected-count {
+        margin-left: 0;
+        margin-top: 0.5rem;
+        text-align: center;
+    }
+
+    .bulk-actions-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+
+    .bulk-actions-header h4 {
+        text-align: center;
+    }
+
+    .bulk-actions-header button {
+        width: 100%;
+    }
+}
