@@ -304,3 +304,168 @@
         justify-content: center;
     }
 }
+
+
+/* === Стили для управления пользователями === */
+.users-controls {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: space-between;
+}
+
+.search-box {
+    display: flex;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 300px;
+}
+
+.search-box input {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.filters {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.filter-select {
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: white;
+    min-width: 150px;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    margin-bottom: 1rem;
+}
+
+/* Стили для статусов */
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.status-active {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-inactive {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.status-verified {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-not-verified {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Стили для пагинации */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+}
+
+.page-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.page-btn:hover {
+    background: #f8f9fa;
+}
+
+.page-btn.active {
+    background: #3498db;
+    color: white;
+    border-color: #3498db;
+}
+
+/* Стили для кнопок действий пользователей */
+.user-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.user-action-btn {
+    padding: 0.4rem 0.8rem;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    transition: all 0.3s;
+}
+
+.user-action-btn.block {
+    background: #ffc107;
+    color: #212529;
+}
+
+.user-action-btn.unblock {
+    background: #28a745;
+    color: white;
+}
+
+.user-action-btn.delete {
+    background: #dc3545;
+    color: white;
+}
+
+.user-action-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+/* Адаптивность для таблицы пользователей */
+@media (max-width: 768px) {
+    .users-controls {
+        flex-direction: column;
+    }
+
+    .search-box {
+        min-width: 100%;
+    }
+
+    .filters {
+        flex-wrap: wrap;
+    }
+
+    .user-actions {
+        flex-direction: column;
+    }
+
+    .user-action-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}

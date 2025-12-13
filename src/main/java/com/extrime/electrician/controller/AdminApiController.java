@@ -1,8 +1,10 @@
 package com.extrime.electrician.controller;
 
 import com.extrime.electrician.dao.ServiceDAO;
+import com.extrime.electrician.dao.UserDAO;
 import com.extrime.electrician.dao.WorkDAO;
 import com.extrime.electrician.model.OurService;
+import com.extrime.electrician.model.User;
 import com.extrime.electrician.model.Work;
 import com.extrime.electrician.service.FileStorageService;
 import jakarta.servlet.http.HttpSession;
@@ -17,6 +19,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -24,12 +27,14 @@ public class AdminApiController {
     private final ServiceDAO serviceDAO;
     private final WorkDAO workDAO;
     private final FileStorageService fileStorageService;
+    private final UserDAO userDAO;
 
     @Autowired
-    public AdminApiController(ServiceDAO serviceDAO, WorkDAO workDAO, FileStorageService fileStorageService) {
+    public AdminApiController(ServiceDAO serviceDAO, WorkDAO workDAO, FileStorageService fileStorageService, UserDAO userDAO) {
         this.serviceDAO = serviceDAO;
         this.workDAO = workDAO;
         this.fileStorageService = fileStorageService;
+        this.userDAO = userDAO;
     }
 
     // Проверка авторизации для всех API методов
@@ -302,8 +307,8 @@ public class AdminApiController {
             if (imageFile != null && !imageFile.isEmpty()) {
                 System.out.println(
                         "Загрузка файла: " + imageFile.getOriginalFilename() +
-                        ", size: " + imageFile.getSize() +
-                        ", type: " + imageFile.getContentType()
+                                ", size: " + imageFile.getSize() +
+                                ", type: " + imageFile.getContentType()
                 );
 
                 try {
@@ -554,6 +559,205 @@ public class AdminApiController {
             response.put("success", false);
             response.put("message", "Ошибка при удалении изображения: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
+
+
+    // === API для пользователей ===
+
+    @GetMapping("/users")
+    public ResponseEntity<?> getUsers(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int perPage,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String role,
+            @RequestParam(required = false) String status,
+            HttpSession session) {
+
+        if (!isAuthenticated(session)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("success", false, "message", "Требуется авторизация"));
+        }
+
+        try {
+            // Вычисляем offset для пагинации
+            int offset = (page - 1) * perPage;
+
+            List<User> users;
+            int totalUsers;
+
+            if (search != null && !search.trim().isEmpty()) {
+                users = userDAO.searchUsers(search, role, status, offset, perPage);
+                totalUsers = userDAO.countSearchedUsers(search, role, status);
+            } else {
+                users = userDAO.getUsersWithFilters(role, status, offset, perPage);
+                totalUsers = userDAO.countUsersWithFilters(role, status);
+            }
+
+            // Преобразуем в DTO
+            List<Map<String, Object>> usersDTO = users.stream().map(user -> {
+                Map<String, Object> userMap = new HashMap<>();
+                userMap.put("id", user.getId());
+                userMap.put("username", user.getUsername());
+                userMap.put("email", user.getEmail());
+                userMap.put("role", user.getRole());
+                userMap.put("active", user.isActive());
+                userMap.put("email_verified", user.isEmailVerified());
+                userMap.put("created_at", user.getCreatedAt());
+                userMap.put("updated_at", user.getUpdatedAt());
+                return userMap;
+            }).collect(Collectors.toList());
+
+            int totalPages = (int) Math.ceil((double) totalUsers / perPage);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("users", usersDTO);
+
+            Map<String, Object> pagination = new HashMap<>();
+            pagination.put("page", page);
+            pagination.put("per_page", perPage);
+            pagination.put("total", totalUsers);
+            pagination.put("total_pages", totalPages);
+            pagination.put("has_next", page < totalPages);
+            pagination.put("has_prev", page > 1);
+
+            response.put("pagination", pagination);
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", false);
+            response.put("message", "Ошибка при получении пользователей: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @GetMapping("/users/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable Long id, HttpSession session) {
+        if (!isAuthenticated(session)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("success", false, "message", "Требуется авторизация"));
+        }
+
+        try {
+            User user = userDAO.getUserById(id);
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("success", false, "message", "Пользователь не найден"));
+            }
+
+            Map<String, Object> userData = new HashMap<>();
+            userData.put("id", user.getId());
+            userData.put("username", user.getUsername());
+            userData.put("email", user.getEmail());
+            userData.put("role", user.getRole());
+            userData.put("active", user.isActive());
+            userData.put("email_verified", user.isEmailVerified());
+            userData.put("created_at", user.getCreatedAt());
+            userData.put("updated_at", user.getUpdatedAt());
+
+            return ResponseEntity.ok(Map.of("success", true, "user", userData));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", false);
+            response.put("message", "Ошибка при получении пользователя: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @PutMapping("/users/{id}/status")
+    public ResponseEntity<?> updateUserStatus(
+            @PathVariable Long id,
+            @RequestBody Map<String, Object> statusData,
+            HttpSession session) {
+
+        if (!isAuthenticated(session)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("success", false, "message", "Требуется авторизация"));
+        }
+
+        try {
+            User user = userDAO.getUserById(id);
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("success", false, "message", "Пользователь не найден"));
+            }
+
+            // Проверяем, не пытаемся ли изменить статус самого себя
+            Object currentUserId = session.getAttribute("userId");
+            if (currentUserId != null && user.getId().equals(Long.parseLong(currentUserId.toString()))) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Map.of("success", false, "message", "Нельзя изменить статус своему собственному аккаунту"));
+            }
+
+            Boolean active = (Boolean) statusData.get("active");
+            if (active == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Map.of("success", false, "message", "Не указан статус"));
+            }
+
+            boolean success = userDAO.updateUserStatus(id, active);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", success);
+            response.put("message", success ?
+                    (active ? "Пользователь успешно активирован" : "Пользователь успешно заблокирован") :
+                    "Не удалось обновить статус пользователя");
+            response.put("active", active);
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", false);
+            response.put("message", "Ошибка при обновлении статуса пользователя: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id, HttpSession session) {
+        if (!isAuthenticated(session)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("success", false, "message", "Требуется авторизация"));
+        }
+
+        try {
+            User user = userDAO.getUserById(id);
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("success", false, "message", "Пользователь не найден"));
+            }
+
+            // Проверяем, не пытаемся ли удалить самого себя
+            Object currentUserId = session.getAttribute("userId");
+            if (currentUserId != null && user.getId().equals(Long.parseLong(currentUserId.toString()))) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Map.of("success", false, "message", "Нельзя удалить свой собственный аккаунт"));
+            }
+
+            boolean success = userDAO.deleteUser(id);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", success);
+            response.put("message", success ?
+                    "Пользователь успешно удален" :
+                    "Не удалось удалить пользователя");
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", false);
+            response.put("message", "Ошибка при удалении пользователя: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 }

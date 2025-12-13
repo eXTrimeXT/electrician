@@ -13,6 +13,7 @@ function initializeAdminPanel() {
     setupNavigation();
     setupEventListeners();
     loadInitialData();
+    initUsersManagement();
 }
 
 // Настройка навигации

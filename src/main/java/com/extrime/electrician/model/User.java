@@ -21,7 +21,7 @@ public class User {
 
     // Конструкторы
     public User() {
-        this.active = true;
+        this.active = false;
         this.emailVerified = false;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
@@ -33,9 +33,5 @@ public class User {
         this.password = password;
         this.email = email;
         this.role = role;
-        this.active = true;
-        this.emailVerified = false;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
     }
 }

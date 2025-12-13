@@ -22,7 +22,7 @@ public class RegisterService {
     private PasswordService passwordService;
 
     @Autowired
-    private EmailVerificationService emailVerificationService; // Добавлено
+    private EmailVerificationService emailVerificationService;
 
     // Регулярные выражения для валидации
     private static final Pattern USERNAME_PATTERN = Pattern.compile("^[a-zA-Z0-9_]{3,30}$");
@@ -217,12 +217,12 @@ public class RegisterService {
             // Создаем и сохраняем нового пользователя (НО ЕЩЕ НЕ АКТИВИРУЕМ)
             User newUser = createUser(username, password, email);
             newUser.setActive(false); // Пользователь неактивен до подтверждения email
+            newUser.setEmailVerified(false); // email еще не подтвержден
             Long userId = userDAO.createUser(newUser);
 
             if (userId != null && userId > 0) {
                 // Отправляем код подтверждения
-                boolean emailSent = emailVerificationService
-                        .createAndSendVerificationCode(email, userId);
+                boolean emailSent = emailVerificationService.createAndSendVerificationCode(email, userId);
 
                 if (emailSent) {
                     // Возвращаем ID пользователя для верификации
@@ -304,8 +304,7 @@ public class RegisterService {
             }
 
             // Отправляем новый код
-            boolean emailSent = emailVerificationService
-                    .createAndSendVerificationCode(email, userId);
+            boolean emailSent = emailVerificationService.createAndSendVerificationCode(email, userId);
 
             if (emailSent) {
                 result.put("success", true);

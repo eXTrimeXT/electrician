@@ -13,7 +13,9 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -194,20 +196,25 @@ public class UserDAO {
         return jdbcTemplate.query(sql, new UserRowMapper());
     }
 
-    // Удалить пользователя (мягкое удаление)
+    // Удалить пользователя (ФИЗИЧЕСКОЕ удаление)
     public boolean deleteUser(Long id) {
-        if (config.isPostgres()) sql = "UPDATE users SET active = false, updated_at = ? WHERE id = ?";
-        int rowsAffected = jdbcTemplate.update(sql,
-                java.sql.Timestamp.valueOf(LocalDateTime.now()), id);
-        return rowsAffected > 0;
+        if (config.isPostgres()) sql = "DELETE FROM users WHERE id = ?";
+
+        try {
+            int rowsAffected = jdbcTemplate.update(sql, id);
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /**
-     * Активация пользователя (установка флага active = true)
+     * Активация пользователя (установка флага active = true и email_verified = true)
      */
     public boolean activateUser(Long userId) {
         try {
-            if (config.isPostgres()) sql = "UPDATE users SET active = true WHERE id = ?";
+            if (config.isPostgres()) sql = "UPDATE users SET active = true, email_verified = true WHERE id = ?";
             int rowsAffected = jdbcTemplate.update(sql, userId);
             return rowsAffected > 0;
         } catch (Exception e) {
@@ -248,6 +255,163 @@ public class UserDAO {
             user.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
             user.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
             return user;
+        }
+    }
+
+
+    // === НОВЫЕ МЕТОДЫ ДЛЯ АДМИН ПАНЕЛИ ===
+
+    // Получить пользователей с фильтрами и пагинацией
+    public List<User> getUsersWithFilters(String role, String status, int offset, int limit) {
+        StringBuilder sqlBuilder = new StringBuilder("SELECT * FROM users WHERE 1=1");
+        List<Object> params = new ArrayList<>();
+
+        if (role != null && !role.isEmpty()) {
+            sqlBuilder.append(" AND role = ?");
+            params.add(role);
+        }
+
+        if (status != null && !status.isEmpty()) {
+            if (status.equals("active")) {
+                sqlBuilder.append(" AND active = true");
+            } else if (status.equals("inactive")) {
+                sqlBuilder.append(" AND active = false");
+            }
+        }
+
+        sqlBuilder.append(" ORDER BY created_at DESC LIMIT ? OFFSET ?");
+        params.add(limit);
+        params.add(offset);
+
+        sql = sqlBuilder.toString();
+
+        try {
+            return jdbcTemplate.query(sql, new UserRowMapper(), params.toArray());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    // Поиск пользователей
+    public List<User> searchUsers(String search, String role, String status, int offset, int limit) {
+        StringBuilder sqlBuilder = new StringBuilder(
+                "SELECT * FROM users WHERE (username ILIKE ? OR email ILIKE ?)"
+        );
+        List<Object> params = new ArrayList<>();
+        params.add("%" + search + "%");
+        params.add("%" + search + "%");
+
+        if (role != null && !role.isEmpty()) {
+            sqlBuilder.append(" AND role = ?");
+            params.add(role);
+        }
+
+        if (status != null && !status.isEmpty()) {
+            if (status.equals("active")) {
+                sqlBuilder.append(" AND active = true");
+            } else if (status.equals("inactive")) {
+                sqlBuilder.append(" AND active = false");
+            }
+        }
+
+        sqlBuilder.append(" ORDER BY created_at DESC LIMIT ? OFFSET ?");
+        params.add(limit);
+        params.add(offset);
+
+        sql = sqlBuilder.toString();
+
+        try {
+            return jdbcTemplate.query(sql, new UserRowMapper(), params.toArray());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    // Подсчет пользователей с фильтрами
+    public int countUsersWithFilters(String role, String status) {
+        StringBuilder sqlBuilder = new StringBuilder("SELECT COUNT(*) FROM users WHERE 1=1");
+        List<Object> params = new ArrayList<>();
+
+        if (role != null && !role.isEmpty()) {
+            sqlBuilder.append(" AND role = ?");
+            params.add(role);
+        }
+
+        if (status != null && !status.isEmpty()) {
+            if (status.equals("active")) {
+                sqlBuilder.append(" AND active = true");
+            } else if (status.equals("inactive")) {
+                sqlBuilder.append(" AND active = false");
+            }
+        }
+
+        sql = sqlBuilder.toString();
+
+        try {
+            if (params.isEmpty()) {
+                return jdbcTemplate.queryForObject(sql, Integer.class);
+            } else {
+                return jdbcTemplate.queryForObject(sql, Integer.class, params.toArray());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    // Подсчет найденных пользователей
+    public int countSearchedUsers(String search, String role, String status) {
+        StringBuilder sqlBuilder = new StringBuilder(
+                "SELECT COUNT(*) FROM users WHERE (username ILIKE ? OR email ILIKE ?)"
+        );
+        List<Object> params = new ArrayList<>();
+        params.add("%" + search + "%");
+        params.add("%" + search + "%");
+
+        if (role != null && !role.isEmpty()) {
+            sqlBuilder.append(" AND role = ?");
+            params.add(role);
+        }
+
+        if (status != null && !status.isEmpty()) {
+            if (status.equals("active")) {
+                sqlBuilder.append(" AND active = true");
+            } else if (status.equals("inactive")) {
+                sqlBuilder.append(" AND active = false");
+            }
+        }
+
+        sql = sqlBuilder.toString();
+
+        try {
+            return jdbcTemplate.queryForObject(sql, Integer.class, params.toArray());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    // Обновить статус пользователя
+    public boolean updateUserStatus(Long id, boolean active) {
+        if (config.isPostgres()) sql = "UPDATE users SET active = ?, updated_at = ? WHERE id = ?";
+
+        int rowsAffected = jdbcTemplate.update(sql,
+                active,
+                Timestamp.valueOf(LocalDateTime.now()),
+                id);
+
+        return rowsAffected > 0;
+    }
+
+    // Получить пользователя по ID (с существующей сигнатурой)
+    public User getUserById(Long id) {
+        try {
+            if (config.isPostgres()) sql = "SELECT * FROM users WHERE id = ?";
+            return jdbcTemplate.queryForObject(sql, new UserRowMapper(), id);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
         }
     }
 }
