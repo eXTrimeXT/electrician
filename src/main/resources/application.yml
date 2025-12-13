@@ -1,8 +1,8 @@
 spring:
   application:
     name: electrician-service
-    url: ${SPRING_APPLICATION_URL}
-    domain: ${SPRING_APPLICATION_DOMAIN}
+    url: ${SERVER_URL}
+    domain: ${SERVER_DOMAIN}
 
   # POSTGRES
   datasource:
