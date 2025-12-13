@@ -18,9 +18,6 @@ RUN mkdir -p /app/uploads /app/logs
 # Копируем приложение
 COPY --from=build /app/target/*.jar app.jar
 
-# LOCALE + docker
-#EXPOSE 8081
-# PRODUCTION
 EXPOSE 80
 
 # Добавляем healthcheck для приложения
