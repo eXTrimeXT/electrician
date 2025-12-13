@@ -35,7 +35,7 @@ public class FileStorageService {
         Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
         // Возвращаем URL для доступа к файлу
-        return "/static/uploads/" + fileName;
+        return config.getDOMAIN() + "static/uploads/" + fileName;
     }
 
      // Удаляет файл по URL
