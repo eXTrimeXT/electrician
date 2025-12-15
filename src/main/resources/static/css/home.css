@@ -1,17 +1,17 @@
 /* Hero Section */
 .hero {
     text-align: center;
-    padding: 3rem 0;
     background: white;
-    margin: 2rem 0;
+    margin: 0 0 2rem 0;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.05);
 }
 
 .hero h2 {
     color: #2c3e50;
+    margin-top: 1rem;
     margin-bottom: 1rem;
-    font-size: 2.2rem;
+    font-size: 1.5rem;
 }
 
 .hero p {
@@ -19,6 +19,21 @@
     font-size: 1.1rem;
     max-width: 800px;
     margin: 0 auto 2rem;
+}
+
+.phone i, .hours i {
+    color: #f39c12;
+}
+
+.phone a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.phone a:hover {
+    color: #f39c12;
+    text-decoration: underline;
 }
 
 /* Social Links */
@@ -47,9 +62,6 @@
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
-.vk { background-color: #4c75a3; }
-.telegram { background-color: #0088cc; }
-.whatsapp { background-color: #25d366; }
 
 /* Services Section */
 .services {
@@ -244,6 +256,44 @@ td small {
     width: 30px;
 }
 
+.contact-item-whatsapp {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #2cb742 ;
+    border-radius: 8px;
+}
+.contact-item-whatsapp i {
+    color: white;
+    font-size: 1.2rem;
+    width: 30px;
+}
+.contact-item-whatsapp a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.contact-item-telegram {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #0088cc ;
+    border-radius: 8px;
+}
+.contact-item-telegram i {
+    color: white;
+    font-size: 1.2rem;
+    width: 30px;
+}
+.contact-item-telegram a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
 /* Responsive Design для home-specific стилей */
 @media (max-width: 768px) {
     .hero h2 {
@@ -257,5 +307,113 @@ td small {
     table {
         display: block;
         overflow-x: auto;
+    }
+}
+
+/* Добавьте в конец файла home.css */
+
+/* Main Layout Grid */
+.main-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+/* Telegram Widget Styles */
+.telegram-widget-section {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    height: fit-content;
+    position: sticky; /* плавающий виджет */
+    top: 2rem;
+}
+
+.telegram-widget-section .telegram-widget {
+    max-width: 100%;
+    box-shadow: none;
+    border: none;
+    padding: 0;
+}
+
+.telegram-widget-section .channel-header {
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.telegram-widget-section .channel-avatar {
+    width: 70px;
+    height: 70px;
+}
+
+.telegram-widget-section .channel-title h3 {
+    font-size: 1.4rem;
+    color: #2c3e50;
+}
+
+.telegram-widget-section .channel-stats {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+}
+
+.telegram-widget-section .latest-post {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+}
+
+.telegram-widget-section .benefit-item {
+    background: white;
+    border-left: 4px solid #0088cc;
+}
+
+.telegram-widget-section .primary-btn {
+    background: linear-gradient(135deg, #0088cc 0%, #006699 100%);
+}
+
+/* Стили для левой колонки (основной контент) */
+.main-content {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Адаптивность для нового макета */
+@media (max-width: 1024px) {
+    .main-container {
+        grid-template-columns: 1fr;
+    }
+
+    .telegram-widget-section {
+        position: static;
+        order: -1;
+        margin-bottom: 1rem;
+    }
+
+    .telegram-widget-section .telegram-widget {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-container {
+        gap: 1.5rem;
+    }
+
+    .telegram-widget-section {
+        padding: 1rem;
+    }
+
+    .telegram-widget-section .channel-avatar {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+@media (max-width: 480px) {
+    .telegram-widget-section .benefits {
+        grid-template-columns: 1fr;
     }
 }

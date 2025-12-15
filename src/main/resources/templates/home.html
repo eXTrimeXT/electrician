@@ -6,6 +6,7 @@
     <title th:text="${pageTitle}">Электрик - профессиональные услуги</title>
     <link rel="stylesheet" href="../static/css/main.css">
     <link rel="stylesheet" href="../static/css/home.css">
+    <link rel="stylesheet" href="../static/css/telegram.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -62,100 +63,181 @@
 </header>
 
 <main class="container">
-    <section class="hero">
-        <h2>Надежные электромонтажные работы любой сложности</h2>
-        <p>Качественные услуги электрика с гарантией. Работаем быстро, аккуратно и по доступным ценам.</p>
-        <div class="social-links">
-<!--            <a href="https://vk.com/" class="social-btn vk" target="_blank">-->
-<!--                <i class="fab fa-vk"></i> ВКонтакте-->
-<!--            </a>-->
-            <a href="https://t.me/master_electric52" class="social-btn telegram" target="_blank">
-                <i class="fab fa-telegram"></i> Telegram
-            </a>
-            <a href="https://wa.me/79506219757" class="social-btn whatsapp" target="_blank">
-                <i class="fab fa-whatsapp"></i> WhatsApp
-            </a>
-        </div>
-    </section>
+    <div class="main-container">
+        <!-- Левая колонка - основной контент -->
+        <div class="main-content">
+            <section class="hero">
+                <h2>Надежные электромонтажные работы любой сложности</h2>
+                <p>Работаем быстро, аккуратно и по доступным ценам.</p>
+            </section>
 
-    <section class="services">
-        <h2><i class="fas fa-bolt"></i> Наши услуги и цены</h2>
+            <section class="services">
+                <h2><i class="fas fa-bolt"></i> Наши услуги и цены</h2>
 
-        <div class="popular-services" th:if="${not #lists.isEmpty(popularServices)}">
-            <h3>Популярные услуги:</h3>
-            <div class="services-grid">
-                <div class="service-card" th:each="service : ${popularServices}">
-                    <h3 th:text="${service.title}">Услуга</h3>
-                    <p th:text="${service.description}">Описание услуги</p>
-                    <div class="price">
-                        <strong th:text="${service.price} + ' ₽'">1000 ₽</strong>
-                        <span th:text="${service.priceUnit}">за точку</span>
+                <div class="popular-services" th:if="${not #lists.isEmpty(popularServices)}">
+                    <h3>Популярные услуги:</h3>
+                    <div class="services-grid">
+                        <div class="service-card" th:each="service : ${popularServices}">
+                            <h3 th:text="${service.title}">Услуга</h3>
+                            <p th:text="${service.description}">Описание услуги</p>
+                            <div class="price">
+                                <strong th:text="${service.price} + ' ₽'">1000 ₽</strong>
+                                <span th:text="${service.priceUnit}">за точку</span>
+                            </div>
+                            <span class="popular-badge">Популярно</span>
+                        </div>
                     </div>
-                    <span class="popular-badge">Популярно</span>
+                </div>
+
+                <div class="all-services">
+                    <h3>Полный прайс-лист:</h3>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Услуга</th>
+                            <th>Описание</th>
+                            <th>Цена</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="service : ${services}">
+                            <td th:text="${service.title}">розетка</td>
+                            <td th:text="${service.description}">круглая</td>
+                            <td>
+                                <span th:text="${service.price} + ' ₽'">1000 ₽</span>
+                                <small th:text="${service.priceUnit}">за штуку</small>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="works">
+                <h2><i class="fas fa-tools"></i>Крупные работы</h2>
+                <div class="works-grid">
+                    <div class="work-card" th:each="work : ${works}">
+                        <img th:src="${work.imageUrl}" alt="Работа" class="work-image">
+                        <div class="work-content">
+                            <h3 th:text="${work.title}">Название работы</h3>
+                            <div class="work-date" th:text="${work.formattedDate}">15.03.2025</div>
+                            <p class="work-description" th:text="${work.description}">Описание работы</p>
+                            <div class="work-price" th:text="${#numbers.formatDecimal(work.price, 0, 'DEFAULT', 0, 'DEFAULT') + ' ₽'}">25 000 ₽</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="contact-info">
+                <h2><i class="fas fa-address-card"></i> Контактная информация</h2>
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span th:text="${contactInfo.address}">г. Нижний Новгород</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-clock"></i>
+                        <span th:text="${contactInfo.workingHours}">Пн-Пт: 00:00-00:00</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span th:text="${contactInfo.phone}">+7 (950) 621-97-57</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span th:text="${contactInfo.email}">electrician@example.com</span>
+                    </div>
+                    <div class="contact-item-whatsapp">
+                        <i class="fab fa-whatsapp"></i>
+                        <a href="https://wa.me/79506219757" target="_blank">WhatsApp</a>
+                    </div>
+                    <div class="contact-item-telegram">
+                        <i class="fab fa-telegram"></i>
+                        <a href="https://t.me/master_electric52" target="_blank">Telegram</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Правая колонка - Telegram виджет -->
+        <aside class="telegram-widget-section">
+            <div class="telegram-widget">
+                <div class="channel-header">
+                    <div class="channel-avatar">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="channel-title">
+                        <h3>Наш Telegram канал</h3>
+                    </div>
+                </div>
+
+                <div class="channel-stats">
+                    <div class="stat">
+                        <i class="fas fa-users"></i>
+                        <div class="stat-info">
+                            <span class="stat-value">1.2K</span>
+                            <span class="stat-label">подписчиков</span>
+                        </div>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-newspaper"></i>
+                        <div class="stat-info">
+                            <span class="stat-value">450+</span>
+                            <span class="stat-label">постов</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Последний пост -->
+                <div class="latest-post">
+                    <div class="post-header">
+                        <i class="fas fa-paperclip"></i>
+                        <h4>Последний пост:</h4>
+                    </div>
+                    <div class="post-content">
+                        <p class="post-text">Как безопасно заменить розетку своими руками? Пошаговая инструкция с фото...</p>
+                        <div class="post-meta">
+                            <span class="post-date">
+                                <i class="far fa-calendar"></i>
+                                2 часа назад
+                            </span>
+                            <span class="post-views">
+                                <i class="far fa-eye"></i>
+                                850 просмотров
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Что в канале -->
+                <div class="channel-features">
+                    <h4><i class="fas fa-star"></i> Что в канале:</h4>
+                    <div class="benefits">
+                        <div class="benefit-item">
+                            <i class="fas fa-comments"></i>
+                            <span>Консультация в чате</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-video"></i>
+                            <span>Видео-обзоры</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-tools"></i>
+                            <span>Выполненные работы</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Подписаться -->
+                <div class="widget-actions">
+                    <a href="https://t.me/master_electric52" class="primary-btn" target="_blank">
+                        <i class="fab fa-telegram"></i>
+                        <span>Подписаться</span>
+                    </a>
                 </div>
             </div>
-        </div>
-
-        <div class="all-services">
-            <h3>Полный прайс-лист:</h3>
-            <table>
-                <thead>
-                <tr>
-                    <th>Услуга</th>
-                    <th>Описание</th>
-                    <th>Цена</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="service : ${services}">
-                    <td th:text="${service.title}">розетка</td>
-                    <td th:text="${service.description}">круглая</td>
-                    <td>
-                        <span th:text="${service.price} + ' ₽'">1000 ₽</span>
-                        <small th:text="${service.priceUnit}">за штуку</small>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </section>
-
-    <section class="works">
-        <h2><i class="fas fa-tools"></i>Крупные работы</h2>
-        <div class="works-grid">
-            <div class="work-card" th:each="work : ${works}">
-                <img th:src="${work.imageUrl}" alt="Работа" class="work-image">
-                <div class="work-content">
-                    <h3 th:text="${work.title}">Название работы</h3>
-                    <div class="work-date" th:text="${work.formattedDate}">15.03.2025</div>
-                    <p class="work-description" th:text="${work.description}">Описание работы</p>
-                    <div class="work-price" th:text="${#numbers.formatDecimal(work.price, 0, 'DEFAULT', 0, 'DEFAULT') + ' ₽'}">25 000 ₽</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="contact-info">
-        <h2><i class="fas fa-address-card"></i> Контактная информация</h2>
-        <div class="contact-details">
-            <div class="contact-item">
-                <i class="fas fa-map-marker-alt"></i>
-                <span th:text="${contactInfo.address}">г. Нижний Новгород</span>
-            </div>
-            <div class="contact-item">
-                <i class="fas fa-phone"></i>
-                <span th:text="${contactInfo.phone}">+7 (950) 621-97-57</span>
-            </div>
-            <div class="contact-item">
-                <i class="fas fa-envelope"></i>
-                <span th:text="${contactInfo.email}">electrician@example.com</span>
-            </div>
-            <div class="contact-item">
-                <i class="fas fa-clock"></i>
-                <span th:text="${contactInfo.workingHours}">Пн-Пт: 00:00-00:00</span>
-            </div>
-        </div>
-    </section>
+        </aside>
+    </div>
 </main>
 
 <footer>
