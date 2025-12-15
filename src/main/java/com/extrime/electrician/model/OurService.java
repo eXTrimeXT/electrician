@@ -3,11 +3,9 @@ package com.extrime.electrician.model;
 import lombok.Getter;
 import lombok.Setter;
 
-// Наши услуги(service) на сайте
 @Setter
 @Getter
 public class OurService {
-    // Геттеры и сеттеры
     private Long id;
     private String title;
     private String description;
@@ -15,7 +13,6 @@ public class OurService {
     private String priceUnit;
     private Boolean isPopular;
 
-    // Конструкторы
     public OurService() {}
 
     public OurService(Long id, String title, String description, Double price, String priceUnit, Boolean isPopular) {

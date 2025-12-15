@@ -8,6 +8,7 @@ import com.extrime.electrician.model.User;
 import com.extrime.electrician.model.Work;
 import com.extrime.electrician.service.FileStorageService;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/admin")
 public class AdminApiController {
@@ -265,7 +267,7 @@ public class AdminApiController {
             HttpSession session) {
 
         if (!isAuthenticated(session)) {
-            System.out.println("Пользователь не авторизован");
+            log.info("Пользователь не авторизован");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Требуется авторизация");
         }
 
@@ -285,7 +287,7 @@ public class AdminApiController {
                     work.setWorkDate(LocalDate.now());
                 }
             } catch (Exception e) {
-                System.out.println("Ошибка парсинга даты: " + e.getMessage());
+                log.error("Ошибка парсинга даты: ", e);
                 work.setWorkDate(LocalDate.now());
             }
 
@@ -297,7 +299,7 @@ public class AdminApiController {
                     work.setPrice(0.0);
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Ошибка парсинга цены: " + e.getMessage());
+                log.error("Ошибка парсинга цены: ", e);
                 work.setPrice(0.0);
             }
 
@@ -305,46 +307,45 @@ public class AdminApiController {
             String finalImageUrl = null;
 
             if (imageFile != null && !imageFile.isEmpty()) {
-                System.out.println(
-                        "Загрузка файла: " + imageFile.getOriginalFilename() +
-                                ", size: " + imageFile.getSize() +
-                                ", type: " + imageFile.getContentType()
+                log.info("Загрузка файла: " + imageFile.getOriginalFilename() +
+                        ", size: " + imageFile.getSize() +
+                        ", type: " + imageFile.getContentType()
                 );
 
                 try {
                     finalImageUrl = fileStorageService.storeFile(imageFile);
-                    System.out.println("Файл сохранен: " + finalImageUrl);
+                    log.info("Файл сохранен: " + finalImageUrl);
                 } catch (IOException e) {
-                    System.err.println("Ошибка сохранения файла: " + e.getMessage());
+                    log.error("Ошибка сохранения файла: ", e);
                     finalImageUrl = "/static/images/default-work.jpg";
                 }
             } else if (imageUrl != null && !imageUrl.trim().isEmpty()) {
-                System.out.println("Используем URL: " + imageUrl);
+                log.info("Используем URL: " + imageUrl);
                 finalImageUrl = imageUrl.trim();
             } else {
-                System.out.println("Используем изображение по умолчанию");
+                log.info("Используем изображение по умолчанию");
                 finalImageUrl = "/static/images/default-work.jpg";
             }
 
             work.setImageUrl(finalImageUrl);
-            System.out.println("Данные для сохранения:");
-            System.out.println("- title: " + work.getTitle());
-            System.out.println("- description: " + work.getDescription());
-            System.out.println("- workDate: " + work.getWorkDate());
-            System.out.println("- price: " + work.getPrice());
-            System.out.println("- imageUrl: " + work.getImageUrl());
+            log.info("Данные для сохранения:");
+            log.info("- title: " + work.getTitle());
+            log.info("- description: " + work.getDescription());
+            log.info("- workDate: " + work.getWorkDate());
+            log.info("- price: " + work.getPrice());
+            log.info("- imageUrl: " + work.getImageUrl());
 
-            System.out.println("Сохранение работы в БД...");
+            log.info("Сохранение работы в БД...");
             Long id = workDAO.addWork(work);
-            System.out.println("Работа сохранена с ID: " + id);
+            log.info("Работа сохранена с ID: " + id);
 
             response.put("success", true);
             response.put("message", "Работа успешно добавлена");
             response.put("id", id);
             response.put("imageUrl", work.getImageUrl());
 
-            System.out.println("Отправка успешного ответа: " + response);
-            System.out.println("=== КОНЕЦ СОЗДАНИЯ РАБОТЫ ===");
+            log.info("Отправка успешного ответа: " + response);
+            log.info("=== КОНЕЦ СОЗДАНИЯ РАБОТЫ ===");
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
@@ -355,7 +356,7 @@ public class AdminApiController {
             response.put("message", "Ошибка при добавлении работы: " + e.getMessage());
             response.put("error", e.toString());
 
-            System.out.println("=== КОНЕЦ С ОШИБКОЙ ===");
+            log.error("=== КОНЕЦ С ОШИБКОЙ ===");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }

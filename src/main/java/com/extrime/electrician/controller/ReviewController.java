@@ -27,15 +27,10 @@ public class ReviewController {
     @GetMapping
     public String reviewsPage(Model model, HttpSession session) {
         model.addAttribute("pageTitle", "Отзывы клиентов");
-
-        // Проверяем авторизацию
         User user = (User) session.getAttribute("user");
         model.addAttribute("isLoggedIn", user != null);
         model.addAttribute("isAdmin", user != null && "ADMIN".equals(user.getRole()));
-
-        // Получаем отзывы
         model.addAttribute("reviews", reviewDAO.findAllActive());
-
         // Форматируем даты для отображения
         model.addAttribute("formatter", formatter);
 

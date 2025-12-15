@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class Review {
-    // Getters and Setters
     private Long id;
     private Long userId;
     private String username;
@@ -19,7 +18,6 @@ public class Review {
     private LocalDateTime updatedAt;
     private boolean active;
 
-    // Constructors
     public Review() {}
 
     public Review(Long userId, String username, Integer rating, String comment) {

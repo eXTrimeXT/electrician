@@ -79,22 +79,16 @@ public class EmailVerificationService {
      */
     @Transactional
     public boolean verifyCode(String email, String code) {
-        EmailVerification verification = emailVerificationDAO
-                .findByEmailAndCode(email, code);
+        EmailVerification verification = emailVerificationDAO.findByEmailAndCode(email, code);
 
-        if (verification == null) {
-            return false;
-        }
+        // Проверяем существование почты и кода
+        if (verification == null) { return false; }
 
         // Проверяем, не истек ли срок действия
-        if (verification.getExpiresAt().isBefore(LocalDateTime.now())) {
-            return false;
-        }
+        if (verification.getExpiresAt().isBefore(LocalDateTime.now())) { return false; }
 
         // Проверяем, не использован ли уже код
-        if (verification.isUsed()) {
-            return false;
-        }
+        if (verification.isUsed()) { return false; }
 
         // Помечаем код как использованный
         verification.setUsed(true);
@@ -107,8 +101,8 @@ public class EmailVerificationService {
      * Проверка наличия активной верификации
      */
     public boolean hasActiveVerification(Long userId) {
-        EmailVerification verification = emailVerificationDAO
-                .findActiveByUserId(userId);
+        EmailVerification verification = emailVerificationDAO.findActiveByUserId(userId);
+
         return verification != null &&
                 verification.getExpiresAt().isAfter(LocalDateTime.now()) &&
                 !verification.isUsed();

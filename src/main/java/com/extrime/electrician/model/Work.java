@@ -9,7 +9,6 @@ import java.time.format.DateTimeFormatter;
 @Setter
 @Getter
 public class Work {
-    // Геттеры и сеттеры
     private Long id;
     private String title;
     private String description;
@@ -17,7 +16,6 @@ public class Work {
     private Double price;
     private String imageUrl;
 
-    // Конструкторы
     public Work() {}
 
     public Work(Long id, String title, String description, LocalDate workDate, Double price, String imageUrl) {

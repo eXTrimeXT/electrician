@@ -1,6 +1,7 @@
 package com.extrime.electrician.service;
 
 import com.extrime.electrician.config.Config;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class FileStorageService {
 
@@ -28,7 +30,7 @@ public class FileStorageService {
         // Генерируем уникальное имя файла
         String originalFileName = file.getOriginalFilename();
         String fileExtension = getFileExtension(originalFileName);
-        String fileName = UUID.randomUUID().toString() + fileExtension;
+        String fileName = UUID.randomUUID() + fileExtension;
 
         // Сохраняем файл
         Path targetLocation = uploadPath.resolve(fileName);
@@ -47,7 +49,7 @@ public class FileStorageService {
 
             return Files.deleteIfExists(filePath);
         } catch (IOException e) {
-            System.err.println("Ошибка при удалении файла: " + e.getMessage());
+            log.error("Ошибка при удалении файла: ", e);
             return false;
         }
     }

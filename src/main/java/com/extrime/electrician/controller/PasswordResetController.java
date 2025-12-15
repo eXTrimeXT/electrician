@@ -6,6 +6,7 @@ import com.extrime.electrician.model.PasswordResetToken;
 import com.extrime.electrician.model.User;
 import com.extrime.electrician.service.PasswordService;
 import com.extrime.electrician.service.email.EmailService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
 @Controller
 @RequestMapping("/password")
 public class PasswordResetController {
@@ -34,7 +36,7 @@ public class PasswordResetController {
     @Autowired
     private Config config;
 
-    // Хранилище токенов сброса пароля (в production используйте БД или Redis)
+    // Хранилище токенов сброса пароля (в production БД или Redis)
     private final Map<String, PasswordResetToken> resetTokens = new ConcurrentHashMap<>();
 
     /**
@@ -50,9 +52,7 @@ public class PasswordResetController {
      * Обработка запроса на сброс пароля
      */
     @PostMapping("/forgot")
-    public String processForgotPassword(
-            @RequestParam("email") String email,
-            Model model) {
+    public String processForgotPassword(@RequestParam("email") String email, Model model) {
 
         try {
             // Ищем пользователя по email
@@ -93,9 +93,7 @@ public class PasswordResetController {
      * Страница для ввода нового пароля
      */
     @GetMapping("/reset")
-    public String showResetPasswordPage(
-            @RequestParam("token") String token,
-            Model model) {
+    public String showResetPasswordPage(@RequestParam("token") String token, Model model) {
 
         PasswordResetToken resetToken = resetTokens.get(token);
 
@@ -254,8 +252,7 @@ public class PasswordResetController {
             boolean emailSent = emailService.sendResetPasswordEmail(toEmail, resetLink, username);
 
             if (!emailSent) {
-                // Обработка ошибки
-                System.err.println("Failed to send reset password email to: " + toEmail);
+                log.error("Failed to send reset password email to:", toEmail);
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -35,7 +35,9 @@ public class TelegramBotService {
     public void init() {
         try {
             this.bot = new TelegramBot(telegramBotConfig.getTELEGRAM_TOKEN());
-            log.info("Telegram бот инициализирован для владельца: {}", telegramBotConfig.getTELEGRAM_OWNER_ID());
+            log.info("TG_BOT: инициализирован");
+            log.info("TG_BOT: ID Владельца: {}", telegramBotConfig.getTELEGRAM_OWNER_ID());
+            log.info("TG_BOT: ID Канала: {}", telegramBotConfig.getTELEGRAM_CHANNEL_ID());
 
             // При старте получаем время последнего отзыва
             LocalDateTime latestReviewTime = reviewService.getLatestReviewTime();
@@ -128,9 +130,9 @@ public class TelegramBotService {
             SendMessage message = new SendMessage(telegramBotConfig.getTELEGRAM_OWNER_ID(), text);
             SendResponse response = bot.execute(message);
 
-            if (!response.isOk()) {
-                log.error("Ошибка отправки сообщения: {}", response.description());
-            }
+            if (response.isOk()) log.info("Сообщение отправлено: {}", message);
+            else log.error("Ошибка отправки сообщения: {}", response.description());
+
         } catch (Exception e) {
             log.error("Ошибка отправки сообщения", e);
         }

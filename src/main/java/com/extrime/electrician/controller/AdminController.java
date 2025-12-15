@@ -23,7 +23,6 @@ public class AdminController {
         // Проверяем роль пользователя
         User user = (User) session.getAttribute("user");
         if (user == null || !user.getRole().equals("ADMIN")) {
-            // Если пользователь не админ, перенаправляем на профиль
             return "redirect:/profile";
         }
 
@@ -31,7 +30,7 @@ public class AdminController {
         return "admin";
     }
 
-     // Защищенный маршрут для получения данных (например, через REST)
+     // Защищенный маршрут для получения данных через REST
     @GetMapping("/admin/data")
     public String getAdminData(HttpSession session, Model model) {
         // Проверяем авторизацию

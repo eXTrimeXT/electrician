@@ -16,8 +16,6 @@ import java.util.Objects;
 
 @Repository
 public class EmailVerificationDAO {
-//    @Autowired
-//    private JdbcTemplate jdbcTemplate;
     @Autowired
     public Config config;
 

@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 public class User {
-    // Геттеры и сеттеры
     private Long id;
     private String username;
     private String password;
@@ -19,7 +18,6 @@ public class User {
     private boolean active;
     private boolean emailVerified;
 
-    // Конструкторы
     public User() {
         this.active = false;
         this.emailVerified = false;

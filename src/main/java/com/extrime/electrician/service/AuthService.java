@@ -32,7 +32,6 @@ public class AuthService {
     }
 
     // Проверить, является ли пользователь админом
-    // Добавить эту проверку в каждый метод админ-контроллера
     public boolean isAdmin(HttpSession session) {
         User user = (User) session.getAttribute("user");
         return user != null && "ADMIN".equals(user.getRole());
