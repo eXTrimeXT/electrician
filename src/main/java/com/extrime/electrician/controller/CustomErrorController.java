@@ -28,9 +28,9 @@ public class CustomErrorController implements ErrorController {
             int statusCode = Integer.parseInt(status.toString());
 
             if (statusCode == HttpStatus.NOT_FOUND.value()) {
-                return "error/404";
+                return "errors/404";
             } else if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
-                return "error/500";
+                return "errors/500";
             }
         }
 
@@ -40,7 +40,7 @@ public class CustomErrorController implements ErrorController {
         model.addAttribute("error", message != null ? message : "Произошла ошибка");
         model.addAttribute("path", path != null ? path : request.getRequestURI());
 
-        return "error";
+        return "errors";
     }
 
     @GetMapping("/404")
@@ -48,7 +48,7 @@ public class CustomErrorController implements ErrorController {
         model.addAttribute("timestamp", LocalDateTime.now().format(formatter));
         model.addAttribute("status", "404");
         model.addAttribute("error", "Страница не найдена");
-        return "error/404";
+        return "errors/404";
     }
 
     @GetMapping("/500")
@@ -56,6 +56,6 @@ public class CustomErrorController implements ErrorController {
         model.addAttribute("timestamp", LocalDateTime.now().format(formatter));
         model.addAttribute("status", "500");
         model.addAttribute("error", "Внутренняя ошибка сервера");
-        return "error/500";
+        return "errors/500";
     }
 }

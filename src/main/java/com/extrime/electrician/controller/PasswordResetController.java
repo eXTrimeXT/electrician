@@ -45,7 +45,7 @@ public class PasswordResetController {
     @GetMapping("/forgot")
     public String showForgotPasswordPage(Model model) {
         model.addAttribute("pageTitle", "Восстановление пароля - Электрик");
-        return "password-forgot";
+        return "passwords/password-forgot";
     }
 
     /**
@@ -61,7 +61,7 @@ public class PasswordResetController {
                 // Для безопасности не сообщаем, что email не найден
                 model.addAttribute("successMessage",
                         "Если указанный email существует в системе, на него будет отправлена инструкция по восстановлению пароля.");
-                return "password-forgot";
+                return "passwords/password-forgot";
             }
 
             User user = userOptional.get();
@@ -86,7 +86,7 @@ public class PasswordResetController {
                     "Произошла ошибка при обработке запроса. Пожалуйста, попробуйте позже.");
         }
 
-        return "password-forgot";
+        return "passwords/password-forgot";
     }
 
     /**
@@ -100,12 +100,12 @@ public class PasswordResetController {
         if (resetToken == null || !resetToken.isValid()) {
             model.addAttribute("error",
                     "Ссылка для восстановления пароля недействительна или истек срок её действия.");
-            return "password-error";
+            return "passwords/password-error";
         }
 
         model.addAttribute("token", token);
         model.addAttribute("pageTitle", "Ввод нового пароля - Электрик");
-        return "password-reset";
+        return "passwords/password-reset";
     }
 
     /**
@@ -124,28 +124,28 @@ public class PasswordResetController {
             if (resetToken == null || !resetToken.isValid()) {
                 model.addAttribute("error",
                         "Ссылка для восстановления пароля недействительна или истек срок её действия.");
-                return "password-error";
+                return "passwords/password-error";
             }
 
             // Проверяем совпадение паролей
             if (!newPassword.equals(confirmPassword)) {
                 model.addAttribute("error", "Пароли не совпадают.");
                 model.addAttribute("token", token);
-                return "password-reset";
+                return "passwords/password-reset";
             }
 
             // Проверяем сложность пароля
             if (newPassword.length() < 8) {
                 model.addAttribute("error", "Пароль должен содержать минимум 8 символов.");
                 model.addAttribute("token", token);
-                return "password-reset";
+                return "passwords/password-reset";
             }
 
             // Находим пользователя
             var userOptional = userDAO.findByEmail(resetToken.getEmail());
             if (userOptional.isEmpty()) {
                 model.addAttribute("error", "Пользователь не найден.");
-                return "password-error";
+                return "passwords/password-error";
             }
 
             User user = userOptional.get();
@@ -165,13 +165,13 @@ public class PasswordResetController {
 
             model.addAttribute("successMessage",
                     "Пароль успешно изменён! Теперь вы можете войти в систему с новым паролем.");
-            return "password-success";
+            return "passwords/password-success";
 
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("error",
                     "Произошла ошибка при изменении пароля. Пожалуйста, попробуйте позже.");
-            return "password-error";
+            return "passwords/password-error";
         }
     }
 
