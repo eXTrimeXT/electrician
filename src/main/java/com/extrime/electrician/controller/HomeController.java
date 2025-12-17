@@ -33,7 +33,7 @@ public class HomeController {
 
         // Добавляем информацию про последний пост + общее количество постов
          model.addAttribute("telegramPost", telegramPostDAO.getLatestPost());
-         model.addAttribute("postsCount", telegramPostDAO.getCount());
+         model.addAttribute("postsCount", telegramPostDAO.getCount() + 3); // Убрать +3
 
          return "home";
     }
