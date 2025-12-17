@@ -120,7 +120,7 @@
                             <h3 th:text="${work.title}">Название работы</h3>
                             <div class="work-date" th:text="${work.formattedDate}">15.03.2025</div>
                             <p class="work-description" th:text="${work.description}">Описание работы</p>
-                            <div class="work-price" th:text="${#numbers.formatDecimal(work.price, 0, 'DEFAULT', 0, 'DEFAULT') + ' ₽'}">25 000 ₽</div>
+                            <div class="work-price" th:text="от ${#numbers.formatDecimal(work.price, 0, 'DEFAULT', 0, 'DEFAULT') + ' ₽'}">от 25 000 ₽</div>
                         </div>
                     </div>
                 </div>
