@@ -85,21 +85,7 @@
     margin: 1.5rem 0 1rem;
 }
 
-.price-container {
-    min-width: 120px; /* Задайте минимальную ширину при необходимости */
-}
 
-.price {
-    font-size: 1.1em;
-    font-weight: bold;
-    white-space: nowrap; /* Запретить перенос */
-}
-
-.price-unit {
-    font-size: 0.8em;
-    color: #666;
-    white-space: nowrap; /* Запретить перенос */
-}
 
 /* Works Section */
 .works {
@@ -237,6 +223,11 @@ tbody tr:hover {
     background: #f8f9fa;
 }
 
+td small {
+    color: #7f8c8d;
+    margin-left: 0.5rem;
+}
+
 /* Contact Info */
 .contact-info {
     background: white;
@@ -266,43 +257,65 @@ tbody tr:hover {
     font-size: 1.2rem;
     width: 30px;
 }
-
-.contact-item-whatsapp {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-    background: #2cb742 ;
-    border-radius: 8px;
-}
-.contact-item-whatsapp i {
-    color: white;
-    font-size: 1.2rem;
-    width: 30px;
-}
-.contact-item-whatsapp a {
-    color: white;
-    text-decoration: none;
-    transition: color 0.3s;
-}
-
+/* Общие стили для обоих типов кнопок */
+.contact-item-whatsapp,
 .contact-item-telegram {
     display: flex;
     align-items: center;
     gap: 1rem;
     padding: 1rem;
-    background: #0088cc ;
     border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    /* Для hover эффектов */
+    position: relative;
+    overflow: hidden;
 }
-.contact-item-telegram i {
+
+/* Специфичные стили для WhatsApp */
+.contact-item-whatsapp {
+    background: #2cb742;
     color: white;
+}
+
+.contact-item-whatsapp:hover {
+    background: #25a635;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(44, 183, 66, 0.3);
+}
+
+/* Специфичные стили для Telegram */
+.contact-item-telegram {
+    background: #0088cc;
+    color: white;
+}
+
+.contact-item-telegram:hover {
+    background: #0077b3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 136, 204, 0.3);
+}
+
+/* Стили для иконок и текста внутри */
+.contact-item-whatsapp i,
+.contact-item-telegram i {
     font-size: 1.2rem;
     width: 30px;
-}
-.contact-item-telegram a {
     color: white;
-    text-decoration: none;
-    transition: color 0.3s;
+}
+
+.contact-item-whatsapp span,
+.contact-item-telegram span {
+    color: white;
+    font-weight: 500;
+}
+
+/* Эффект нажатия */
+.contact-item-whatsapp:active,
+.contact-item-telegram:active {
+    transform: translateY(0);
+    transition: transform 0.1s;
 }
 
 /* Responsive Design для home-specific стилей */

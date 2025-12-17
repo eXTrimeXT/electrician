@@ -120,7 +120,7 @@
                             <h3 th:text="${work.title}">Название работы</h3>
                             <div class="work-date" th:text="${work.formattedDate}">15.03.2025</div>
                             <p class="work-description" th:text="${work.description}">Описание работы</p>
-                            <div class="work-price" th:text="от ${#numbers.formatDecimal(work.price, 0, 'DEFAULT', 0, 'DEFAULT') + ' ₽'}">от 25 000 ₽</div>
+                            <div class="work-price" th:text="'от ' + ${#numbers.formatDecimal(work.price, 0, 'DEFAULT', 0, 'DEFAULT') + ' ₽'}">от 25 000 ₽</div>
                         </div>
                     </div>
                 </div>
@@ -145,14 +145,15 @@
                         <i class="fas fa-envelope"></i>
                         <span th:text="${contactInfo.email}">electrician@example.com</span>
                     </div>
-                    <div class="contact-item-whatsapp">
+                    <a href="https://wa.me/79506219757" target="_blank" class="contact-item-whatsapp">
                         <i class="fab fa-whatsapp"></i>
-                        <a href="https://wa.me/79506219757" target="_blank">WhatsApp</a>
-                    </div>
-                    <div class="contact-item-telegram">
+                        <span>WhatsApp</span>
+                    </a>
+
+                    <a href="https://t.me/master_electric52" target="_blank" class="contact-item-telegram">
                         <i class="fab fa-telegram"></i>
-                        <a href="https://t.me/master_electric52" target="_blank">Telegram</a>
-                    </div>
+                        <span>Telegram</span>
+                    </a>
                 </div>
             </section>
         </div>
