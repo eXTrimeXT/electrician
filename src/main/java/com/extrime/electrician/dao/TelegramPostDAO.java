@@ -104,7 +104,7 @@ public class TelegramPostDAO {
     public TelegramPost getLatestPost() {
         String sql = "SELECT * FROM telegram_posts ORDER BY created_at DESC LIMIT 1";
         List<TelegramPost> posts = jdbcTemplate.query(sql, new TelegramPostRowMapper());
-        return posts.isEmpty() ? null : posts.get(0);
+        return posts.isEmpty() ? null : posts.getFirst();
     }
 
     // Получить самую последнюю запись по дате
@@ -116,7 +116,7 @@ public class TelegramPostDAO {
                 LIMIT 1
                 """;
         List<TelegramPost> posts = jdbcTemplate.query(sql, new TelegramPostRowMapper());
-        return posts.isEmpty() ? null : posts.get(0);
+        return posts.isEmpty() ? null : posts.getFirst();
     }
 
     // Получить запись по postId
