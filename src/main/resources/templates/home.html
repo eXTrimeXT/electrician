@@ -19,16 +19,14 @@
                     <i class="fas fa-phone"></i>
                     <!-- ИЗМЕНИТЬ НОМЕР ТЕЛЕФОНА ЕСЛИ НЕОБХОДИМО -->
                     <span><a href="tel:+79506219757">Иван</a></span>
-
-<!--                    Если нужно создать ошибку 500-->
-<!--                    <span th:href="tel: ${contactInfo.phone}" th:text="y54trth"> text </span>-->
+                    <!-- Если нужно создать ошибку 500-->
+                    <!-- <span th:href="tel: ${contactInfo.phone}" th:text="y54trth"> text </span>-->
                 </div>
                 <div class="hours">
                     <i class="fas fa-clock"></i>
                     <span th:text="${contactInfo.workingHours}">Ср-Вс: 08:00-17:00</span>
                 </div>
 
-                <!-- КНОПКА ОТЗЫВОВ (ДОБАВЛЕНА ПЕРЕД КНОПКОЙ ВХОДА) -->
                 <a href="/reviews" class="admin-btn reviews-btn">
                     <i class="fas fa-comments"></i> Отзывы
                 </a>
@@ -167,22 +165,28 @@
                         <i class="fas fa-bolt"></i>
                     </div>
                     <div class="channel-title">
-                        <h3>Наш Telegram канал</h3>
+                        <h3 th:text="${channelInfo?.title ?: 'Наш Telegram канал'}">Наш Telegram канал</h3>
+                        <div class="channel-description">
+                            <span th:text="${channelInfo?.description ?: 'Описание не придумали'}">
+                                Описание
+                            </span>
+                        </div>
                     </div>
+
                 </div>
 
                 <div class="channel-stats">
                     <div class="stat">
                         <i class="fas fa-users"></i>
                         <div class="stat-info">
-                            <span class="stat-value">1.2K</span>
+                            <span class="stat-value" th:text="${channelInfo?.subscribersCount ?: '100'}">0</span>
                             <span class="stat-label">подписчиков</span>
                         </div>
                     </div>
                     <div class="stat">
                         <i class="fas fa-newspaper"></i>
                         <div class="stat-info">
-                            <span class="stat-value">450+</span>
+                            <span class="stat-value" th:text="${postsCount ?: '100+'}">0+</span>
                             <span class="stat-label">постов</span>
                         </div>
                     </div>
@@ -195,15 +199,16 @@
                         <h4>Последний пост:</h4>
                     </div>
                     <div class="post-content">
-                        <p class="post-text">Как безопасно заменить розетку своими руками? Пошаговая инструкция с фото...</p>
+                        <p class="post-text" th:text="${telegramPost?.postText ?: 'Как безопасно заменить розетку?'}">
+                            Как безопасно заменить розетку своими руками? Пошаговая инструкция с фото...
+                        </p>
                         <div class="post-meta">
                             <span class="post-date">
                                 <i class="far fa-calendar"></i>
-                                2 часа назад
-                            </span>
-                            <span class="post-views">
-                                <i class="far fa-eye"></i>
-                                850 просмотров
+                                <span th:if="${telegramPost?.createdAt}" th:text="${#temporals.format(telegramPost.createdAt, 'dd.MM.yyyy HH:mm')}">
+                                    2 часа назад
+                                </span>
+                                <span th:unless="${telegramPost?.createdAt}">2 часа назад</span>
                             </span>
                         </div>
                     </div>
@@ -230,7 +235,8 @@
 
                 <!-- Подписаться -->
                 <div class="widget-actions">
-                    <a href="https://t.me/master_electric52" class="primary-btn" target="_blank">
+                    <a th:href="${channelInfo?.inviteLink ?: 'https://t.me/master_electric52'}"
+                       class="primary-btn" target="_blank">
                         <i class="fab fa-telegram"></i>
                         <span>Подписаться</span>
                     </a>

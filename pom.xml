@@ -102,6 +102,7 @@
             <artifactId>java-telegram-bot-api</artifactId>
             <version>9.2.1</version>
         </dependency>
+
     </dependencies>
 
 	<build>

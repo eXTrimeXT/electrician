@@ -37,6 +37,16 @@
     color: #2c3e50;
     font-size: 1.3rem;
     margin-bottom: 0.3rem;
+    align-items: center;
+}
+
+.channel-description{
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: #7f8c8d;
+    font-weight: 400;
+    margin-top: 0.3rem;
 }
 
 /* Stats */

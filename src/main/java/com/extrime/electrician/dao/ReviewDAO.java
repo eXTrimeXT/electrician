@@ -202,12 +202,7 @@ public class ReviewDAO {
         public Review mapRow(ResultSet rs, int rowNum) throws SQLException {
             Review review = new Review();
             review.setId(rs.getLong("id"));
-
-            // Исправленная строка - сначала получаем как Integer, затем конвертируем в Long
-//            Integer userIdInt = rs.getObject("user_id", Integer.class);
-//            review.setUserId(userIdInt != null ? userIdInt.longValue() : null);
             review.setUserId(rs.getLong("user_id"));
-
             review.setUsername(rs.getString("username"));
             review.setRating(rs.getInt("rating"));
             review.setComment(rs.getString("comment"));

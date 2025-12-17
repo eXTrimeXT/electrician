@@ -26,6 +26,9 @@ public class DatabaseInitializer {
     @Autowired
     private ReviewDAO reviewDAO;
 
+    @Autowired
+    private TelegramPostDAO telegramPostDAO;
+
     @PostConstruct
     @Profile("!test") // Не выполняем в тестах
     public void init() {
@@ -53,5 +56,10 @@ public class DatabaseInitializer {
             reviewDAO.createTableIfNotExists();
             System.out.println("✅ База данных REVIEWS инициализирована успешно!");
         }catch (Exception e) {System.err.println("❌ Ошибка при инициализации базы данных REVIEWS: " + e.getMessage());}
+
+        try{
+            telegramPostDAO.createTableIfNotExists();
+            System.out.println("✅ База данных TELEGRAM_POSTS инициализирована успешно!");
+        }catch (Exception e) {System.err.println("❌ Ошибка при инициализации базы данных TELEGRAM_POSTS: " + e.getMessage());}
     }
 }

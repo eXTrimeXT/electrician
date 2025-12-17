@@ -1,10 +1,8 @@
-package com.extrime.electrician.service;
+package com.extrime.electrician.service.telegram;
 
 import com.extrime.electrician.config.Config;
-import com.extrime.electrician.config.TelegramBotConfig;
 import com.extrime.electrician.model.Review;
-import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.request.SendMessage;
+import com.extrime.electrician.service.ReviewService;
 import com.pengrad.telegrambot.response.SendResponse;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -20,25 +18,20 @@ import java.util.concurrent.atomic.AtomicReference;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TelegramBotService {
+public class TelegramNotifyReviews {
     @Autowired
     private Config config;
 
-    private final TelegramBotConfig telegramBotConfig;
-    private final ReviewService reviewService;
+    @Autowired
+    private TelegramBotInit telegramBotInit;
 
-    private TelegramBot bot;
+    private final ReviewService reviewService;
     private final AtomicReference<LocalDateTime> lastReviewTime = new AtomicReference<>(LocalDateTime.now());
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     @PostConstruct
     public void init() {
         try {
-            this.bot = new TelegramBot(telegramBotConfig.getTELEGRAM_TOKEN());
-            log.info("TG_BOT: инициализирован");
-            log.info("TG_BOT: ID Владельца: {}", telegramBotConfig.getTELEGRAM_OWNER_ID());
-            log.info("TG_BOT: ID Канала: {}", telegramBotConfig.getTELEGRAM_CHANNEL_ID());
-
             // При старте получаем время последнего отзыва
             LocalDateTime latestReviewTime = reviewService.getLatestReviewTime();
             if (latestReviewTime != null) {
@@ -53,7 +46,7 @@ public class TelegramBotService {
     /**
      * Проверка новых отзывов каждые 30 секунд
      */
-    @Scheduled(fixedDelay = 30000) // 30 секунд
+    @Scheduled(fixedDelay = 60000) // 60 секунд
     public void checkNewReviews() {
         try {
             LocalDateTime currentLastTime = lastReviewTime.get();
@@ -77,30 +70,10 @@ public class TelegramBotService {
      * Отправка уведомления о новом отзыве
      */
     private void sendNewReviewNotification(Review review) {
-        String message = buildNotificationMessage(review);
-
-        try {
-            // Отправка владельцу
-            SendMessage sendMessage = new SendMessage(telegramBotConfig.getTELEGRAM_OWNER_ID(), message);
-            SendResponse response = bot.execute(sendMessage);
-
-            if (response.isOk()) {
-                log.info("Уведомление о новом отзыве отправлено владельцу");
-            } else {
-                log.error("Ошибка отправки уведомления: {}", response.description());
-            }
-        } catch (Exception e) {
-            log.error("Ошибка отправки сообщения в Telegram", e);
-        }
-    }
-
-    /**
-     * Формирование сообщения об отзыве
-     */
-    private String buildNotificationMessage(Review review) {
         String stars = "⭐".repeat(review.getRating()) + "☆".repeat(5 - review.getRating());
 
-        return String.format("""
+        // Формирование сообщения о новом отзыве
+        String message = String.format("""
                 🔔 Новый отзыв на сайте!
                 
                 👤 Пользователь: %s
@@ -120,21 +93,18 @@ public class TelegramBotService {
                 review.getCreatedAt().format(formatter),
                 config.getDOMAIN()
         );
-    }
 
-    /**
-     * Метод для ручной отправки сообщений
-     */
-    public void sendMessage(String text) {
+        // Отправка владельцу
         try {
-            SendMessage message = new SendMessage(telegramBotConfig.getTELEGRAM_OWNER_ID(), text);
-            SendResponse response = bot.execute(message);
+            SendResponse response = telegramBotInit.SendOwnerMessage(message);
 
-            if (response.isOk()) log.info("Сообщение отправлено: {}", message);
-            else log.error("Ошибка отправки сообщения: {}", response.description());
-
+            if (response.isOk()) {
+                log.info("Уведомление о новом отзыве отправлено владельцу");
+            } else {
+                log.error("Ошибка отправки уведомления: {}", response.description());
+            }
         } catch (Exception e) {
-            log.error("Ошибка отправки сообщения", e);
+            log.error("Ошибка отправки сообщения в Telegram", e);
         }
     }
 }

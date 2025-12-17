@@ -1,6 +1,5 @@
 package com.extrime.electrician.dao;
 
-import com.extrime.electrician.config.Config;
 import com.extrime.electrician.model.OurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,11 +16,8 @@ import java.util.Objects;
 
 @Repository
 public class ServiceDAO {
-    @Autowired
-    public Config config;
 
     private final JdbcTemplate jdbcTemplate;
-    private String sql;
 
     @Autowired
     public ServiceDAO(JdbcTemplate jdbcTemplate) {
@@ -29,8 +25,7 @@ public class ServiceDAO {
     }
 
     public void createTableIfNotExists() {
-        if (config.isPostgres()) {
-            sql = """
+        String sql = """
                     CREATE TABLE IF NOT EXISTS services (
                         id SERIAL PRIMARY KEY,
                         title VARCHAR(255) NOT NULL,
@@ -41,32 +36,31 @@ public class ServiceDAO {
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                     )
                     """;
-        }
         jdbcTemplate.execute(sql);
     }
 
     // Получить все услуги
     public List<OurService> getAllServices() {
-        if (config.isPostgres()) sql = "SELECT * FROM services ORDER BY title";
+        String sql = "SELECT * FROM services ORDER BY title";
         return jdbcTemplate.query(sql, new ServiceRowMapper());
     }
 
     // Получить популярные услуги
     public List<OurService> getPopularServices() {
-        if (config.isPostgres()) sql = "SELECT * FROM services WHERE is_popular = true ORDER BY title";
+        String sql = "SELECT * FROM services WHERE is_popular = true ORDER BY title";
         return jdbcTemplate.query(sql, new ServiceRowMapper());
     }
 
     // Получить услугу по ID
     public OurService getServiceById(Long id) {
-        if (config.isPostgres()) sql = "SELECT * FROM services WHERE id = ?";
+        String sql = "SELECT * FROM services WHERE id = ?";
         List<OurService> services = jdbcTemplate.query(sql, new ServiceRowMapper(), id);
-        return services.isEmpty() ? null : services.get(0);
+        return services.isEmpty() ? null : services.getFirst();
     }
 
     // Добавить новую услугу
     public Long addService(OurService service) {
-        if (config.isPostgres()) sql = "INSERT INTO services (title, description, price, price_unit, is_popular) " + "VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO services (title, description, price, price_unit, is_popular) " + "VALUES (?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
@@ -83,7 +77,7 @@ public class ServiceDAO {
 
     // Обновить услугу
     public boolean updateService(OurService service) {
-        if (config.isPostgres()) sql = "UPDATE services SET title = ?, description = ?, price = ?, " +
+        String sql = "UPDATE services SET title = ?, description = ?, price = ?, " +
                 "price_unit = ?, is_popular = ? WHERE id = ?";
 
         int rowsAffected = jdbcTemplate.update(sql,
@@ -100,7 +94,7 @@ public class ServiceDAO {
 
     // Удалить услугу
     public boolean deleteService(Long id) {
-        if (config.isPostgres()) sql = "DELETE FROM services WHERE id = ?";
+        String sql = "DELETE FROM services WHERE id = ?";
         int rowsAffected = jdbcTemplate.update(sql, id);
         return rowsAffected > 0;
     }
