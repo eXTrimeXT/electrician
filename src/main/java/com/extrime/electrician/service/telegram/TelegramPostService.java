@@ -14,12 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -45,6 +44,7 @@ public class TelegramPostService {
      */
     @Scheduled(fixedDelay = 60000)  // Проверка каждую минуту
     public TelegramPost getPostInfo() {
+        // Добавить проверку по ID_CHANNEL
         try {
             GetUpdates getUpdates = new GetUpdates().limit(1).offset(-1).timeout(0);
             GetUpdatesResponse getUpdatesResponse = bot.execute(getUpdates);
@@ -62,13 +62,19 @@ public class TelegramPostService {
                 return null;
             }
 
+            if (!Objects.equals(updatePost.chat().id().toString(), telegramBotConfig.getTELEGRAM_CHANNEL_ID()))
+            {
+                log.info("RETURN NULL\nchat_id = {}\nCHANNEL_ID = {}", updatePost.chat().id(), telegramBotConfig.getTELEGRAM_CHANNEL_ID());
+                return null;
+            }
+
             Long postId = Long.valueOf(updatePost.messageId());
             String postText = updatePost.text() != null ? updatePost.text() : updatePost.caption();
             Integer dateTimestamp = updatePost.date();
 
             // Проверяем существующую запись
             TelegramPost existingPost = telegramPostDAO.getPostByPostId(postId);
-
+            log.info("updatePost = {}", updatePost);
             // Если записи нет - создаем новую
             if (existingPost == null) {
                 TelegramPost newPost = new TelegramPost();
