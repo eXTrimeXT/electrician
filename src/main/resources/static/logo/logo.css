@@ -1,0 +1,82 @@
+.logo-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+.logo-svg {
+    width: 60px;
+    height: 60px;
+    transition: transform 0.3s ease;
+}
+
+.logo-is-hover {}
+.logo-is-hover:hover {
+    transform: scale(1.75);
+}
+
+/* Анимация пульсации для лампочки */
+.logo-animation {
+    animation: gradient-glow 3s infinite ease-in-out;
+}
+
+/* Пульсация */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Более яркая пульсация */
+@keyframes pulse-bright {
+    0% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+    50% {
+        transform: scale(1.1);
+        filter: brightness(1.5);
+    }
+    100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+}
+
+/* Пульсация только свечения */
+@keyframes glow-pulse {
+    0% {
+        filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3));
+    }
+    50% {
+        filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
+    }
+    100% {
+        filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3));
+    }
+}
+
+@keyframes gradient-glow {
+    0%, 100% {
+        filter:
+            drop-shadow(0 0 5px #f00)
+            hue-rotate(0deg);
+    }
+    50% {
+        filter:
+            drop-shadow(0 0 15px #00f)
+            hue-rotate(20deg);
+    }
+}

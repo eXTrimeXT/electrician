@@ -7,13 +7,19 @@
     <link rel="stylesheet" href="../static/css/main.css">
     <link rel="stylesheet" href="../static/css/home.css">
     <link rel="stylesheet" href="../static/css/telegram.css">
+    <link rel="stylesheet" href="../static/logo/logo.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 <header>
     <div class="container">
         <div class="header-content">
-            <h1><i class="fas fa-bolt"></i>Профессиональный электрик</h1>
+            <h1 class="logo-header">
+                <img src="../static/logo/logo_white_lamp.svg" alt="Лампочка" class="logo-svg logo-is-hover logo-animation">
+                <span class="logo-animation">Профессиональный электрик</span>
+<!--                Профессиональный электрик-->
+            </h1>
+
             <div class="contact-header">
                 <div class="phone">
                     <i class="fas fa-phone"></i>
@@ -162,9 +168,13 @@
         <aside class="telegram-widget-section">
             <div class="telegram-widget">
                 <div class="channel-header">
+<!--                    <div class="channel-avatar">-->
+<!--                        <i class="fas fa-bolt"></i>-->
+<!--                    </div>-->
                     <div class="channel-avatar">
-                        <i class="fas fa-bolt"></i>
+                        <img src="../static/logo/logo_white_lamp.svg" alt="Лампочка" class="logo-svg logo-animation">
                     </div>
+
                     <div class="channel-title">
                         <h3 th:text="${channelInfo?.title ?: 'Наш Telegram канал'}">Наш Telegram канал</h3>
                         <div class="channel-description">
@@ -175,7 +185,7 @@
                     </div>
 
                 </div>
-
+                <!-- Статистика -->
                 <div class="channel-stats">
                     <div class="stat">
                         <i class="fas fa-users"></i>
@@ -234,7 +244,7 @@
                     </div>
                 </div>
 
-                <!-- Подписаться -->
+                <!-- Кнопка подписаться -->
                 <div class="widget-actions">
                     <a th:href="${channelInfo?.inviteLink ?: 'https://t.me/master_electric52'}"
                        class="primary-btn" target="_blank">
