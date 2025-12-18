@@ -73,7 +73,7 @@ public class TelegramPostService {
             Integer dateTimestamp = updatePost.date();
 
             // Если изменили название канала, фотографию канала, то пропускаем
-            if (postText.isEmpty()){
+            if (postText == null){
                 return null;
             }
 
