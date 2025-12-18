@@ -17,7 +17,7 @@
 
 .telegram-widget-section .channel-header {
     justify-content: center;
-    text-align: center;
+    text-align: start;
     flex-direction: column;
     gap: 0.8rem;
 }
@@ -65,8 +65,7 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    margin: 1rem;
 }
 
 .channel-avatar {
@@ -90,6 +89,7 @@
 .channel-description{
     display: flex;
     align-items: center;
+    text-align: start;
     gap: 0.8rem;
     color: #7f8c8d;
     font-size: 1rem;
