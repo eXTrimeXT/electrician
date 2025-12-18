@@ -47,7 +47,8 @@ public class TelegramChannelService {
             if (response.isOk()) {
                 ChatFullInfo chat = response.chat();
                 channel.setTitle(chat.title());
-                channel.setDescription(chat.description());
+                // Убираем ссылку на сайт из описания, если она есть
+                channel.setDescription(chat.description().replace("http://электрик252.рф", ""));
                 channel.setInviteLink(chat.inviteLink());
 
                 // Получение количества подписчиков
