@@ -1,3 +1,56 @@
+.telegram-widget-section {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    height: fit-content;
+    position: sticky; /* плавающий виджет */
+    top: 4rem;
+}
+
+.telegram-widget-section .telegram-widget {
+    max-width: 100%;
+    box-shadow: none;
+    border: none;
+    padding: 0;
+}
+
+.telegram-widget-section .channel-header {
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.telegram-widget-section .channel-avatar {
+    width: 70px;
+    height: 70px;
+}
+
+.telegram-widget-section .channel-title h3 {
+    font-size: 1.2rem;
+    color: #2c3e50;
+}
+
+.telegram-widget-section .channel-stats {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+}
+
+.telegram-widget-section .latest-post {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+}
+
+.telegram-widget-section .benefit-item {
+    background: white;
+    border-left: 4px solid #0088cc;
+}
+
+.telegram-widget-section .primary-btn {
+    background: linear-gradient(135deg, #0088cc 0%, #006699 100%);
+}
+
 .telegram-widget {
     width: 100%;
     background: white;
@@ -8,16 +61,12 @@
     padding: 1rem;
 }
 
-@keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-}
-
 .channel-header {
     display: flex;
     align-items: center;
     gap: 1rem;
-    margin-bottom: 1.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .channel-avatar {
@@ -34,8 +83,6 @@
 }
 
 .channel-title h3 {
-    color: #2c3e50;
-    font-size: 1.3rem;
     margin-bottom: 0.3rem;
     align-items: center;
 }
@@ -45,7 +92,7 @@
     align-items: center;
     gap: 0.8rem;
     color: #7f8c8d;
-    font-weight: 400;
+    font-size: 1rem;
     margin-top: 0.3rem;
 }
 
@@ -219,6 +266,40 @@
     font-size: 1.3rem;
 }
 
+/* Responsive Design для home-specific стилей - ДОПОЛНЕНО */
+@media (max-width: 1024px) {
+    .telegram-widget-section {
+        position: static;
+        order: -1;
+        margin-bottom: 1rem;
+    }
+
+    .telegram-widget-section .telegram-widget {
+        max-width: 100%;
+    }
+
+    .hero p {
+        font-size: 1rem;
+        padding: 0 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .telegram-widget-section {
+        padding: 1rem;
+        margin: 0 0.5rem;
+    }
+
+    .telegram-widget-section .channel-avatar {
+        width: 60px;
+        height: 60px;
+    }
+
+    .telegram-widget-section .channel-title h3 {
+        font-size: 1rem;
+    }
+}
+
 /* Responsive */
 @media (max-width: 480px) {
     .telegram-widget {
@@ -243,5 +324,22 @@
 
     .widget-actions {
         padding: 0 1.2rem 1.2rem;
+    }
+    .telegram-widget-section .benefits {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+
+    .telegram-widget-section {
+        padding: 1rem 0.8rem;
+    }
+
+    .telegram-widget-section .channel-avatar {
+        width: 50px;
+        height: 50px;
+    }
+
+    .telegram-widget-section .channel-title h3 {
+        font-size: 1rem;
     }
 }

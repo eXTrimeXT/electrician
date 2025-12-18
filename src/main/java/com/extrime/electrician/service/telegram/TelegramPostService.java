@@ -72,6 +72,11 @@ public class TelegramPostService {
             String postText = updatePost.text() != null ? updatePost.text() : updatePost.caption();
             Integer dateTimestamp = updatePost.date();
 
+            // Если изменили название канала, фотографию канала, то пропускаем
+            if (postText.isEmpty()){
+                return null;
+            }
+
             // Проверяем существующую запись
             TelegramPost existingPost = telegramPostDAO.getPostByPostId(postId);
             log.info("updatePost = {}", updatePost);
