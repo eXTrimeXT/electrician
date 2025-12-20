@@ -1,37 +1,47 @@
 /* Reviews Page Styles */
 .reviews-page {
     background: white;
-    padding: 2rem;
+    padding: clamp(1rem, 2vw, 2rem);
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    margin: 1rem;
+    margin: clamp(0.5rem, 1vw, 1rem);
 }
 
 .add-review-form {
     background: #f8f9fa;
-    padding: 2rem;
+    padding: clamp(1.2rem, 2vw, 2rem);
     border-radius: 8px;
-    margin-bottom: 2rem;
+    margin-bottom: clamp(1.5rem, 2vw, 2rem);
     border: 1px solid #e9ecef;
 }
 
+.add-review-form h3 {
+    font-size: clamp(1.1rem, 1.8vw, 1.3rem);
+    margin-bottom: 1.2rem;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 .form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.2rem;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
     font-weight: 600;
     color: #2c3e50;
+    font-size: clamp(0.9rem, 1.5vw, 1rem);
 }
 
 .form-control {
     width: 100%;
-    padding: 0.8rem;
+    padding: 0.7rem;
     border: 1px solid #ddd;
     border-radius: 5px;
-    font-size: 1rem;
+    font-size: clamp(0.9rem, 1.5vw, 1rem);
     font-family: inherit;
 }
 
@@ -42,26 +52,28 @@
 }
 
 textarea.form-control {
-    min-height: 120px;
+    min-height: 100px;
     resize: vertical;
 }
 
 .rating-stars {
     display: flex;
-    gap: 0.5rem;
-    margin: 1rem 0;
+    gap: 0.4rem;
+    margin: 0.8rem 0;
+    flex-wrap: wrap;
 }
 
 .star {
-    font-size: 1.8rem;
+    font-size: clamp(1.4rem, 2vw, 1.8rem);
     color: #ddd;
     cursor: pointer;
     transition: all 0.3s;
+    padding: 0.2rem;
 }
 
 .star.hover {
     color: #ffcc00;
-    transform: scale(1.5);
+    transform: scale(1.3);
 }
 
 .star.active {
@@ -70,15 +82,24 @@ textarea.form-control {
 }
 
 .reviews-list {
-    margin-top: 2rem;
+    margin-top: clamp(1.5rem, 2vw, 2rem);
+}
+
+.reviews-list h2 {
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .review-card {
     background: white;
     border: 1px solid #eee;
     border-radius: 10px;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
+    padding: clamp(1rem, 1.5vw, 1.5rem);
+    margin-bottom: clamp(1rem, 1.5vw, 1.5rem);
     position: relative;
     transition: box-shadow 0.3s;
 }
@@ -91,90 +112,94 @@ textarea.form-control {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 1rem;
+    margin-bottom: 0.8rem;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 0.8rem;
 }
 
 .review-user {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
     font-weight: 600;
     color: #2c3e50;
+    font-size: clamp(0.9rem, 1.5vw, 1rem);
 }
 
 .review-user i {
     color: #3498db;
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
 }
 
 .review-rating {
     color: #f39c12;
     font-weight: bold;
-    font-size: 1.1rem;
+    font-size: clamp(1rem, 1.5vw, 1.1rem);
     display: flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: 0.2rem;
 }
 
 .review-date {
     color: #7f8c8d;
-    font-size: 0.9rem;
-    margin: 0.5rem 0;
+    font-size: clamp(0.8rem, 1.2vw, 0.9rem);
+    margin: 0.4rem 0;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
 }
 
 .review-content {
-    margin: 1.5rem 0;
+    margin: 1rem 0;
     color: #333;
-    line-height: 1.7;
-    font-size: 1.05rem;
+    line-height: 1.6;
+    font-size: clamp(0.95rem, 1.5vw, 1.05rem);
 }
 
 .admin-response {
     background: #f0f9ff;
     border-left: 4px solid #3498db;
-    padding: 1.2rem;
-    margin-top: 1.5rem;
+    padding: clamp(0.8rem, 1.2vw, 1.2rem);
+    margin-top: 1rem;
     border-radius: 0 8px 8px 0;
 }
 
 .admin-response-header {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
     font-weight: 600;
     color: #2c3e50;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.6rem;
+    font-size: clamp(0.9rem, 1.5vw, 1rem);
 }
 
 .admin-response-header i {
     color: #3498db;
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
 }
 
 .review-actions {
     display: flex;
-    gap: 0.75rem;
-    margin-top: 1.5rem;
+    gap: 0.6rem;
+    margin-top: 1rem;
     flex-wrap: wrap;
 }
 
 .btn {
-    padding: 0.6rem 1.2rem;
+    padding: 0.5rem 1rem;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.95rem;
+    font-size: clamp(0.85rem, 1.2vw, 0.95rem);
     font-weight: 600;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
     transition: all 0.3s;
     font-family: inherit;
+    white-space: nowrap;
 }
 
 .btn:hover {
@@ -219,8 +244,8 @@ textarea.form-control {
 }
 
 .btn-sm {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.85rem;
+    padding: 0.3rem 0.6rem;
+    font-size: clamp(0.75rem, 1vw, 0.85rem);
 }
 
 /* Modal windows */
@@ -235,41 +260,45 @@ textarea.form-control {
     z-index: 1000;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: clamp(0.5rem, 1vw, 1rem);
 }
 
 .modal-content {
     background: white;
-    padding: 2rem;
+    padding: clamp(1.2rem, 2vw, 2rem);
     border-radius: 10px;
     width: 100%;
-    max-width: 500px;
+    max-width: min(500px, 90vw);
     max-height: 90vh;
     overflow-y: auto;
+    margin: 0 clamp(0.5rem, 1vw, 1rem);
 }
 
 .modal-content h3 {
     color: #2c3e50;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.2rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    font-size: clamp(1.1rem, 1.8vw, 1.3rem);
 }
 
 .modal-actions {
     display: flex;
-    gap: 1rem;
-    margin-top: 1.5rem;
+    gap: 0.8rem;
+    margin-top: 1.2rem;
+    flex-wrap: wrap;
 }
 
 /* Alerts */
 .alert {
-    padding: 1rem 1.5rem;
+    padding: 0.8rem 1.2rem;
     border-radius: 8px;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.2rem;
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.6rem;
+    font-size: clamp(0.9rem, 1.5vw, 1rem);
 }
 
 .alert-success {
@@ -290,27 +319,6 @@ textarea.form-control {
     border: 1px solid #ffeaa7;
 }
 
-/* Responsive for reviews */
-@media (max-width: 768px) {
-    .review-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .review-actions {
-        flex-direction: column;
-    }
-
-    .review-actions .btn {
-        width: 100%;
-        justify-content: center;
-    }
-
-    .modal-content {
-        padding: 1.5rem;
-    }
-}
-
 /* Кнопка отзывов в header */
 .reviews-btn {
     background: #9b59b6;
@@ -318,4 +326,430 @@ textarea.form-control {
 
 .reviews-btn:hover {
     background: #8e44ad;
+}
+
+/* Login prompt */
+.login-prompt {
+    text-align: center;
+    padding: clamp(1.2rem, 2vw, 2rem);
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin: clamp(1rem, 1.5vw, 2rem) 0;
+}
+
+.login-prompt h3 {
+    color: #7f8c8d;
+    margin-bottom: 0.8rem;
+    font-size: clamp(1.1rem, 1.8vw, 1.3rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.login-prompt p {
+    color: #555;
+    margin-bottom: 1rem;
+    font-size: clamp(0.9rem, 1.5vw, 1rem);
+}
+
+/* Empty state */
+.reviews-list > div[style*="text-align: center"] {
+    text-align: center;
+    padding: clamp(2rem, 3vw, 3rem);
+    color: #7f8c8d;
+}
+
+.reviews-list > div[style*="text-align: center"] i {
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin-bottom: 1rem;
+    color: #ddd;
+}
+
+.reviews-list > div[style*="text-align: center"] h3 {
+    margin-bottom: 0.5rem;
+    font-size: clamp(1.1rem, 1.8vw, 1.3rem);
+}
+
+.reviews-list > div[style*="text-align: center"] p {
+    font-size: clamp(0.9rem, 1.5vw, 1rem);
+}
+
+/* Responsive Design - Медиа-запросы */
+
+/* Большие планшеты и маленькие ноутбуки (1024px и меньше) */
+@media (max-width: 1024px) {
+    .reviews-page {
+        padding: 1.5rem;
+        margin: 0.8rem;
+    }
+
+    .add-review-form {
+        padding: 1.5rem;
+    }
+
+    .review-card {
+        padding: 1.2rem;
+    }
+
+    .modal-content {
+        padding: 1.5rem;
+    }
+}
+
+/* Планшеты (768px и меньше) */
+@media (max-width: 768px) {
+    .reviews-page {
+        padding: 1.2rem;
+        margin: 0.5rem;
+    }
+
+    .add-review-form {
+        padding: 1.2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .reviews-list h2 {
+        margin-bottom: 1.2rem;
+    }
+
+    .review-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .review-user, .review-rating {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .review-actions {
+        gap: 0.5rem;
+    }
+
+    .btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    .modal-content {
+        padding: 1.2rem;
+        max-width: 95vw;
+        margin: 0 0.5rem;
+    }
+
+    .modal-actions {
+        gap: 0.6rem;
+    }
+
+    .alert {
+        padding: 0.7rem 1rem;
+    }
+}
+
+/* Большие телефоны (576px и меньше) */
+@media (max-width: 576px) {
+    .reviews-page {
+        padding: 1rem;
+        margin: 0.3rem;
+    }
+
+    .add-review-form {
+        padding: 1rem;
+        margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+        margin-bottom: 0.3rem;
+    }
+
+    .form-control {
+        padding: 0.6rem;
+    }
+
+    .rating-stars {
+        gap: 0.3rem;
+    }
+
+    .star {
+        font-size: 1.6rem;
+    }
+
+    .review-card {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .review-content {
+        margin: 0.8rem 0;
+        font-size: 0.95rem;
+    }
+
+    .admin-response {
+        padding: 0.8rem;
+        margin-top: 0.8rem;
+    }
+
+    .review-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+    }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+        padding: 0.6rem;
+    }
+
+    .login-prompt {
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+    }
+
+    .modal-content {
+        padding: 1rem;
+    }
+
+    .modal-content h3 {
+        margin-bottom: 1rem;
+    }
+
+    textarea.form-control {
+        min-height: 80px;
+    }
+}
+
+/* Маленькие телефоны (400px и меньше) */
+@media (max-width: 400px) {
+    .reviews-page {
+        padding: 0.8rem;
+        margin: 0.2rem;
+    }
+
+    .add-review-form {
+        padding: 0.8rem;
+    }
+
+    .add-review-form h3 {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+
+    .form-control {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .rating-stars {
+        justify-content: center;
+    }
+
+    .star {
+        font-size: 1.5rem;
+    }
+
+    .reviews-list h2 {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+    }
+
+    .review-card {
+        padding: 0.8rem;
+    }
+
+    .review-user {
+        font-size: 0.9rem;
+    }
+
+    .review-user i {
+        font-size: 1.1rem;
+    }
+
+    .review-rating {
+        font-size: 1rem;
+    }
+
+    .review-date {
+        font-size: 0.8rem;
+    }
+
+    .review-content {
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+    .admin-response-header {
+        font-size: 0.9rem;
+    }
+
+    .admin-response-header i {
+        font-size: 1rem;
+    }
+
+    .modal-content {
+        padding: 0.8rem;
+        max-width: 98vw;
+    }
+
+    .modal-content h3 {
+        font-size: 1.1rem;
+    }
+
+    .alert {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    .login-prompt {
+        padding: 1.2rem;
+    }
+
+    .login-prompt h3 {
+        font-size: 1.1rem;
+    }
+
+    .login-prompt p {
+        font-size: 0.9rem;
+    }
+
+    .btn {
+        font-size: 0.85rem;
+        padding: 0.5rem;
+    }
+}
+
+/* Самые маленькие телефоны (320px и меньше) */
+@media (max-width: 320px) {
+    .reviews-page {
+        padding: 0.6rem;
+        margin: 0.1rem;
+        border-radius: 8px;
+    }
+
+    .add-review-form {
+        padding: 0.7rem;
+        border-radius: 6px;
+    }
+
+    .form-group {
+        margin-bottom: 0.8rem;
+    }
+
+    .form-group label {
+        font-size: 0.85rem;
+    }
+
+    textarea.form-control {
+        min-height: 70px;
+        font-size: 0.85rem;
+    }
+
+    .star {
+        font-size: 1.3rem;
+        padding: 0.1rem;
+    }
+
+    .review-card {
+        padding: 0.7rem;
+        border-radius: 8px;
+    }
+
+    .review-user {
+        gap: 0.4rem;
+    }
+
+    .review-user i {
+        font-size: 1rem;
+    }
+
+    .review-header {
+        margin-bottom: 0.6rem;
+    }
+
+    .review-date {
+        margin: 0.3rem 0;
+    }
+
+    .review-content {
+        margin: 0.6rem 0;
+        font-size: 0.85rem;
+    }
+
+    .admin-response {
+        padding: 0.6rem;
+        margin-top: 0.6rem;
+    }
+
+    .review-actions {
+        margin-top: 0.8rem;
+    }
+
+    .btn {
+        padding: 0.4rem;
+        font-size: 0.8rem;
+        gap: 0.3rem;
+    }
+
+    .btn i {
+        font-size: 0.9rem;
+    }
+
+    .btn-sm {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.75rem;
+    }
+
+    .modal-content {
+        padding: 0.7rem;
+        border-radius: 8px;
+    }
+
+    .modal-content h3 {
+        margin-bottom: 0.8rem;
+        font-size: 1rem;
+        gap: 0.3rem;
+    }
+
+    .modal-actions {
+        margin-top: 1rem;
+        gap: 0.5rem;
+    }
+
+    .alert {
+        padding: 0.5rem 0.7rem;
+        border-radius: 6px;
+        font-size: 0.85rem;
+    }
+
+    .login-prompt {
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 6px;
+    }
+
+    .login-prompt h3 {
+        font-size: 1rem;
+    }
+
+    .login-prompt p {
+        font-size: 0.85rem;
+    }
+
+    .reviews-list > div[style*="text-align: center"] {
+        padding: 1.5rem;
+    }
+
+    .reviews-list > div[style*="text-align: center"] i {
+        font-size: 2rem;
+    }
+
+    .reviews-list > div[style*="text-align: center"] h3 {
+        font-size: 1rem;
+    }
+
+    .reviews-list > div[style*="text-align: center"] p {
+        font-size: 0.85rem;
+    }
 }

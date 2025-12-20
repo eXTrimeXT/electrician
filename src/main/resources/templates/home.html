@@ -69,12 +69,12 @@
     <div class="main-container">
         <!-- Левая колонка - основной контент -->
         <div class="main-content">
-            <section class="hero">
+            <section class="hero border-animation">
                 <h2>Надежные электромонтажные работы любой сложности</h2>
                 <p>Работаем быстро, аккуратно и по доступным ценам.</p>
             </section>
 
-            <section class="services">
+            <section class="services border-animation">
                 <h2><i class="fas fa-bolt"></i> Наши услуги и цены</h2>
 
                 <div class="popular-services" th:if="${not #lists.isEmpty(popularServices)}">
@@ -116,7 +116,7 @@
                 </div>
             </section>
 
-            <section class="works">
+            <section class="works border-animation">
                 <h2><i class="fas fa-tools"></i>Крупные работы</h2>
                 <div class="works-grid">
                     <div class="work-card" th:each="work : ${works}">
@@ -131,7 +131,7 @@
                 </div>
             </section>
 
-            <section class="contact-info">
+            <section class="contact-info border-animation">
                 <h2><i class="fas fa-address-card"></i> Контактная информация</h2>
                 <div class="contact-details">
                     <div class="contact-item">
@@ -164,7 +164,7 @@
         </div>
 
         <!-- Правая колонка - Telegram виджет -->
-        <aside class="telegram-widget-section">
+        <aside class="telegram-widget-section border-animation">
             <div class="telegram-widget">
                 <div class="channel-header">
                     <div class="logo-header">
