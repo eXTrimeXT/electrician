@@ -8,19 +8,19 @@
 }
 
 .logo-svg {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     transition: transform 0.3s ease;
 }
 
 .logo-is-hover {}
 .logo-is-hover:hover {
-    transform: scale(1.5);
+    transform: scale(1.1);
 }
 
 /* Анимация пульсации для лампочки */
 .logo-animation {
-    animation: gradient-glow 3s infinite ease-in-out;
+    animation: gradient-glow 20s infinite ease-in-out;
 }
 
 /* Пульсация */
@@ -76,7 +76,7 @@
     }
     50% {
         filter:
-            drop-shadow(0 0 15px #00f)
-            hue-rotate(20deg);
+            drop-shadow(0 0 5px #00f)
+            hue-rotate(10deg);
     }
 }
