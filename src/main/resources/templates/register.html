@@ -10,7 +10,7 @@
     <script src="../static/js/register-script.js"></script>
 </head>
 <body>
-<header>
+<header class="border-animation">
     <div class="container">
         <div class="header-content">
             <h1><i class="fas fa-user-plus"></i> Регистрация</h1>
@@ -22,7 +22,7 @@
 </header>
 
 <main class="container">
-    <div class="register-container">
+    <div class="register-container border-animation">
         <!-- Сообщение об успехе -->
         <div th:if="${successMessage}" class="success-message">
             <i class="fas fa-check-circle"></i>
@@ -100,7 +100,7 @@
     </div>
 </main>
 
-<footer>
+<footer class="border-animation">
     <p>&copy; <span th:text="${#dates.year(#dates.createNow())}">2022</span> Профессиональный электрик. Все права защищены.</p>
 </footer>
 </body>
